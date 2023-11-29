@@ -1,0 +1,27 @@
+<div class="item wrapper lazy_" data-post-id="<?php echo($post_data['post_id']) ?>">
+	<div class="user-postset_fav explore-postset" id="<?php echo $post_data['post_id']; ?>">
+		<?php if ($post_data['type'] == 'video') { 
+			if ($post_data['is_should_hide']) {	?>
+			<div class="valign is_should_hide1 text_m_reprted-<?php echo($post_data['post_id']) ?>">
+				<p class="is_should_hide3">{{LANG post_m_report}}</p>
+				<div class="is_should_hide4">
+					<a class="btn btn-mat is_should_hide5" href="javascript:void(0);" onclick="show_m_reprted(<?php echo($post_data['post_id']) ?>)">See now</a>
+				</div>
+			</div>
+		<?php } } ?>
+		<div class="image" onclick="lightbox('<?php echo $post_data['post_id']; ?>','<?php echo $context['page']; ?>');">
+			<img src="<?php echo media($post_data['thumb']); ?>" />
+			<?php if ($post_data['type'] != 'image' && $post_data['type'] != 'gif' && $post_data['type'] != 'fetched') { ?>
+				<span class="category">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M17 9.2l5.213-3.65a.5.5 0 0 1 .787.41v12.08a.5.5 0 0 1-.787.41L17 14.8V19a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v4.2zM5 8v2h2V8H5z"/></svg>
+				</span>
+			<?php } ?>
+			<div class="valign caption">
+				<p>
+					<span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M21.179 12.794l.013.014L12 22l-9.192-9.192.013-.014A6.5 6.5 0 0 1 12 3.64a6.5 6.5 0 0 1 9.179 9.154z"/></svg> <?php echo $post_data['likes']; ?></span>
+					<span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M14.45 19L12 22.5 9.55 19H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h18a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-6.55z"/></svg> <?php echo $post_data['comments']; ?></span>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>

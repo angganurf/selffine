@@ -1,0 +1,84 @@
+<tr id="UserID_<?php echo $context['wal_requests']['id']?>" data-user-id="<?php echo $context['user']['user_id']?>" data_selected="<?php echo $context['wal_requests']['id']?>">
+   <td><input type="checkbox" id="check-data-<?php echo $context['wal_requests']['id']?>" class="delete-checkbox filled-in"><label for="check-data-<?php echo $context['wal_requests']['id']?>"></label></td>
+   <td><?php echo $context['wal_requests']['id']?></td>
+   <td>
+      <a href="<?php echo $context['user']['url']; ?>">
+      <img src="<?php echo $context['user']['avatar']; ?>" class="setting-avatar" alt="<?php echo $context['user']['avatar']?> Profile Picture">
+      <?php echo $context['user']['name']; ?>
+      </a>
+      <span class="pointer toggle-verification-request" onclick="ToggleVerfRequest(<?php echo $context['wal_requests']['id']; ?>,this)">
+         <i class="fa fa-caret-down" aria-hidden="true"></i>
+      </span>
+   </td>
+   <td><?php echo $context['user']['paypal_email'];?></td>
+   <td><?php echo(Pxp_GetCurrency($context['wal_requests']['currency']).$context['wal_requests']['amount']) ?></td>
+   <td>
+   <?php 
+   if ($context['wal_requests']['status'] == 0) {
+      echo '<span class="label label-warning">Pending</span>';
+   } else 
+   if ($context['wal_requests']['status'] == 1) {
+      echo '<span class="label label-success">Approved</span>';
+   } else
+   if ($context['wal_requests']['status'] == 2) {
+      echo '<span class="label label-danger">Declined</span>';
+   }
+   ?></td>
+   <td>
+      <button onclick="MarkPaid(<?php echo $context['wal_requests']['id']?>,'hide');" type="button" class="btn bg-success admn_table_btn">Paid</button>
+      <button onclick="DeclinePayment(<?php echo $context['wal_requests']['id']?>,'hide');" type="button" class="btn bg-danger admn_table_btn">Decline</button>
+   </td>
+</tr>
+
+<tr id="review-verif-request-info-<?php echo $context['wal_requests']['id']; ?>" style="display: none;">
+   <td colspan="4">
+      <div class="row">
+           <div class="col-md-8">
+               <div class="card">
+                   <div class="card-body">
+                       <div class="row">
+                           <div class="col-md-6">
+                            <?php if (!empty($context['wal_requests']['iban'])) { ?>
+                               <p>
+                                   <span class="badge bg-success-bright text-success">IBAN</span>
+                               </p>
+                               <p><?php echo $context['wal_requests']['iban']; ?></p>
+                               <p>
+                                   <span class="badge bg-info-bright text-info">Country</span>
+                               </p>
+                               <p><?php echo $context['wal_requests']['country']; ?></p>
+                               <p>
+                                   <span class="badge bg-info-bright text-info">Full Name</span>
+                               </p>
+                               <p><?php echo $context['wal_requests']['full_name']; ?></p>
+                               <p>
+                                   <span class="badge bg-info-bright text-info">Swift Code</span>
+                               </p>
+                               <p><?php echo $context['wal_requests']['swift_code']; ?></p>
+                               <p>
+                                   <span class="badge bg-info-bright text-info">Address</span>
+                               </p>
+                               <p><?php echo $context['wal_requests']['address']; ?></p>
+                            <?php }else{ ?>
+                                <p>
+                                   <span class="badge bg-success-bright">Method Type</span>
+                                </p>
+                                <?php if ($context['wal_requests']['type'] == 'custom') { ?>
+                                    <p><?php echo($config['custom_name']) ?></p>
+                                <?php }else{ ?>
+                                    <p><?php echo(ucfirst($context['wal_requests']['type'])) ?></p>
+                                <?php } ?>
+                                <p>
+                                   <span class="badge bg-success-bright text-success">Information</span>
+                                </p>
+                                <p><?php echo $context['wal_requests']['transfer_info']; ?></p>
+                            <?php } ?>
+
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+      </div>
+   </td>
+</tr>

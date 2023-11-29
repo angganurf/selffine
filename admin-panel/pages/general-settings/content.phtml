@@ -1,0 +1,515 @@
+<?php $langs = $admin::getLangs(); ?>
+<div class="container-fluid">
+    <div>
+        <h3>General Configuration</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Settings</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">General Configuration</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">General Configuration</h6>
+                    <form class="form general-settings-form">
+                        <div class="float-left">
+                            <label for="developer_mode" class="main-label">Developer Mode</label>
+                            <br><small class="admin-info">By enabling developer mode, error reporting will be enabled, <br>it's not recommended to enable this mode without the help of a developer,<br> this may occur some issues in your website.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="developer_mode" value="0" />
+                            <input type="checkbox" name="developer_mode" id="chck-developer_mode" value="1" <?php echo ($config['developer_mode'] == 1) ? 'checked': '';?>>
+                            <label for="chck-developer_mode" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <label for="language" class="main-label">Default Language</label>
+                        <br><small class="admin-info">Set your site default language.</small>
+                        <div class="form-group">
+                            <select class="form-control show-tick" name="language">
+                                <option value="">-- Please select --</option>
+                                <?php foreach ($langs as $key => $language): ?>
+                                    <option value="<?php echo($key); ?>" <?php echo ($key == $config['language']) ? 'selected' : ''; ?>>
+                                        <?php echo($language); ?>
+                                    </option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="face_filter" class="main-label">Face Filter System</label>
+                            <br><small class="admin-info">Enable this feature to add filters to images.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="face_filter" value="off" />
+                            <input type="checkbox" name="face_filter" id="chck-face_filter" value="on" <?php echo ($config['face_filter'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-face_filter" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="business_account" class="main-label">Business Account System</label>
+                            <br><small class="admin-info">Users can upgrade their accounts to business.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="business_account" value="off" />
+                            <input type="checkbox" name="business_account" id="chck-business_account" value="on" <?php echo ($config['business_account'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-business_account" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="withdraw_system" class="main-label">Withdrawal System</label>
+                            <br><small class="admin-info">Give the ability for users to withdrawal money.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="withdraw_system" value="off" />
+                            <input type="checkbox" name="withdraw_system" id="chck-withdraw_system" value="on" <?php echo ($config['withdraw_system'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-withdraw_system" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="raise_money" class="main-label">Funding Settings</label>
+                            <br><small class="admin-info">Allow users to create funding requests and earn donations.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="raise_money" value="off" />
+                            <input type="checkbox" name="raise_money" id="chck-raise_money" value="on" <?php echo ($config['raise_money'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-raise_money" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <label for="raise_money_type" class="main-label">Funding Requests</label>
+                        <br><small class="admin-info">Who can create funding requests?</small>
+                        <div class="form-group">
+                            <select class="form-control show-tick" id="raise_money_type" name="raise_money_type">
+                                <option value="1" <?php echo ($config['raise_money_type'] == '1' ? 'selected' : ''); ?>>Verified</option>
+                                <option value="0" <?php echo ($config['raise_money_type'] == '0' ? 'selected' : ''); ?>>All Users</option>
+                            </select>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="share_system" class="main-label">Share system</label>
+                            <br><small class="admin-info">Allow users to share posts.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="share_system" value="off" />
+                            <input type="checkbox" name="share_system" id="chck-share_system" value="on" <?php echo ($config['share_system'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-share_system" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="clearfix"></div>
+                        <div class="float-left">
+                            <label for="blog_system" class="main-label">Blog System</label>
+                            <br><small class="admin-info">Allow admins to create articles.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="blog_system" value="off" />
+                            <input type="checkbox" name="blog_system" id="chck-blog_system" value="on" <?php echo ($config['blog_system'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-blog_system" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="float-left">
+                            <label for="allow_user_create_blog" class="main-label">Blog System For Users</label>
+                            <br><small class="admin-info">Allow users to create articles?</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="allow_user_create_blog" value="off" />
+                            <input type="checkbox" name="allow_user_create_blog" id="chck-allow_user_create_blog" value="on" <?php echo ($config['allow_user_create_blog'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-allow_user_create_blog" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="story_system" class="main-label">Story System</label>
+                            <br><small class="admin-info">Allow users to create stories & status that expire after 24 hours.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="story_system" value="off" />
+                            <input type="checkbox" name="story_system" id="chck-story_system" value="on" <?php echo ($config['story_system'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-story_system" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">User story slide/video duration in seconds</label>
+                                <input type="text" name="story_duration" class="form-control" value="<?php echo $config['story_duration']?>"><small class="admin-info">Lorem Ipsum is simply dummy text</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Private Photos & Videos</h6>
+                    <form class="form general-settings-form">
+                        <div class="float-left">
+                            <label for="private_photos" class="main-label">Lock Private Photos</label>
+                            <br><small class="admin-info">Users can lock their images and sell them.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="private_photos" value="off" />
+                            <input type="checkbox" name="private_photos" id="chck-private_photos" value="on" <?php echo ($config['private_photos'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-private_photos" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Commission from unlocking locked photos</label>
+                                <input type="number" name="private_photos_commission" class="form-control" value="<?php echo $config['private_photos_commission']?>"><small class="admin-info">Percentage (%)</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Image Blur Level</label>
+                                <input type="number" name="photo_blurred_number" class="form-control" value="<?php echo $config['photo_blurred_number']?>"><small class="admin-info">The number of times the image is blurred, 100 is max.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Downsize the image to make the process faster</label>
+                                <input type="number" name="downsize_blurred_photo" class="form-control" value="<?php echo $config['downsize_blurred_photo']?>"><small class="admin-info">This will not effect to the original image (Image Size / Downsize)</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="private_videos" class="main-label">Lock Private Videos</label>
+                            <br><small class="admin-info">Users can lock their videos and sell them</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="private_videos" value="off" />
+                            <input type="checkbox" name="private_videos" id="chck-private_videos" value="on" <?php echo ($config['private_videos'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-private_videos" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Commission from unlock the locked videos </label>
+                                <input type="number" name="private_videos_commission" class="form-control" value="<?php echo $config['private_videos_commission']?>"><small class="admin-info">Percentage (%)</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Commission from monthly subscribers</label>
+                                <input type="number" name="monthly_subscribers_commission" class="form-control" value="<?php echo $config['monthly_subscribers_commission']?>"><small class="admin-info">Percentage (%)</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="locked_content_explore_page" class="main-label">Explore Locked Content</label>
+                            <br><small class="admin-info">Show locked content in explore page.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="locked_content_explore_page" value="off" />
+                            <input type="checkbox" name="locked_content_explore_page" id="chck-locked_content_explore_page" value="on" <?php echo ($config['locked_content_explore_page'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-locked_content_explore_page" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Login & Registration</h6>
+                    <form class="general-settings-form form-group form-float">
+                        <div class="float-left">
+                            <label for="signup_system" class="main-label">User Registration</label>
+                            <br><small class="admin-info">Allow users to create accounts in your site.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="signup_system" value="off" />
+                            <input type="checkbox" name="signup_system" id="chck-signup_system" value="on" <?php echo ($config['signup_system'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-signup_system" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="delete_account" class="main-label">Delete User Account</label>
+                            <br><small class="admin-info">Allow users to delete their accounts in your site.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="delete_account" value="off" />
+                            <input type="checkbox" name="delete_account" id="chck-delete_account" value="on" <?php echo ($config['delete_account'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-delete_account" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="account_validation" class="main-label">Account Validation</label>
+                            <br><small class="admin-info">Send an activation link after registration.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="account_validation" value="0" />
+                            <input type="checkbox" name="account_validation" id="chck-account_validation" value="1" <?php echo ($config['account_validation'] == 1) ? 'checked': '';?>>
+                            <label for="chck-account_validation" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <label for="defualtLang" >Account Validation Method</label>
+                        <br><small class="admin-info">Choose the validation type, by SMS or E-mail, if you choose SMS, <br> make sure you have configured SMS.</small>
+                        <div class="form-group">
+                            <select class="form-control show-tick" id="validation_method" name="validation_method">
+                                <option value="mail" <?php echo ($config['validation_method'] == 'mail') ? 'selected': '';?>>E-mail address</option>
+                                <option value="sms" <?php echo ($config['validation_method'] == 'sms') ? 'selected': '';?>>SMS / Phone Number</option>
+                            </select>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="login_auth" class="main-label">Two-factor authentication</label>
+                            <br><small class="admin-info">Send confirmation code to email or SMS when user login.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="two_factor" value="0" />
+                            <input type="checkbox" name="two_factor" id="chck-two_factor" value="1" <?php echo ($config['two_factor'] == 1) ? 'checked': '';?>>
+                            <label for="chck-two_factor" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <label for="defualtLang">Two-factor Authentication Method</label>
+                        <br><small class="admin-info">Select the system the 2FA should use.</small>
+                        <div class="form-group">
+                            <select class="form-control show-tick" id="two_factor_type" name="two_factor_type">
+                              <option value="email" <?php echo ($config['two_factor_type'] == 'email') ? 'selected': '';?>>E-mail Address</option>
+                              <option value="phone" <?php echo ($config['two_factor_type'] == 'phone') ? 'selected': '';?>>SMS / Phone Number</option>
+                              <option value="both" <?php echo ($config['two_factor_type'] == 'both') ? 'selected': '';?>>Both Together</option>
+                            </select>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Allow Specific Emails</label>
+                                <input type="text" name="specific_email_signup" class="form-control" value="<?php echo $config['specific_email_signup']?>"><small class="admin-info">Allow signs ups from specific Email provider. for example gmail.com</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="recaptcha" class="main-label">reCaptcha</label>
+                            <br><small class="admin-info">Enable reCaptcha to prevent spam.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="recaptcha" value="off" />
+                            <input type="checkbox" name="recaptcha" id="chck-recaptcha" value="on" <?php echo ($config['recaptcha'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-recaptcha" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">ReCaptcha site key</label>
+                                <input type="text" name="recaptcha_site_key" class="form-control" value="<?php echo $config['recaptcha_site_key']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">ReCaptcha secret key</label>
+                                <input type="text" name="recaptcha_secret_key" class="form-control" value="<?php echo $config['recaptcha_secret_key']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Store Settings</h6>
+                    <form class="form general-settings-form">
+                        <div class="float-left">
+                            <label for="image_sell_system" class="main-label">Images Sell System</label>
+                            <br><small class="admin-info">Allow users to sell images in store.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="image_sell_system" value="off" />
+                            <input type="checkbox" name="image_sell_system" id="chck-image_sell_system" value="on" <?php echo ($config['image_sell_system'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-image_sell_system" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Min Image Width</label>
+                                <input type="text" name="min_image_width" class="form-control" value="<?php echo $config['min_image_width']?>"><small class="admin-info">Set the minimum width required, in pixles.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Min Image Height</label>
+                                <input type="text" name="min_image_height" class="form-control" value="<?php echo $config['min_image_height']?>"><small class="admin-info">Set the maximum width required, in pixles.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Watermark Opacity</label>
+                                <input type="text" name="watermark_opacity" class="form-control" value="<?php echo $config['watermark_opacity']?>"><small class="admin-info">Watermark opacity value must be between 0:1</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <label for="watermark_anchor" class="main-label">Watermark Placement</label>
+                        <br><small class="admin-info">Where the watermark should be located on the image?</small>
+                        <div class="form-group">
+                            <select class="form-control show-tick" id="watermark_anchor" name="watermark_anchor">
+                                <option value="top left" <?php if($config['watermark_anchor'] == 'top left'){ echo("selected");}?>>top left</option>
+                                <option value="top right" <?php if($config['watermark_anchor'] == 'top right'){ echo("selected");}?>>top right</option>
+                                <option value="top" <?php if($config['watermark_anchor'] == 'top'){ echo("selected");}?>>top</option>
+                                <option value="bottom left" <?php if($config['watermark_anchor'] == 'bottom left'){ echo("selected");}?>>bottom left</option>
+                                <option value="bottom right" <?php if($config['watermark_anchor'] == 'bottom right'){ echo("selected");}?>>bottom right</option>
+                                <option value="bottom" <?php if($config['watermark_anchor'] == 'bottom'){ echo("selected");}?>>bottom</option>
+                                <option value="right" <?php if($config['watermark_anchor'] == 'right'){ echo("selected");}?>>right</option>
+                                <option value="top center" <?php if($config['watermark_anchor'] == 'top center'){ echo("selected");}?>>center</option>
+                            </select>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Adult Images Settings</h6>
+                    <form class="adult-settings small-p" method="POST">
+                        <div class="float-left">
+                            <label for="adult_images" class="main-label">Adult Images Filtration</label>
+                            <br><small class="admin-info">Enable this feature to blur or delete posts that contain adult contents using Google AI.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="adult_images" value="0" />
+                            <input type="checkbox" name="adult_images" id="chck-adult_images" value="1" <?php echo ($config['adult_images'] == 1) ? 'checked': '';?>>
+                            <label for="chck-adult_images" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Vision API key</label>
+                                <input type="text" id="vision_api_key" name="vision_api_key" class="form-control" value="<?php echo $config['vision_api_key']?>">
+                                <small class="admin-info">Your Google Vision API Key.</small>
+                            </div>
+                        </div>
+                        <hr>
+                        <p>Please follow the steps below to activate the system:</p> <hr>
+                        <p class="main-label">1. Select or create a GCP project from <a href="https://console.cloud.google.com/projectcreate?previousPage=%2Fcloud-resource-manager%3F_ga%3D2.239227332.-679302599.1549629461&defaultProjectName=&project=robotic-subject-231114&folder=&organizationId=">Here</a></p>
+                        <p class="main-label">2. Make sure that billing is enabled for your project <a href="https://cloud.google.com/billing/docs/how-to/modify-project">From Here</a> Or <a href="https://console.cloud.google.com/freetrial/signup/tos">Create a new billing account</a></p>
+                        <p class="main-label">3. Enable the Cloud Vision API. <a href="https://console.cloud.google.com/flows/enableapi?apiid=vision-json.googleapis.com&_ga=2.132996809.-679302599.1549629461">From Here</a></p>
+                        <p class="main-label">4. Create an API key:</p>
+                        <p >     - Navigate to the <a href="https://console.cloud.google.com/apis/credentials?_ga=2.194723562.-679302599.1549629461">APIs & Services → Credentials</a> panel in GCP Console.</p>
+                        <p>     - Select Create credentials, then select API key from the dropdown menu.</p>
+                        <p>     - Click the Create button. The API key created dialog box displays your newly created key.</p>
+                        
+                        <div class="adult-settings-test-alert"></div>
+                        <div class="btn btn-info m-t-15 waves-effect" id="test_btn" onclick="Wo_TestVisionApi();">Test API</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    function Wo_TestVisionApi() {
+        $('#test_btn').text('Please wait..');
+        $.post(acpajax_url('test_vision_api'), function(data, textStatus, xhr) {
+            if (data.status == 400) {
+                $(".adult-settings-test-alert").html('<div class="alert alert-danger">' + data.message + '</div>');
+                setTimeout(function (argument) {
+                    $(".adult-settings-test-alert").html('');
+                },2000);
+            }
+            else{
+                $(".adult-settings-test-alert").html('<div class="alert alert-success">' + data.message + '</div>');
+                setTimeout(function (argument) {
+                    $(".adult-settings-test-alert").html('');
+                },2000);
+            }
+            $('#test_btn').text('Test API');
+        });
+    }
+$(function() {
+    $('.switcher input[type=checkbox]').click(function () {
+        var configName = $(this).attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        if ($(this).is(":checked") === true) {
+            objData[configName] = $(this).val();
+        }
+        else{
+            if ($('input[name='+configName+']')[0]) {
+                objData[configName] = $($('input[name='+configName+']')[0]).val();
+            }
+        }
+        objData['hash_id'] = hash_id;
+        $.post(acpajax_url('general-settings'), objData);
+    });
+
+    var setTimeOutColor = setTimeout(function (){});
+    $('select').on('change', function() {
+         clearTimeout(setTimeOutColor);
+        var thisElement = $(this);
+        var configName = thisElement.attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        objData[configName] = thisElement.val();
+        objData['hash_id'] = hash_id;
+        thisElement.addClass('warning');
+        $.post(acpajax_url('general-settings'), objData, function (data) {
+            if (data.status == 200) {
+                thisElement.removeClass('warning');
+                thisElement.addClass('success');
+            } else {
+                thisElement.addClass('error');
+            }
+            var setTimeOutColor = setTimeout(function () {
+                thisElement.removeClass('success');
+                thisElement.removeClass('warning');
+                thisElement.removeClass('error');
+            }, 2000);
+        });
+    });
+    $('input[type=text], input[type=number] , textarea').on('input', delay(function() {
+            clearTimeout(setTimeOutColor);
+            var thisElement = $(this);
+            var configName = thisElement.attr('name');
+            var hash_id = $('input[name=hash_id]').val();
+            var objData = {};
+            objData[configName] = this.value;
+            objData['hash_id'] = hash_id;
+            thisElement.addClass('warning');
+            $.post(acpajax_url('general-settings'), objData, function (data) {
+                if (data.status == 200) {
+                    thisElement.removeClass('warning');
+                    thisElement.addClass('success');
+                } else {
+                    thisElement.addClass('error');
+                }
+                var setTimeOutColor = setTimeout(function () {
+                    thisElement.removeClass('success');
+                    thisElement.removeClass('warning');
+                    thisElement.removeClass('error');
+                }, 2000);
+                //thisElement.focus();
+            });
+    }, 500));
+});
+
+
+</script>

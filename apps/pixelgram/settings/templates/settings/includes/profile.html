@@ -1,0 +1,87 @@
+<div class="prof-active">
+	<h2 class="user_sttng_panel_hd">{{LANG profile_settings}}</h2>
+	<form class="form pp_sett_form" id="edit-profile-settings">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="pg_mat_input">
+					<input type="text" name="fname" placeholder="{{LANG fname}}" value="<?php echo($context['me']['fname']) ?>">
+					<label>{{LANG fname}}</label>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="pg_mat_input">
+					<input type="text" name="lname" placeholder="{{LANG lname}}" value="<?php echo($context['me']['lname']) ?>">
+					<label>{{LANG lname}}</label>
+				</div>
+			</div>
+		</div>
+		<div class="pg_mat_input">
+			<input type="url2" name="website" placeholder="{{LANG website}}"value="<?php echo($context['me']['website']) ?>">
+			<label>{{LANG website}}</label>
+		</div>
+		<div class="pg_mat_input">
+			<input type="url2" name="facebook" placeholder="{{LANG ur_facebook}}" value="<?php echo($context['me']['facebook']) ?>">
+			<label>{{LANG ur_facebook}}</label>
+		</div>
+		<div class="pg_mat_input hidden">
+			<input type="url2" name="google" placeholder="{{LANG ur_google}}" value="<?php echo($context['me']['google']) ?>">
+			<label>{{LANG ur_google}}</label>
+		</div>
+		<div class="pg_mat_input">
+			<input type="url2" name="twitter" placeholder="{{LANG ur_twitter}}" value="<?php echo($context['me']['twitter']) ?>">
+			<label>{{LANG ur_twitter}}</label>
+		</div>
+		<div class="pg_mat_input">
+			<textarea placeholder="{{LANG about_u}}" id="about_u" name="about" rows="3" maxlength="150"><?php if($context['me']['about']){ echo br2nl($context['me']['about']) ; } ?></textarea>
+			<label>{{LANG about_u}}</label>
+			<span class="help-block"><span id="chars">150</span> characters remaining.</span>
+		</div>
+		<?php if ($context['user']['admin'] == 1 || $context['me']['is_pro']) { ?>
+		<div class="pg_mat_input">
+			<label>{{LANG profile_style}}</label>
+			<select name="profile" class="pg_select_has_label" required="true">
+				<option value="1" <?php if($context['me']['profile'] == 1){ ?> selected <?php } ?>>{{LANG default_profile}}</option>
+				<?php if($config['pro_system'] === 'on'){ ?>
+					<option value="2" <?php if($context['me']['profile'] == 2){ ?> selected <?php } ?>>{{LANG new_profile}}</option>
+				<?php } ?>
+			</select>
+		</div>
+		<?php } ?>
+
+		<?php if ($context['me']['business_account'] == 1 && $config['business_account'] == 'on') { ?>
+		<hr>
+		<div class="pg_mat_input">
+			<input type="url2" name="b_name" placeholder="{{LANG business_name}}" value="<?php echo($context['me']['b_name']) ?>">
+			<label>{{LANG business_name}}</label>
+		</div>
+		<div class="pg_mat_input">
+			<input type="url2" name="b_email" placeholder="{{LANG email}}" value="<?php echo($context['me']['b_email']) ?>">
+			<label>{{LANG email}}</label>
+		</div>
+		<div class="pg_mat_input">
+			<input type="url2" name="b_phone" placeholder="{{LANG phone_number}}" value="<?php echo($context['me']['b_phone']) ?>">
+			<label>{{LANG phone_number}}</label>
+		</div>
+		<div class="pg_mat_input">
+			<input type="url2" name="b_site" placeholder="{{LANG call_to_target_url}}" value="<?php echo($context['me']['b_site']) ?>">
+			<label>{{LANG call_to_target_url}}</label>
+		</div>
+		<div class="pg_mat_input">
+			<label>{{LANG call_to_action}}</label>
+			<select name="b_site_action" class="pg_select_has_label" required="true">
+				<?php foreach ($context['call_action'] as $cid => $cname) { ?>
+					<option value="<?php echo($cid) ?>" <?php if($context['me']['b_site_action'] == $cid){ ?> selected <?php } ?>><?php echo lang($cname); ?></option>
+				<?php } ?>
+			</select>
+		</div>
+		<?php } ?>
+		<div class="pg_sett_save"><button class="btn btn-main btn-mat btn-mat-raised pp_flat_btn" type="submit">{{LANG save_changes}}</button></div>
+		<input type="hidden" name="user_id" value="<?php echo($context['me']['user_id']) ?>">
+		<input type="hidden" name="hash" value="<?php echo($context['csrf_token']) ?>">
+	</form>
+</div>
+
+<?php 
+include $context['dirname_theme'].'/main/templates/includes/lazy-load.html';
+include $context['dirname_theme'].'/settings/templates/settings/js/script.html';
+ ?>

@@ -1,0 +1,113 @@
+<div class="explore-page-container">
+    <div class="">
+        <?php
+         if ($context['images']) {
+			echo '<div class="explore-posts-container pg_store_posts">';
+             global $user;
+             foreach ($context['images'] as $key => $post_data) {
+                $post_data['post_id'] = $post_data['id'];
+                $post_data['type'] = 'image';
+                $post_data['thumb'] = $post_data['small_file'];
+                $post_data['boosted'] = 0;
+
+                $_user_data = $user->getUserDataById($post_data['user_id']);
+                $_user_data = o2array($_user_data);
+
+                $post_data['avatar'] = $_user_data['avatar'];
+                $post_data['username'] = $_user_data['username'];
+                //var_dump($post_data);
+                include 'list-item.html';
+             }
+			 echo '</div>';
+         } else{
+                include $context['dirname_theme'].'/explore/templates/explore/includes/no-posts-found.html';
+         }
+        ?>
+    </div>
+</div>
+
+<?php
+    include $context['dirname_theme'].'/main/templates/includes/lazy-load.html';
+?>
+
+<script>
+    var myLazyLoad = new LazyLoad({
+        elements_selector: ".lazy_"
+    });
+
+    jQuery(document).ready(function($) {
+        window.scrolled = 0;
+        var last_id  = <?php echo end($context['images'])['id'];?>;
+
+        $(window).scroll(function() {
+            if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+                if (window.scrolled == 0 && $('.explore-postset').length > 0) {
+                    window.scrolled = 1;
+					if ($('#is_search_filter').val() == '1') {
+                        $('#is_load_filter').val('1');
+						$('#store_search').click();
+						return false;
+                    }
+					
+                    var list_ids = $("div.explore-postset[id]").map(function() {
+                        return $(this).attr('id');
+                    }).get();
+
+                    if (!list_ids) {
+                        return false;
+                    }
+
+                    var _sort = 'id'
+                    if( $('#store_sort').length ){
+                        _sort = $('#store_sort option:selected').val();
+                    }
+                    // if( _sort == 'popularity_desc' || _sort == 'downloads_desc' || _sort == 'sales_desc' || _sort == 'date_desc' ){
+                    //     var last_id  = $("div.explore-postset[id]").last().attr('id');
+                    // }else if( _sort == 'popularity_asc' || _sort == 'downloads_asc' || _sort == 'sales_asc' || _sort == 'date_asc' ){
+                    //     var last_id  = $("div.explore-postset[id]").last().attr('id');
+                    // }else if( _sort == 'id' ){
+                    //     var last_id  = $("div.explore-postset[id]").last().attr('id');
+                    // }
+
+                    //var last_id         = $("div.explore-postset[id]").last().attr('data-post-id');
+                    var _last_views     = $("div.explore-postset[id]").last().attr('data-post-views');
+                    var _last_sells     = $("div.explore-postset[id]").last().attr('data-post-sells');
+                    var _last_download  = $("div.explore-postset[id]").last().attr('data-post-download');
+                    var _last_date      = $("div.explore-postset[id]").last().attr('data-post-date');
+
+                    var _viewed_store_ids = [];
+                    for (var i = 0; i < $("div.explore-postset[id]").length; i++) {
+                        //if ($($("div.explore-postset[id]")[i]).attr('data-post-views') == _last_views) {
+                            _viewed_store_ids.push($($("div.explore-postset[id]")[i]).attr('data-post-id'));
+                        //}
+                    }
+
+                    $.ajax({
+                        url: link('store/explore-all-store'),
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {
+                            scroll: true,
+                            sort: _sort,
+                            offset:last_id,
+                            last_views:_last_views,
+                            last_sells:_last_sells,
+                            last_download:_last_download,
+                            last_date:_last_date,
+                            viewed_store_ids: _viewed_store_ids
+                        },
+                    }).done(function(data) {
+                        if (data.status == 200) {
+                            last_id = data.last_id;
+                            $(".explore-posts-container").append(data.html);
+                            window.scrolled = 0;
+                        }
+                        else{
+                            //$(window).unbind('scroll');
+                        }
+                    });
+                }
+            }
+        });
+    });
+</script>

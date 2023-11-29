@@ -1,0 +1,22 @@
+<tr class="setting-banlist" id="currency_<?php echo $context['currency_value']?>" >
+   <td><?php echo $context['currency_key']?></td>
+   <td>
+      <div>
+         <?php echo $context['currency_value'];?>
+      </div>
+   </td>
+   <td>
+     <?php echo $config['currency_symbol_array'][$context['currency_value']] ?>
+   </td>
+   <td>
+     <?php echo ($context['currency_value'] == $config['currency']) ? '<span class="label label-success">Default</span>': '';?>
+   </td>
+   <td>
+     <?php echo (!empty($config['exchange']) && !empty($config['exchange'][$context['currency_value']]) ? $config['exchange'][$context['currency_value']] : '');?>
+   </td>
+   <td>
+      <?php if ($context['currency_value'] != $config['currency']) { ?><a href="javascript:void()" onclick="make_default('<?php echo $context['currency_value']; ?>')" class="btn bg-success admn_table_btn">Set Default</a>  <?php  } ?>
+      <a href="javascript:void(0)" onclick="open_edit_currency('<?php echo $context['currency_value']; ?>','<?php echo($config['currency_symbol_array'][$context['currency_value']]) ?>','<?php echo $context['currency_key']?>')" class="btn bg-info admn_table_btn">Edit</a>
+      <a href="javascript:void(0)" onclick="delete_currency('<?php echo $context['currency_value']; ?>','hide')" class="btn bg-danger admn_table_btn">Delete</a>
+   </td>
+</tr>

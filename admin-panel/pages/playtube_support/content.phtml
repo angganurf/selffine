@@ -1,0 +1,121 @@
+<?php 
+$playtube_links_on = ($config['playtube_links'] == 'on') ? 'checked' : '';
+$playtube_links_off = ($config['playtube_links'] == 'off') ? 'checked' : '';
+ ?>
+<div class="container-fluid">
+    <div>
+        <h3>Playtube Support</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Settings</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Playtube Support</li>
+            </ol>
+        </nav>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Playtube Support</h6>
+                    <form class="form general-settings-form">
+                        <div class="float-left">
+                            <label for="playtube_links" class="main-label">Playtube Links System</label>
+                            <br><small class="admin-info">Playtube Links System</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="playtube_links" value="off" />
+                            <input type="checkbox" name="playtube_links" id="chck-playtube_links" value="on" <?php echo ($config['playtube_links'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-playtube_links" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">The Site Link that uses PlayTube script, e.g. https://playtubescript.com</label>
+                                <input type="text" name="playtube_url" class="form-control" value="<?php echo $config['playtube_url']?>"><small class="admin-info">This feature allows you to integrate PlayTube script with your site, so videos will be embedded in the post box if someone shares a link from your site.</small>
+                                <a href="https://codecanyon.net/item/playtube-the-ultimate-php-video-sharing-platform/20759294">
+                                    What is PlayTube?
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+$(function() {
+    $('.switcher input[type=checkbox]').click(function () {
+        var configName = $(this).attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        if ($(this).is(":checked") === true) {
+            objData[configName] = $(this).val();
+        }
+        else{
+            if ($('input[name='+configName+']')[0]) {
+                objData[configName] = $($('input[name='+configName+']')[0]).val();
+            }
+        }
+        objData['hash_id'] = hash_id;
+        $.post(acpajax_url('playtube_support'), objData);
+    });
+
+    var setTimeOutColor = setTimeout(function (){});
+    $('select').on('change', function() {
+         clearTimeout(setTimeOutColor);
+        var thisElement = $(this);
+        var configName = thisElement.attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        objData[configName] = thisElement.val();
+        objData['hash_id'] = hash_id;
+        thisElement.addClass('warning');
+        $.post(acpajax_url('playtube_support'), objData, function (data) {
+            if (data.status == 200) {
+                thisElement.removeClass('warning');
+                thisElement.addClass('success');
+            } else {
+                thisElement.addClass('error');
+            }
+            var setTimeOutColor = setTimeout(function () {
+                thisElement.removeClass('success');
+                thisElement.removeClass('warning');
+                thisElement.removeClass('error');
+            }, 2000);
+        });
+    });
+    $('input[type=text], input[type=number] , textarea').on('input', delay(function() {
+            clearTimeout(setTimeOutColor);
+            var thisElement = $(this);
+            var configName = thisElement.attr('name');
+            var hash_id = $('input[name=hash_id]').val();
+            var objData = {};
+            objData[configName] = this.value;
+            objData['hash_id'] = hash_id;
+            thisElement.addClass('warning');
+            $.post(acpajax_url('playtube_support'), objData, function (data) {
+                if (data.status == 200) {
+                    thisElement.removeClass('warning');
+                    thisElement.addClass('success');
+                } else {
+                    thisElement.addClass('error');
+                }
+                var setTimeOutColor = setTimeout(function () {
+                    thisElement.removeClass('success');
+                    thisElement.removeClass('warning');
+                    thisElement.removeClass('error');
+                }, 2000);
+                //thisElement.focus();
+            });
+    }, 500));
+});
+</script>

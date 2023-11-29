@@ -1,0 +1,23 @@
+<div class="item wrapper lazy_" data-post-id="<?php echo($post_data['pid']) ?>">
+	<div class="explore-postset" id="<?php echo($post_data['pid']) ?>">
+		<a href="<?php echo(pxp_link('live')) . '/' . $post_data['post_key'] ?>" data-ajax="ajax_loading.php?app=live&apph=live&id=<?php echo $post_data['post_key'];?>">
+			<div class="image">
+				<img src="<?php echo(media($post_data['thumb'])) ?>" />
+				<span class="category">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M17,10.5V7A1,1 0 0,0 16,6H4A1,1 0 0,0 3,7V17A1,1 0 0,0 4,18H16A1,1 0 0,0 17,17V13.5L21,17.5V6.5L17,10.5Z"/></svg>
+				</span>
+				<div class="valign caption">
+					<?php if ($post_data['boosted'] == 1 && $context['is_boosted'] == false) { ?>
+					<!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#ffeac9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-award" data-toggle="tooltip" title="Promoted" color="#ffa412" style="position: absolute;top: 10;"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg> -->
+					<?php $context['is_boosted'] = true; } ?>
+					<img src="<?php echo(media($post_data['avatar'])) ?>" class="img-circle">
+					<h3><?php echo($post_data['username']) ?></h3>
+					<p>
+						<span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M21.179 12.794l.013.014L12 22l-9.192-9.192.013-.014A6.5 6.5 0 0 1 12 3.64a6.5 6.5 0 0 1 9.179 9.154z"/></svg> <?php echo($post_data['likes']) ?></span>
+						<span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M14.45 19L12 22.5 9.55 19H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h18a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-6.55z"/></svg> <?php echo($post_data['comments']) ?></span>
+					</p>
+				</div>
+			</div>
+		</a>
+	</div>
+</div>

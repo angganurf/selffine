@@ -1,0 +1,35 @@
+<div class="timeline-posts content-shadow timeline-posts-ads">
+	<div class="valign header">
+		<div class="valign publisher-name">
+			<a href="<?php echo($post_data['url']) ?>" target="_blank">
+				<img src="<?php echo(media($post_data['user_data']['avatar'])) ?>" class="img-circle" />
+			</a>
+			<div>
+				<p><a href="<?php echo($post_data['url']) ?>" target="_blank"><?php if ($post_data['headline']) { echo $post_data['headline']; } ?></a></p>
+				<div class="timeline-posts_ads_name">
+					<span><a href="{{CONFIG site_url}}/ads" data-ajax="ajax_loading.php?app=ads&apph=ads" class="sponsored">{{LANG sponsored}}</a></span>
+					<span class="middot">·</span>
+					<time class="time-ago" title="<?php echo(ToDate($post_data['posted'])) ?>"><a href="<?php echo($post_data['url']) ?>" target="_blank"><?php echo(time2str($post_data['posted'])); ?></a></time>
+				</div>
+			</div>
+		</div>
+		<?php if ($post_data['user_data']['user_id'] == $me['user_id']) { ?>
+		<div class="dropdown">
+			<span class="dropdown-toggle" data-toggle="dropdown"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 13.172l4.95-4.95 1.414 1.414L12 16 5.636 9.636 7.05 8.222z"/></svg></span>
+			<ul class="dropdown-menu pull-right">
+				<li><a href="{{CONFIG site_url}}/edit_ad/<?php echo($post_data['id']) ?>">{{LANG edit_ad}}</a></li>
+			</ul>
+		</div>
+		<?php } ?>
+	</div>
+	<div class="post-images fluid lightgallery">
+		<?php  if (!empty($post_data['ad_media'])) { ?>
+			<a href="<?php echo($post_data['url']) ?>" target="_blank" <?php if ($post_data['bidding'] == 'clicks') { ?> onclick="ad_click(<?php echo $post_data['id']; ?>)" <?php } ?>>
+				<img src="<?php echo(media($post_data['ad_media'])) ?>" class="img-res">
+			</a>
+       	<?php } ?>
+	</div>
+	<div class="caption" data-caption><?php if ($post_data['description']) {
+			echo $post_data['description'];
+		} ?></div>
+</div>

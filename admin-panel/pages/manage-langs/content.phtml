@@ -1,0 +1,244 @@
+<div class="container-fluid">
+    <div>
+        <h3>Manage Languages</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Languages</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Manage Languages</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Manage & Edit Languages</h6>
+                    <div class="langs-settings-alert"></div>
+                   <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="check-all" class="filled-in check-all" ><label for="check-all"></label></th>
+                                    <th style="text-align: center;">Language Name</th>
+                                    <th style="text-align: center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $langs = $admin::getLangs();
+                                if (count($langs) > 0) {
+                                    foreach ($langs as $key => $lang) {
+                                        $context['lang_key']  = $key;   
+                                      $context['lang_name'] = $lang;  
+                                        $context['langs_len'] = len($langs);    
+                                      echo $admin->loadPage('manage-langs/list');
+                                    }
+                                } 
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3">
+                            <span>&nbsp;</span>
+                            <button type="button" class="btn btn-info waves-effect delete-selected d-block" disabled>Delete Selected<span></span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- #END# Vertical Layout -->
+    <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModal1Label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal1Label">Delete language?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this language?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="SelectedDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModal1Label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal1Label">Delete language?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure that you want to remove the selected language(s)?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="DeleteSelected()" data-dismiss="modal">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    $('.check-all').on('click', function(event) {
+        $('input:checkbox').not(this).prop('checked', this.checked);
+    });
+    $('.delete-checkbox, .check-all').change(function(event) {
+        $('.delete-selected').attr('disabled', false);
+        $('.delete-selected').find('span').text(' (' + $('.delete-checkbox:checked').length + ')');
+    });
+    $('.submit-selected').on('click', function(event) {
+        event.preventDefault();
+        $('#SelectedStatusModal').modal('show');
+    });
+
+    $('.delete-selected').on('click', function(event) {
+        event.preventDefault();
+        $('#SelectedDeleteModal').modal('show');
+    });
+    function DeleteSelected() {
+        data = new Array();
+        $('td input:checked').parents('tr').each(function () {
+            data.push($(this).attr('data_selected'));
+        });
+        $('.delete-selected').attr('disabled', true);
+        $('.delete-selected').text('Please wait..');
+        $.post(acpajax_url('remove_multi_lang'), {ids: data}, function () {
+            $.each( data, function( index, value ){
+                $('#' + value).remove();
+            });
+            $('.delete-selected').text('Delete Selected');
+        });
+    }
+    function Wo_DeleteLang(id,type = 'show') {
+      if (id == '') {
+        return false;
+      }
+      if (type == 'hide') {
+        $('#DeleteModal').find('.btn-primary').attr('onclick', "Wo_DeleteLang('"+id+"')");
+        $('#DeleteModal').modal('show');
+        return false;
+      }
+      $('#' + id).fadeOut(300, function () {
+          $(this).remove();
+      });
+      $.post(acpajax_url('delete-lang'), {id:id});
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div class="block-header">
+    <h2 class="breadcrumb">Languages <i class="material-icons">keyboard_arrow_right</i> Manage Languages</h2>
+</div>
+<div class="row">
+    <div class="col-lg-6 col-md-6">
+        <div class="card">
+            <div class="header">
+                <h2>Manage & Edit Languages</h2>
+            </div>
+            <div class="body">
+               <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">Language Name</th>
+                                <th style="text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                                $langs = $admin::getLangs();
+                                if (count($langs) > 0) {
+                                    foreach ($langs as $key => $lang) {
+                                        $context['lang_key']  = $key;   
+                                      $context['lang_name'] = $lang;  
+                                        $context['langs_len'] = len($langs);    
+                                      echo $admin->loadPage('manage-langs/list');
+                                    }
+                                }  
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<div id="delete-modal" class="modal fade" role="dialog" data-id="">
+    <div class="modal-dialog">
+        <div class="modal-content modal-col-red">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">DELETE LANGUAGE</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to continue? this action can't be undo</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link waves-effect delete-button" data-dismiss="modal" data-type="lang">DELETE</button>
+                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  jQuery(document).ready(function($) {
+    $(document).on('click', '.delete-content',function(event) {
+      event.preventDefault();
+      $('#delete-modal').attr('data-id', $(this).attr('data-id')).modal('show');
+      $('.delete-button').attr('data-id', $(this).attr('data-id'));
+    });
+  });
+</script> -->

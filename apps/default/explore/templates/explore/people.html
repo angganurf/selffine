@@ -1,0 +1,57 @@
+
+	<div class="explore-page-container">
+		<div class="container">
+			<div class="reels_hdr explore_page">
+				<div class="circle_green"></div>
+				<div class="circle_blue"></div>
+				<div class="reels_hdr_title">{{LANG explore_people}}</div>
+				<p>{{LANG suggested_people}}</p>
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#66757f" class="feather feather-compass"><defs xmlns="http://www.w3.org/2000/svg"><linearGradient x1="19.28%" y1="86.72%" x2="88.05%" y2="12.24%" id="explore"><stop stop-color="#3D3695" offset="0%"></stop><stop stop-color="#953594" offset="49.5%"></stop><stop stop-color="#DA2129" offset="100%"></stop></linearGradient></defs><path d="M12 10.9c-.61 0-1.1.49-1.1 1.1s.49 1.1 1.1 1.1c.61 0 1.1-.49 1.1-1.1s-.49-1.1-1.1-1.1zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19z" fill="url(#explore)"></path></svg>
+			</div>
+		
+			<div class="explore-people-container">
+				<div class="row people pp_explore_people">
+					<?php if ($context['users']) {
+						foreach ($context['users'] as $key => $udata) {
+							include 'includes/row.html';
+						}
+					} else{
+						include 'includes/no-users-found.html';
+					} ?>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		jQuery(document).ready(function($) {
+			var scrolled = 0;
+			var last_id  = 0;
+
+			$(window).scroll(function() {
+			    if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+			    	if (scrolled == 0) {
+		                scrolled = 1;
+		                if ($(".explore-people__itemz").length > 0) {
+		                	last_id = $(".explore-people__itemz").last().attr('id');
+		                }
+
+						$.ajax({
+							url: link('main/explore-people'),
+							type: 'GET',
+							dataType: 'json',
+							data: {offset:last_id},
+						}).done(function(data) {
+							if (data.status == 200) {
+								$(".explore-people-container").find('.people').append($(data.html));
+								scrolled = 0;
+							}
+							else{
+								$(window).unbind('scroll');
+							}
+						});
+		       		}
+			    }
+			});
+		});
+	</script>
+	<?php include $context['dirname_theme'].'/main/templates/includes/lazy-load.html'; ?>

@@ -1,0 +1,110 @@
+<div class="explore-page-container">
+	<div class="sub__header">
+		<div class="container">
+			<h3>{{LANG lives}}</h3>
+			<p>{{LANG Explore pixelphoto lives}}</p>
+		</div>
+		<svg width="100%" height="50px" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1920 75"><path fill="currentColor" d="M1963,327H-105V65A2647.49,2647.49,0,0,1,431,19c217.7,3.5,239.6,30.8,470,36,297.3,6.7,367.5-36.2,642-28a2511.41,2511.41,0,0,1,420,48"></path></svg>
+	</div>
+	
+	<?php if ($context['follow']) { ?>
+		<div class="pg_folw_sugg">
+			<div class="container">
+				<div class="valign pg_widget_title">
+					<h5>{{LANG follow_suggestions}}</h5>
+					<a href="<?php echo(pxp_link('explore/people')); ?>" data-ajax="ajax_loading.php?app=explore&apph=people">{{LANG see_all}}</a>
+				</div>
+				<div class="pg_folw_sugg_carousel" id="follow__suggestions-cr">
+					<?php foreach ($context['follow'] as $key => $user_data) { ?>
+						<div class="item">
+							<div class="avatar">
+								<img src="<?php echo($user_data['avatar']) ?>">
+								<div class="valign uname">
+									<a href="<?php echo($user_data['url']) ?>" data-ajax="ajax_loading.php?app=profile&apph=profile&uname=<?php echo($user_data['username']) ?>"><h4><?php echo($user_data['username']) ?></h4></a>
+									<p><?php echo($user_data['name']) ?></p>
+								</div>
+							</div>
+							<div class="button">
+								<button class="btn btn-mat" onclick="follow(<?php echo($user_data['user_id']) ?>,this);"><span>{{LANG follow}}</span></button>
+							</div>
+						</div>
+					<?php } ?>
+				</div>
+			</div>
+		</div>
+	<?php } ?>
+	
+	<div class="container">
+		<div class="explore-posts-container explore-posts-container-postss pg_grid_posts">
+			<?php if ($context['lives']) {
+				foreach ($context['lives'] as $key => $post_data) {
+					include 'includes/list.html';
+				}
+			} else{ 
+					include 'includes/no-posts-found.html';
+			} ?>
+		</div>
+	</div>
+</div>
+<?php
+	include $context['dirname_theme'].'/main/templates/modals/delete-post.html';
+	include $context['dirname_theme'].'/main/templates/modals/embed_post.html';
+	include $context['dirname_theme'].'/main/templates/includes/lazy-load.html';
+	include $context['dirname_theme'].'/main/templates/modals/delete-comment.html';
+?>
+
+	<script>
+		var myLazyLoad = new LazyLoad({
+		    elements_selector: ".lazy_"
+		});
+
+		jQuery(document).ready(function($) {
+			var scrolled = 0;
+			var last_id  = 0;
+
+			$(window).scroll(function() {
+			    if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+			    	if (scrolled == 0 && $('.explore-postset').length > 0) {
+		                scrolled = 1;
+		                var list_ids = $("div.explore-postset[id]").map(function() {
+							if($(this).attr('id') > 0) {
+								return $(this).attr('id');
+							}
+			            }).get();
+
+			            if (!list_ids) {
+			                return false;
+			            }
+			            
+        				var last_id  = Math.min.apply(Math,list_ids);
+
+						$.ajax({
+							url: link('posts/explore-lives'),
+							type: 'GET',
+							dataType: 'json',
+							data: {offset:last_id},
+						}).done(function(data) {
+							if (data.status == 200) {
+								$(".explore-posts-container-postss").append(data.html);
+								scrolled = 0;
+							}
+							else{
+								$(window).unbind('scroll');
+							}
+						});
+		       		}
+			    }
+			});
+			
+			$(document).ready(function(){
+				$('#follow__suggestions-cr').flickity({
+					freeScroll: true,
+					pageDots: false,
+					contain: true,
+					resize: false,
+					cellAlign: 'left',
+				});
+			});
+		});
+
+	</script>

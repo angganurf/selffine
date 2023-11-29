@@ -1,0 +1,89 @@
+<style>
+.navbar-fixed-top.transparent {background: transparent;box-shadow: none;transition: all 0.2s ease-in-out;}
+.navbar-fixed-top.transparent .navbar-nav > li > a, .navbar-fixed-top.transparent .navbar-nav li div.notifications-list {color: #ffffff;}
+.navbar-fixed-top.transparent .navbar-nav li.pg_hdr_act_menu .dropdown-toggle span {color: #ffffff;}
+.navbar-fixed-top.transparent form.navbar-search .input input {background-color: rgba(255, 255, 255, 0.2);}
+.navbar-fixed-top.transparent form.navbar-search .input input:focus {background-color: white;}
+.navbar-fixed-top.transparent .navbar-nav li.active a, .navbar-fixed-top.transparent .navbar-nav li.active a:focus, .navbar-fixed-top.transparent .navbar-nav li div.notifications-list.open > span > svg, .navbar-fixed-top.transparent .navbar-nav > .active > a, .navbar-fixed-top.transparent .navbar-nav > .active > a:hover, .navbar-fixed-top.transparent .navbar-nav > .active > a:focus {color: var(--main);}
+</style>
+<div class="pg_store_main_head">
+	<div class="container">
+		<h2>{{LANG store}}</h2>
+		<?php include 'includes/filter.html'; ?>
+	</div>
+</div>
+<div class="container">
+	<div class="page-margin">
+		<?php if($context['me']) {?>
+			<div class="valign pp_store_head">
+				<ul class="list-unstyled pp_store_head_nav">
+					<li><a href="{{CONFIG site_url}}/store/{{ME username}}/items" data-ajax="ajax_loading.php?app=store&apph=store&user={{ME username}}&page=items"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,18H6V14H12M21,14V12L20,7H4L3,12V14H4V20H14V14H18V20H20V14M20,4H4V6H20V4Z" /></svg> {{LANG my_store}}</a></li>
+					<li><a href="{{CONFIG site_url}}/store/{{ME username}}/downloads" data-ajax="ajax_loading.php?app=store&apph=store&user={{ME username}}&page=downloads"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" /></svg> {{LANG my_downloads}}</a></li>
+					<li><a href="{{CONFIG site_url}}/store/{{ME username}}/upload" data-ajax="ajax_loading.php?app=store&apph=store&user={{ME username}}&page=upload"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg> {{LANG upload}}</a></li>
+				</ul>
+				<div>
+					<select class="form-control" id="store_sort">
+						<option value="id" selected disabled>{{LANG sort_by}}</option>
+						<option value="popularity_desc">Popularity Descending</option>
+						<option value="popularity_asc">Popularity Ascending</option>
+						<option value="downloads_desc">Downloads Descending</option>
+						<option value="downloads_asc">Downloads Ascending</option>
+						<option value="sales_desc">Sales Descending</option>
+						<option value="sales_asc">Sales Ascending</option>
+						<option value="date_desc">Release date Descending</option>
+						<option value="date_asc">Release date Ascending</option>
+					</select>
+				</div>
+			</div>
+		<?php } ?>
+		<?php include 'includes/'.$context['page'].'.html'; ?>
+	</div>
+</div>
+<script>
+	$(document).scroll(function(event){
+		if($(document).scrollTop() > 50) {
+			$(".navbar-fixed-top").removeClass("transparent");
+		} else {
+			$(".navbar-fixed-top").addClass("transparent");
+		}
+	});
+	
+    $('#store_sort').change(function(event){
+        event.preventDefault();
+        var val = $('#store_sort option:selected').val();
+
+        var list_ids = $("div.explore-postset[id]").map(function() {
+            return $(this).attr('id');
+        }).get();
+
+        if (!list_ids) {
+            return false;
+        }
+
+        var last_id  = Math.min.apply(Math,list_ids);
+        var _last_views     = $("div.explore-postset[id]").last().attr('data-post-views');
+        var _last_sells     = $("div.explore-postset[id]").last().attr('data-post-sells');
+        var _last_download  = $("div.explore-postset[id]").last().attr('data-post-download');
+        var _last_date      = $("div.explore-postset[id]").last().attr('data-post-date');
+
+        $.ajax({
+            url: link('store/explore-all-store'),
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                sort:val,
+                offset :last_id,
+                last_views:_last_views,
+                last_sells:_last_sells,
+                last_download:_last_download,
+                last_date:_last_date
+            },
+        }).done(function(data) {
+            if (data.status == 200) {
+                $(".explore-posts-container").html(data.html);
+                window.scrolled = 0;
+            }
+        });
+
+    });
+</script>

@@ -1,0 +1,59 @@
+<div class="explore-page-container">
+	<div class="sub__header">
+		<div class="container">
+			<h3>{{LANG explore_people}}</h3>
+			<p>{{LANG suggested_people}}</p>
+		</div>
+		<svg width="100%" height="50px" class="pg_gray_svg" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1920 75"><path fill="currentColor" d="M1963,327H-105V65A2647.49,2647.49,0,0,1,431,19c217.7,3.5,239.6,30.8,470,36,297.3,6.7,367.5-36.2,642-28a2511.41,2511.41,0,0,1,420,48"></path></svg>
+	</div>
+	<div class="container">
+		<div class="valign pg_widget_title">
+			<h5>{{LANG follow_suggestions}}</h5>
+		</div>
+		<div class="explore-people-container pg_grid_ppl_sugg">
+			<div class="row people">
+				<?php if ($context['users']) {
+					foreach ($context['users'] as $key => $udata) {
+						include 'includes/row.html';
+					}
+				} else{
+					include 'includes/no-users-found.html';
+				} ?>
+			</div>
+		</div>
+	</div>
+</div>
+
+	<script>
+		jQuery(document).ready(function($) {
+			var scrolled = 0;
+			var last_id  = 0;
+
+			$(window).scroll(function() {
+			    if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+			    	if (scrolled == 0) {
+		                scrolled = 1;
+		                if ($(".explore-people__item").length > 0) {
+		                	last_id = $(".explore-people__item").last().attr('id');
+		                }
+
+						$.ajax({
+							url: link('main/explore-people'),
+							type: 'GET',
+							dataType: 'json',
+							data: {offset:last_id},
+						}).done(function(data) {
+							if (data.status == 200) {
+								$(".explore-people-container").find('.people').append($(data.html));
+								scrolled = 0;
+							}
+							else{
+								$(window).unbind('scroll');
+							}
+						});
+		       		}
+			    }
+			});
+		});
+	</script>
+	<?php include $context['dirname_theme'].'/main/templates/includes/lazy-load.html'; ?>

@@ -1,0 +1,35 @@
+<tr id="list-<?php echo($cd['report']['id']); ?>" data-report="<?php echo($cd['report']['id']); ?>" data_selected="<?php echo($cd['report']['id']); ?>" data-post="<?php echo($cd['report']['fund_id']); ?>">
+	<td class="check"><input type="checkbox" id="check-data-<?php echo($cd['report']['id']); ?>" class="delete-checkbox filled-in"><label for="check-data-<?php echo($cd['report']['id']); ?>"></label></td>
+	<td>
+		<span>
+			<?php echo($cd['report']['id']); ?>
+		</span>
+	</td>
+	<td>
+		<a href="<?php echo(un2url($cd['report']['username'])); ?>">
+			<img src="<?php echo(media($cd['report']['avatar'])); ?>" class="setting-avatar rounded-circle" alt="report avatar">
+			<?php echo($cd['report']['username']); ?>
+		</a>
+	</td>
+	<td>
+		<span>
+			<?php echo(date('Y-F-d h:s',$cd['report']['time'])); ?>
+		</span>
+	</td>
+	<td>
+		<span>
+			<a href="<?php echo( $context['fund_url']); ?>">
+				<b>Open funding request</b>
+			</a>
+		</span>
+	</td>
+	<td>
+		<span>
+			<?php echo($cd['report']['text']); ?>
+		</span>
+	</td>
+	<td>
+		<button class="btn bg-success admn_table_btn" data-id="<?php echo($cd['report']['id']); ?>" onclick="MarkSafe(<?php echo($cd['report']['id']); ?>,'hide');">MARK SAFE</button>
+		<button class="btn bg-danger admn_table_btn" data-id="<?php echo($cd['report']['u2_id']); ?>" onclick="DeletePost(<?php echo($cd['report']['id']); ?>,'hide');">DELETE</button>
+	</td>
+</tr>

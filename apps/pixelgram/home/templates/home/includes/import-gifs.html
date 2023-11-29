@@ -1,0 +1,36 @@
+<div class="content post-editing-form">
+	<div class="valign user-heading">
+		<img src="{{ME avatar}}" class="img-circle">
+		<div>
+			<span>{{ME username}}</span>
+			<span class="pp_area">GIF</span>
+		</div>
+	</div>
+  	<form class="form" id="import-post-gifs">
+		<div class="pg_imp_gifs">
+			<div class="form-group search-input">
+				<input type="text" placeholder="{{LANG search_gifs}}">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M11 2c4.968 0 9 4.032 9 9s-4.032 9-9 9-9-4.032-9-9 4.032-9 9-9zm0 16c3.867 0 7-3.133 7-7 0-3.868-3.133-7-7-7-3.868 0-7 3.132-7 7 0 3.867 3.132 7 7 7zm8.485.071l2.829 2.828-1.415 1.415-2.828-2.829 1.414-1.414z"/></svg>
+			</div>
+			<div class="preview-video hide">
+				<button type="button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path></svg></button>
+				<div class="fluid"></div>
+			</div>
+			<div class="content_prnt"><div class="content hide"></div></div>
+		</div>
+		<div class="form-group">
+      		<textarea class="form-control" name="caption" rows="3" placeholder="{{LANG add_post_caption}}"></textarea>
+      	</div>
+      	<div class="form-group publish">
+			<div class="loading_cont hidden"></div>
+			<button type="reset" class="btn btn-default btn-mat" id="close-anim-modal">{{LANG close}}</button>
+      		<button type="submit" class="btn btn-main btn-mat">{{LANG publish}}</button>
+      	</div>
+      	<input class="hidden" id="upload-images" type="file" name="images[]" multiple accept="image/*">
+        <input type="hidden" name="hash" value="<?php echo($context['csrf_token']) ?>">
+  	</form>
+</div>
+<div class="clear"></div>
+<?php 
+include $context['dirname_theme'].'/home/templates/home/js/script.import.images.html';
+ ?>

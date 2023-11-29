@@ -1,0 +1,32 @@
+
+	<div class="container">
+		<div class="page-not-found">
+
+			<h3>{{LANG account_not_activated}}</h3>
+			<p>{{LANG click_on_activation_link}}</p>
+			<div class="output-alert"></div>
+			<div><a href="javascript:void(0)" onclick="resendCode(this)">{{LANG resend_code}}</a></div>
+			<div><a href="<?php echo($config['site_url'].'/signout') ?>">{{LANG logout}}</a></div>
+
+		</div>
+	</div>
+	<script type="text/javascript">
+		function resendCode(self) {
+			$(self).attr('disabled');
+			$(self).text("{{LANG please_wait}}");
+			$.ajax({
+				url: link('/signin/resend_code'),
+				type: 'GET',
+				dataType: 'json'
+			}).done(function(data) {
+				$(self).text("{{LANG resend_code}}");
+				$(self).removeAttr('disabled');
+				if (data.status == 200) {
+					showResponseAlert('.output-alert','success',data.message,2000);
+				}
+				else{
+					showResponseAlert('.output-alert','danger',data.message,2000);
+				}
+			});
+		}
+	</script>

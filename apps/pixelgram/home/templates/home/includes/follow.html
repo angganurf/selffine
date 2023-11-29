@@ -1,0 +1,23 @@
+<?php if ($context['follow']) { ?>
+<div class="follow-suggestions-cr">
+	<div class="valign pg_widget_title">
+		<h5>{{LANG follow_suggestions}}</h5>
+		<a href="<?php echo(pxp_link('explore/people')) ?>" data-ajax="ajax_loading.php?app=explore&apph=people">{{LANG see_all}}</a>
+	</div>
+	<div class="pg_folw_sugg_carousel tl-follow-suggestions" id="follow-suggestions-cr">
+		<?php foreach ($context['follow'] as $key => $follow_sugg) { ?>
+			<div class="item">
+				<div class="avatar">
+					<img src="<?php echo($follow_sugg['avatar']) ?>" alt="Picture">
+					<div class="valign uname">
+						<a href="<?php echo($follow_sugg['url']) ?>" data-ajax="ajax_loading.php?app=profile&apph=profile&uname=<?php echo($follow_sugg['username']) ?>"><h4><?php echo $follow_sugg['username']; ?></h4></a>
+					</div>
+				</div>
+				<div class="button">
+					<button class="btn btn-mat" onclick="follow(<?php echo $follow_sugg['user_id']; ?>,this);"><span>{{LANG follow}}</span></button>
+				</div>
+			</div>
+		<?php } ?>
+	</div>
+</div>
+<?php } ?>

@@ -1,0 +1,95 @@
+<div class="sett-active">
+	<h2 class="user_sttng_panel_hd">{{LANG general}}</h2>
+	<div class="valign sett_avatr_chng">
+		<div class="valign avatar-wrapper">
+			<img src="<?php echo($context['me']['avatar']) ?>">
+			<p><?php echo($context['me']['name']) ?></p>
+		</div>
+		<div class="edit-avatar">
+			<form id="edit-avatar">
+				<button type="button" class="btn btn-main btn-mat" onclick="$('#avatar').trigger('click');">{{LANG change_avatar}}</button>
+				<input type="file" accept="image/*" name="avatar" id="avatar" class="hidden">
+				<input type="hidden" name="hash" value="<?php echo($context['csrf_token']) ?>">
+			</form>
+		</div>
+	</div>
+	<form class="form pp_sett_form" id="edit-general-settings">
+		<div class="pg_mat_input">
+			<input required="true" type="text" name="username" placeholder="{{LANG username}}" value="<?php echo($context['me']['username']) ?>">
+			<label>{{LANG username}}</label>
+		</div>
+		<div class="pg_mat_input">
+			<input required="true" type="email" name="email" placeholder="{{LANG email}}" value="<?php echo($context['me']['email']) ?>">
+			<label>{{LANG email}}</label>
+		</div>
+		<div class="pg_mat_input">
+			<select name="gender" class="pg_select_has_label" required="true">
+				<option value="male" <?php if($context['me']['gender'] == 'male'){ ?> selected <?php } ?>>{{LANG male}}</option>
+				<option value="female" <?php if($context['me']['gender'] == 'female'){ ?> selected <?php } ?>>{{LANG female}}</option>
+			</select>
+			<label>{{LANG gender}}</label>
+		</div>
+		<div class="pg_mat_input">
+			<select name="country" class="pg_select_has_label">
+				<?php foreach ($context['countries_name'] as $cid => $cname) { ?>
+					<option value="<?php echo($cid) ?>" <?php if($context['me']['country_id'] == $cid){ ?> selected <?php } ?>><?php echo $cname; ?></option>
+				<?php } ?>
+			</select>
+			<label>{{LANG country}}</label>
+		</div>
+		
+		<?php if ($config['private_photos'] == 'on' || $config['private_photos'] == 'on') { ?>
+			<div class="pg_mat_input">
+				<input required="true" type="number" name="subscribe_price" placeholder="{{LANG monthly_subscribe_price}}" value="<?php echo($context['me']['subscribe_price']) ?>">
+				<label>{{LANG monthly_subscribe_price}}</label>
+			</div>
+		<?php } ?>
+
+		<?php if ($context['user']['admin'] == 1) { ?>
+			<hr>
+			<div class="pg_mat_input">
+				<input required="true" type="wallet" name="wallet" placeholder="{{LANG wallet}}" value="<?php echo($context['me']['wallet']) ?>">
+				<label>{{LANG wallet}}</label>
+			</div>
+			<p class="pg_mat_switch switch">
+				<label>
+					{{LANG activate_user}}
+					<input type="checkbox" name="active" id="active" <?php if($context['me']['active'] == 1){ ?> checked <?php } ?>>
+					<span class="lever"></span>
+				</label>
+			</p>
+			<p class="pg_mat_switch switch">
+				<label>
+					{{LANG verify_user}}
+					<input type="checkbox" name="verified" id="verified" <?php if($context['me']['verified'] == 1){ ?> checked <?php } ?>>
+					<span class="lever"></span>
+				</label>
+			</p>
+			<p class="pg_mat_switch switch">
+				<label>
+					{{LANG pro_member}}
+					<input type="checkbox" name="is_pro" id="is_pro" <?php if($context['me']['is_pro'] == 1){ ?> checked <?php } ?>>
+					<span class="lever"></span>
+				</label>
+			</p>
+			<?php if ($config['business_account'] == 'on') { ?>
+				<p class="pg_mat_switch switch">
+					<label>
+						{{LANG business_account}}
+						<input type="checkbox" name="business_account" id="business_account" <?php if($context['me']['business_account'] == 1){ ?> checked <?php } ?>>
+						<span class="lever"></span>
+					</label>
+				</p>
+			<?php } ?>
+		<?php } ?>
+
+		<div class="pg_sett_save"><button class="btn btn-main btn-mat btn-mat-raised pp_flat_btn" type="submit">{{LANG save_changes}}</button></div>
+		<div class="clear"></div>
+		<input type="hidden" name="user_id" value="<?php echo($context['me']['user_id']) ?>">
+		<input type="hidden" name="hash" value="<?php echo($context['csrf_token']) ?>">
+	</form>
+</div>
+<?php 
+include $context['dirname_theme'].'/main/templates/includes/lazy-load.html';
+include $context['dirname_theme'].'/settings/templates/settings/js/script.html';
+ ?>

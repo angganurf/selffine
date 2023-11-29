@@ -1,0 +1,447 @@
+<style>
+.events_container {
+    display: none;
+}
+.post-data-container .post-data-inner .sidebar .sidebar__inner .comments .post-comments-list li .delcomment {
+    display: none;
+}
+.like_comment {
+    display: none;
+}
+    .wow_liv_comments_feed {
+    position: absolute;
+    z-index: 0;
+    bottom: 0;
+    width: 38%;
+    left: inherit;
+    right: 0;
+    top: 0;
+    padding: 71px 15px 87px;
+}
+
+.live_comments .user_avatar{
+    border: 2px solid #bec2c9;
+    padding: 2px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+}
+.wow_liv_comments_feed .main-comment .user-name a {
+    margin-left: 10px;
+    color: #171615;
+}
+.wow_liv_comments_feed .main-comment .user-comment {
+    padding-left: 66px!important;
+}
+
+.wow_liv_comments_feed .main-comment p.comment-text {
+    color: #171615;
+}
+</style>
+<div class="post-data-container" data-post-id="<?php echo($context['live_data']->post_id) ?>">
+    <input type="hidden" id="video-id" value="<?php echo $context['live_data']->post_id; ?>">
+    <div class="post-data-inner">
+        <div class="post-media-renderer">
+            <div id="background" class="hidden"></div>
+            <div class= player-video" style="margin-top: 0 !important">
+                <div class="sticky-container__wrap sticky-container_in-content" style="height: 608px;">
+                    <div class="video-player pt_video_player  sticky-container__video" id="post_live_video_<?php echo($context['live_data']->post_id) ?>">
+                        <div id="player_1883274941" style="width: 100%; height: 100%; position: relative; background-color: black; overflow: hidden;">
+                            <video id="video1883274941"
+                                style="width: 100%; height: 100%; position: relative; object-fit: cover;"
+                                autoplay=""
+                                muted="" 
+                                playsinline=""
+                                controls
+                                > 
+                                <source 
+                                src="<?php echo $context['live_data']->video_location;?>" 
+                                type="application/x-mpegURL" 
+                                data-quality="360p"
+                                title='360p' 
+                                label='360p' 
+                                res='360'>
+                                <audio id="audio1883274941" playsinline=""></audio>
+                            </video>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div class="sidebar">
+            <div class="sidebar__inner">
+                <div class="header">
+                    <div class="avatar">
+                        <img src="<?php echo(media($context['live_user_data']->avatar)) ?>" alt="Avatar" class="img-circle img-res">
+                    </div>
+                    <div class="uname">
+                        <div class="fluid">
+                            <a href="<?php echo(un2url($context['live_user_data']->username)) ?>"><?php echo($context['live_user_data']->username) ?>
+                                <span class="fluid">
+                                    <span class="time-ago" title="<?php echo(ToDate($context['live_data']->time)) ?>"><?php echo(time2str($context['live_data']->time)) ?></span>
+                                </span>
+                            </a>
+                            <?php if ($context['is_owner'] == false) { 
+                                if ($context['is_following']) { ?>
+                                    <button class="btn-follow pull-right btn-following" onclick="follow(<?php echo($context['live_data']->user_id) ?>,this);">
+                                        <span>{{LANG following}}</span>
+                                    </button>
+                                <?php  } else{ ?>
+                                    <button class="btn-follow pull-right" onclick="follow(<?php echo($context['live_data']->user_id) ?>,this);">
+                                        <span>{{LANG follow}}</span>
+                                    </button>
+                            <?php } } ?>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pp_pst_caption">
+                    <p data-caption></p>
+                </div>
+                
+                <div class="comments">
+                    <ul class="post-comments-list">
+                        <span class="main_post_comm <?php if($context['live_data']->live_ended){}else{ echo 'hidden';}?>"><?php echo $context['live_data']->votes; ?> {{LANG comments}}</span>
+                        
+
+                        <?php
+                        if($context['live_data']->live_ended){
+                        foreach ($context['live_data']->comments as $key => $comment) {?>
+                            <li data-post-comment="<?php echo($comment->id) ?>">
+                                <div class="user-avatar">
+                                    <img src="<?php echo(media($comment->avatar)) ?>" class="img-circle" />
+                                </div>
+                                <div class="pp_com_body">
+                                    <span>
+                                        <strong><a href="<?php echo(un2url($comment->username)) ?>" data-ajax="ajax_loading.php?app=profile&apph=profile&uname=<?php echo($comment->username) ?>"><?php echo($comment->username) ?></a></strong> <?php echo($comment->text) ?>
+                                        <div onclick="pxp_like_dis_comment(<?php echo($comment->id) ?>,this)" class="like_comment comment_like_<?php echo($comment->id) ?>">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart <?php echo ( ($comment->is_liked) ? 'liked_color' : '');?>"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                        </div>
+                                    </span>
+                                </div>
+                                <div class="events_container">
+                                    <span class="evnt_cont_btns comment_like_span_<?php echo($comment->id) ?>"><span><?php echo($comment->likes) ?></span> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart liked_color	smaller"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></span>
+                                    <span class="middot">·</span>
+                                    <span onclick="pxp_get_comment_reply(<?php echo($comment->id) ?>,this)" id="comment_reply_<?php echo($comment->id) ?>" class="evnt_cont_btns pointer">
+                                        <span><?php echo($comment->replies) ?></span> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-circle smaller"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                                    </span>
+                                    <div class="reply_list"></div>
+                                    <form class="form add-comment" style="display: none;" id="add_reply_form_<?php echo $comment->id; ?>">
+                                        <div class="fluid">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control comment" onkeydown="pxp_reply_comment(<?php echo $comment->id; ?>,event);" placeholder="{{LANG write_comment}}" id="emojionearea_comment<?php echo $comment->id; ?>">
+                                            </div>
+                                        </div>
+                                        <div class="reply_commenting_overlay hidden">
+                                            <div id="pp_loader"><div class="speeding_wheel"></div></div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <?php if ($comment->is_owner) { ?>
+                                    <span class="pull-right delcomment" title="{{LANG delete_comment}}" onclick="delete_commnet(<?php echo($comment->id) ?>);">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                    </span>
+                                <?php } ?>
+                            </li>
+                            <script type="text/javascript">add_comment_emoji(<?php echo($comment->id) ?>);</script>
+                        <?php } 
+                        }?>
+
+
+                    </ul>
+                </div>
+                <div class="comment-box">
+                    <form class="form" action="javascript:void(0);">
+                        <input type="hidden" name="hash" value="<?php echo $context['csrf_token']; ?>">
+                        <div class="text-input">	
+                            <?php if (IS_LOGGED) { ?>
+                                <div class="user-avatar post_avatar_">
+                                    <img class="img-circle" src="<?php echo($context['user']['avatar']) ?>" alt="avatar" />
+                                </div>
+                                <div class="post_input_">
+                                    <input type="text" class="form-control comment" id="post_c" placeholder="Write a comment" data-post-id="<?php echo($context['live_data']->post_id) ?>">
+                                </div>
+                                
+                                <div class="commenting-overlay hidden">
+                                    <div id="pp_loader"><div class="speeding_wheel"></div></div>
+                                </div>
+                            <?php } else{ ?>
+                                <div class="login2comment">
+                                    <a href="<?php echo(pxp_link('welcome')) ?>">{{LANG login}}</a> {{LANG login_to_lc_post}}
+                                </div>
+                            <?php } ?>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="footer__container">
+        <?php include $context['dirname_theme'].'/main/templates/includes/lazy-load.html'; ?>
+    </div>
+    <?php if ($context['follow']) { ?>
+        <div class="follow-suggestions-cr">
+            <div class="fluid">
+                <h5>
+                    {{LANG follow_suggestions}}
+                    <a href="<?php echo(pxp_link('explore/people')) ?>" class="pull-right">{{LANG see_all}} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+                </h5>
+            </div>
+            <div class="cr-wrapper">
+                <div class="owl-carousel post-follow-suggestions" id="follow-suggestions-cr">
+                    <?php foreach ($context['follow'] as $key => $follow_sugg) { ?>
+                        <div class="item">
+                            <div class="avatar">
+                                <img src="<?php echo($follow_sugg['avatar']) ?>" class="img-circle">
+                            </div>
+                            <div class="uname">
+                                <a href="<?php echo($follow_sugg['url']) ?>"  data-ajax="ajax_loading.php?app=profile&apph=profile&uname=<?php echo($follow_sugg['username']) ?>">
+                                    <strong><?php echo($follow_sugg['username']) ?></strong>
+                                </a>
+                                <span><?php echo($follow_sugg['name']) ?></span>
+                            </div>
+                            <div class="button">
+                                <button onclick="follow(<?php echo($follow_sugg['user_id']) ?>,this);"><span>{{LANG follow}}</span></button>
+                            </div>
+                        </div>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
+</div>
+
+
+
+<?php
+    if ($config['agora_live_video'] == 1 && !empty($config['agora_app_id'])) {
+       // echo $pixelphoto->PX_LoadPage('live/templates/agora');
+    }
+?>
+
+<script>
+    jQuery(document).ready(function($) {
+        var pd_cont = $(".post-data-container");
+        function insert_p_comment() {
+            $(".post-data-container").find('.commenting-overlay').removeClass('hidden');
+            var zis  = $("#post_c");
+            var text = zis.val();
+            var list = $(".post-data-container").find('.post-comments-list');
+            var id   = $("#post_c").data('post-id');
+
+            if (!text) { return false; }
+
+            $.post(link('posts/add-comment'), {post_id:id,text:text}, function(data, textStatus, xhr) {
+                if (data.status == 200) {
+                    $(data.html).insertAfter(list.find('span.main_post_comm'));
+                }
+
+                zis.val('');
+                $(".post-data-container").find('.commenting-overlay').addClass('hidden');
+            });
+        }
+        var ell = $("#post_c").emojioneArea({
+            pickerPosition: "top",
+            tonesStyle: "radio",
+            events: {
+                keyup: function (editor, event) {
+                    $("#post_c").val(ell[0].emojioneArea.getText());
+                    if (event.keyCode == 13 && event.shiftKey == 0) {
+                    insert_p_comment();
+                    $('.emojionearea .emojionearea-editor').html('');
+                    }
+                }
+            },
+            filters: {
+                flags : false,
+                objects : false,
+                travel_places : false,
+                activity : false
+            }
+        });
+        $('.emojionearea').css('border', '0');
+        pd_cont.find('input[type="text"]').keydown(function(event) {
+            if (event.keyCode == 13 && event.shiftKey == 0) {
+
+                event.preventDefault();
+                event.stopPropagation();
+                pd_cont.find('.commenting-overlay').removeClass('hidden');
+                var zis  = $(this);
+                var text = zis.val();
+                var list = pd_cont.find('.post-comments-list');
+                var id   = $(this).data('post-id');
+
+                if (!text) { return false; }
+
+                $.post(link('posts/add-comment'), {post_id:id,text:text}, function(data, textStatus, xhr) {
+                    if (data.status == 200) {
+                        $(data.html).insertAfter(list.find('span.main_post_comm'));
+                    }
+
+                    zis.val('');
+                    pd_cont.find('.commenting-overlay').addClass('hidden');
+                });
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+<?php
+// var_dump("config['live_video'] = " . $config['live_video']);
+// var_dump($context['live_data']->stream_name);
+// var_dump($context['live_data']->is_still_live);
+// var_dump($context['live_data']->live_ended);
+
+    if (    $config['live_video'] == 1 && 
+            !empty($context['live_data']->stream_name) && 
+            $context['live_data']->is_still_live && 
+            $context['live_data']->live_ended == 0
+        ) 
+    { ?>
+
+    var post_live_<?php echo $context['live_data']->post_id; ?> = setInterval(function(){ 
+        setTimeout(function (argument) {
+            if($('#live_post_comments_<?php echo $context['live_data']->post_id; ?>').length == 0 || $('#video-id').val() != <?php echo $context['live_data']->post_id; ?>){
+                clearInterval(post_live_<?php echo $context['live_data']->post_id; ?>);
+            }
+        },10000);
+        
+        data = {};
+        for (var i = 0; i < $('.live_comments').length; i++) {
+            if ($($('.live_comments')[i]).attr('live_comment_id')) {
+            data[i] = $($('.live_comments')[i]).attr('live_comment_id');
+            }
+        }
+        $.post(link('live/check_comments'), {post_id: <?php echo $context['live_data']->post_id; ?>,ids:data,page:"watch"}, function(data, textStatus, xhr) {
+            if (data.status == 200) {
+                if (data.still_live == 'offline') {
+                    $('#live_post_comments_<?php echo $context['live_data']->post_id; ?>').remove();
+                    $('[id=post-<?php echo $context['live_data']->post_id; ?>]').find('.comment-textarea').attr('disabled');
+                    return false;
+                }
+                $('#live_post_comments_<?php echo $context['live_data']->post_id; ?>').append(data.html);
+                $('#live_count_<?php echo $context['live_data']->post_id; ?>').html(data.count);
+                $('#live_word_<?php echo $context['live_data']->post_id; ?>').html(data.word);
+                var comments = $('#live_post_comments_<?php echo $context['live_data']->post_id; ?> .live_comments');
+                if (comments.length > 4) {
+                    var i;
+                    for (i = 0; i < comments.length; i++) {
+                        if ($('#live_post_comments_<?php echo $context['live_data']->post_id; ?> .live_comments').length > 4) {
+                            comments[i].remove();
+                        }
+                    }
+                }
+            } else if (data.removed == 'yes'){
+                clearInterval(post_live_<?php echo $context['live_data']->post_id; ?>);
+                $('#live_count_<?php echo $context['live_data']->post_id; ?>').html(0);
+                $('#live_post_comments_<?php echo $context['live_data']->post_id; ?>').html("<h3 class='end_video_text'><?php echo(str_replace('{user}', $context['live_user_data']->username, lang('{user} stream has ended.') )) ?></h3>");
+                //$('#live_post_comments_<?php echo $context['live_data']->post_id; ?>').remove();
+                $('.pt_video_comments').remove();
+                return false;
+            } else {
+                clearInterval(post_live_<?php echo $context['live_data']->post_id; ?>);
+                $('#live_count_<?php echo $context['live_data']->post_id; ?>').html(0);
+                //$('#live_post_comments_<?php echo $context['live_data']->post_id; ?>').remove();
+                $('#live_post_comments_<?php echo $context['live_data']->post_id; ?>').html("<h3 class='end_video_text'><?php echo(str_replace('{user}', $context['live_user_data']->username, lang('{user} stream has ended.') )) ?></h3>");
+                $('.pt_video_comments').remove();
+                return false;
+            }
+        });
+    }, 3000);
+
+<?php
+    } 
+?>
+
+<?php 
+    // var_dump("*************************************************");
+    // var_dump("config['agora_live_video'] = " . $config['agora_live_video']);
+    // var_dump("config['agora_app_id'] = " . $config['agora_app_id']);
+    // var_dump("context['live_data']->stream_name = " . $context['live_data']->stream_name);
+    // var_dump( $context['live_data']->is_still_live);
+
+    if (    $config['agora_live_video'] == 1 && 
+            !empty($config['agora_app_id']) && 
+            !empty($context['live_data']->stream_name) && 
+            $context['live_data']->is_still_live
+        ) 
+    { 
+?>
+
+function RunLiveAgora(channelName,DIV_ID,token) {
+    var agoraAppId = '<?php echo($config["agora_app_id"]) ?>'; 
+
+    var client = AgoraRTC.createClient({mode: 'live', codec: 'vp8'}); 
+        client.init(agoraAppId, function () {
+            client.setClientRole('audience', function() {}, function(e) {});
+            let rand = Math.floor(Math.random() * 1000000);
+            client.join(token, channelName, rand, function(uid) {}, function(err) {});
+        }, function (err) {});
+        client.on('stream-added', function (evt) {
+            var stream = evt.stream;
+            var streamId = stream.getId();
+            client.subscribe(stream, function (err) {});
+        });
+        client.on('stream-subscribed', function (evt) {
+            var video_id = $('#video-id').val();
+
+            if (!video_id) {
+                return false;
+            }
+                
+            $('#'+DIV_ID).html('<div class="wow_liv_counter"><span id="live_word_'+video_id+'">{{LANG live}}</span> <span id="live_count_'+video_id+'"> 0</span></div><div id="live_post_comments_'+video_id+'" class="wow_liv_comments_feed user-comments"></div>');
+            var remoteStream = evt.stream;
+                remoteStream.play(DIV_ID);
+                $('#player_'+remoteStream.getId()).find('video').css('position', 'relative');
+        });
+}
+        
+  RunLiveAgora("<?php echo $context['live_data']->stream_name; ?>","post_live_video_<?php echo($context['live_data']->post_id) ?>","<?php echo $context['live_data']->agora_token; ?>");
+     
+<?php 
+    } 
+?>
+</script>
+
+
+<script type="text/javascript">
+
+    function playVideo(){
+        $('.sticky-container__wrap').css('width', '100%');
+        $('.sticky-container__wrap').css('margin-right', '370px');
+        var player = new MediaElement('video1883274941', {
+            //stretching: 'responsive',
+            videoWidth: '100%',
+            videoHeight: '100%',
+            enableAutosize: true,
+            autoplay: true,
+            features: ['playpause', 'current', 'progress', 'duration', 'speed', 'skipback', 'jumpforward', 'tracks', 'markers', 'volume', 'chromecast', 'contextmenu', 'flash', 'fullscreen'],
+            shimScriptAccess: 'always',
+            jumpForwardInterval: 20,
+            pluginPath: '{{THEME_URL}}/main/static/player/',
+            success: function (media) {
+                //var renderer = document.getElementById(media.id + '-rendername');
+
+                media.addEventListener('playing', function (e) {
+                    $('.mejs__container').css('height', ($('.mejs__container').width() / 1.77176216) + 'px');
+                    $('video, iframe').css('height', '100%');
+                });
+
+                media.addEventListener('error', function (e) {
+                    console.log(e.message);
+                });
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        playVideo();
+    });
+    playVideo();
+    
+  
+
+</script>

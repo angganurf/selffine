@@ -1,0 +1,13 @@
+<div class="item">
+	<a href="<?php echo(pxp_link('live')) . '/{{VIDEO_ID_}}' ?>" data-ajax="ajax_loading.php?app=live&apph=live&id={{VIDEO_ID_}}" class="fluid">
+		<div class="thumb" style="background-image: url('{{THUMBNAIL}}');"></div>
+		<div class="caption">
+			<div class="uname">
+				<h6><?php echo $context['video']->user_data->username;?></h6>
+			</div>
+			<span>
+				<time>{{TIME}}</time>
+			</span>
+		</div>
+	</a>
+</div>

@@ -1,0 +1,166 @@
+<div class="container-fluid">
+    <div>
+        <h3>Pro System Settings</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Pro System</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Pro System Settings</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-5 col-md-5">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Pro System Settings</h6>
+                    <form class="pro-settings" method="POST">
+                        <div class="float-left">
+                            <label for="pro_system" class="main-label">Pro System</label>
+                            <br><small class="admin-info">If you disbale Pro Mode,
+                                <br>All features will be free and activated without the boost feature.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="pro_system" value="off" />
+                            <input type="checkbox" name="pro_system" id="chck-pro_system" value="on" <?php echo ($config['pro_system'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-pro_system" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="subscription_on_signup" class="main-label">Pro Membership On Sign Up</label>
+                            <br><small class="admin-info">Require Pro Memebership from users on sign up page.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="subscription_on_signup" value="off" />
+                            <input type="checkbox" name="subscription_on_signup" id="chck-subscription_on_signup" value="on" <?php echo ($config['subscription_on_signup'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-subscription_on_signup" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="clickable_url" class="main-label">Clickable Links</label>
+                            <br><small class="admin-info">Make URL clickable for pro users.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="clickable_url" value="off" />
+                            <input type="checkbox" name="clickable_url" id="chck-clickable_url" value="on" <?php echo ($config['clickable_url'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-clickable_url" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Pro Package Price</label>
+                                <input type="text" name="pro_price" class="form-control" value="<?php echo $config['pro_price']?>"><small class="admin-info">Set the price for pro package.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Boosted Post</label>
+                                <input type="number" name="boosted_posts" class="form-control" value="<?php echo $config['boosted_posts']?>"><small class="admin-info">Set the amount of posts PRO can boost.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <!-- <label for="currency" class="main-label">Currency</label>
+                        <br><small class="admin-info"></small>
+                        <div class="form-group">
+                            <select class="form-control show-tick" id="currency" name="currency">
+                                <option value="USD" <?php echo ($config['currency'] == 'USD')  ? ' selected': '';?>>USD</option>
+                                <option value="EUR" <?php echo ($config['currency'] == 'EUR')  ? ' selected': '';?>>EUR</option>
+                                <option value="JPY" <?php echo ($config['currency'] == 'JPY')  ? ' selected': '';?>>JPY</option>
+                                <option value="TRY" <?php echo ($config['currency'] == 'TRY')  ? ' selected': '';?>>TRY</option>
+                                <option value="GBP" <?php echo ($config['currency'] == 'GBP')  ? ' selected': '';?>>GBP</option>
+                                <option value="RUB" <?php echo ($config['currency'] == 'RUB')  ? ' selected': '';?>>RUB</option>
+                                <option value="PLN" <?php echo ($config['currency'] == 'PLN')  ? ' selected': '';?>>PLN</option>
+                                <option value="ILS" <?php echo ($config['currency'] == 'ILS')  ? ' selected': '';?>>ILS</option>
+                                <option value="BRL" <?php echo ($config['currency'] == 'BRL')  ? ' selected': '';?>>BRL</option>
+                                <option value="INR" <?php echo ($config['currency'] == 'INR')  ? ' selected': '';?>>INR</option>
+                            </select>
+                        </div>
+                        <div class="clearfix"></div> -->
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+
+    </div>
+</div>
+    <!-- #END# Vertical Layout -->
+<script>
+$(function() {
+    $('.switcher input[type=checkbox]').click(function () {
+        var configName = $(this).attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        if ($(this).is(":checked") === true) {
+            objData[configName] = $(this).val();
+        }
+        else{
+            if ($('input[name='+configName+']')[0]) {
+                objData[configName] = $($('input[name='+configName+']')[0]).val();
+            }
+        }
+        objData['hash_id'] = hash_id;
+        $.post(acpajax_url('general-settings'), objData);
+    });
+
+    var setTimeOutColor = setTimeout(function (){});
+    $('select').on('change', function() {
+         clearTimeout(setTimeOutColor);
+        var thisElement = $(this);
+        var configName = thisElement.attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        objData[configName] = thisElement.val();
+        objData['hash_id'] = hash_id;
+        thisElement.addClass('warning');
+        $.post(acpajax_url('general-settings'), objData, function (data) {
+            if (data.status == 200) {
+                thisElement.removeClass('warning');
+                thisElement.addClass('success');
+            } else {
+                thisElement.addClass('error');
+            }
+            var setTimeOutColor = setTimeout(function () {
+                thisElement.removeClass('success');
+                thisElement.removeClass('warning');
+                thisElement.removeClass('error');
+            }, 2000);
+        });
+    });
+    $('input[type=text], input[type=number] , textarea').on('input', delay(function() {
+            clearTimeout(setTimeOutColor);
+            var thisElement = $(this);
+            var configName = thisElement.attr('name');
+            var hash_id = $('input[name=hash_id]').val();
+            var objData = {};
+            objData[configName] = this.value;
+            objData['hash_id'] = hash_id;
+            thisElement.addClass('warning');
+            $.post(acpajax_url('general-settings'), objData, function (data) {
+                if (data.status == 200) {
+                    thisElement.removeClass('warning');
+                    thisElement.addClass('success');
+                } else {
+                    thisElement.addClass('error');
+                }
+                var setTimeOutColor = setTimeout(function () {
+                    thisElement.removeClass('success');
+                    thisElement.removeClass('warning');
+                    thisElement.removeClass('error');
+                }, 2000);
+                //thisElement.focus();
+            });
+    }, 500));
+});
+</script>

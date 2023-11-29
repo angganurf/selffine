@@ -1,0 +1,50 @@
+<tr id="list-<?php echo($cd['report']['id']); ?>" data-report="<?php echo($cd['report']['id']); ?>" data-user="<?php echo($cd['report']['u2_id']); ?>" data_selected="<?php echo($cd['report']['id']); ?>">
+	<td class="check"><input type="checkbox" id="check-data-<?php echo($cd['report']['id']); ?>" class="delete-checkbox filled-in"><label for="check-data-<?php echo($cd['report']['id']); ?>"></label></td>
+	<td>
+		<span>
+			<?php echo($cd['report']['id']); ?>
+		</span>
+	</td>
+	<td>
+		<a href="<?php echo(un2url($cd['report']['u1_uname'])); ?>">
+			<img src="<?php echo(media($cd['report']['u1_uavatar'])); ?>" class="setting-avatar rounded-circle" alt="report avatar">
+			<?php echo($cd['report']['u1_uname']); ?>
+		</a>
+	</td>
+	<td>
+		<span>
+			<?php echo(date('Y-F-d h:s',$cd['report']['time'])); ?>
+		</span>
+	</td>
+	<td>
+		<span>
+			<?php if ($cd['report']['type'] == 1): ?>
+				Account hacking
+			<?php elseif($cd['report']['type'] == 2): ?>
+				Impersonation Accounts
+			<?php elseif($cd['report']['type'] == 3): ?>
+				Violent threats
+			<?php elseif($cd['report']['type'] == 4): ?>
+				Sexual content
+			<?php elseif($cd['report']['type'] == 5): ?>
+				Children who have not reached the required age
+			<?php elseif($cd['report']['type'] == 6): ?>
+				Accounts expressing hatred 
+			<?php elseif($cd['report']['type'] == 7): ?>
+				Spam or Advertizing  
+			<?php elseif($cd['report']['type'] == 8): ?>
+				Copyrighted material
+			<?php endif; ?>
+		</span>
+	</td>
+	<td>
+		<a href="<?php echo(un2url($cd['report']['u2_uname'])); ?>">
+			<img src="<?php echo(media($cd['report']['u2_uavatar'])); ?>" class="setting-avatar rounded-circle" alt="report avatar">
+			<?php echo($cd['report']['u2_uname']); ?>
+		</a>
+	</td>
+	<td>
+		<button class="btn bg-success admn_table_btn" data-id="<?php echo($cd['report']['id']); ?>" onclick="MarkSafe(<?php echo($cd['report']['id']); ?>,'hide');">MARK SAFE</button>
+		<button class="btn bg-danger admn_table_btn" data-id="<?php echo($cd['report']['u2_id']); ?>" onclick="DeleteUser(<?php echo($cd['report']['id']); ?>,'hide');">DELETE</button>
+	</td>
+</tr>

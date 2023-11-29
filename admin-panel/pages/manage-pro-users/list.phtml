@@ -1,0 +1,22 @@
+ <?php $user = $admin::$db->where('type', 'pro_member')->where('user_id', $cd['user']['user_id'])->getOne(T_TRANSACTIONS); ?>
+ <tr class="setting-userlist" id="UserID_<?php echo $cd['user']['user_id']?>" data-user-id="<?php echo $cd['user']['user_id']?>" data_selected="<?php echo $cd['user']['user_id']?>">
+   <td><input type="checkbox" id="check-data-<?php echo $cd['user']['user_id']?>" class="delete-checkbox filled-in"><label for="check-data-<?php echo $cd['user']['user_id']?>"></label></td>
+   <td><?php echo $cd['user']['user_id']?></td>
+   <td>
+      <a href="<?php echo $cd['user']['url']; ?>">
+      <img src="<?php echo media($cd['user']['avatar']); ?>" class="setting-avatar" alt="<?php echo media($cd['user']['avatar'])?> Profile Picture">
+      <?php echo $cd['user']['username']; ?>
+      </a>
+   </td>
+   <td>
+   Pro Member
+   </td>
+   <td>
+     <?php echo(!empty($user) ? ToDate($user->time) : ""); ?>
+   </td>
+   <td><?php echo ($cd['user']['active'] == 1) ? '<span class="label label-success">Active</span>': '<span class="label label-danger">Inactive</span>';?></td>
+   <td>
+      <a target="_blank" class="btn bg-info admn_table_btn" href="<?php echo($cd['user']['edit']); ?>">Edit</a>
+      <a href="javascript:void(0)" class="btn bg-danger admn_table_btn" onclick="DeleteUser('<?php echo($cd['user']['user_id']); ?>','hide');">Delete</a>
+   </td>
+</tr>

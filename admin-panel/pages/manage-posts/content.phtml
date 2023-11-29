@@ -1,0 +1,271 @@
+<?php 
+$page = (!empty($_GET['page-id'])) ? $_GET['page-id'] : 1;
+$filter_keyword = (!empty($_GET['query'])) ? $admin::secure($_GET['query']) : '';
+$filter_type    = '';
+$admin::$db->pageLimit = 50;
+$t_users = T_USERS;
+$t_posts = T_POSTS;
+$link = '';
+
+if (!empty($filter_keyword)) {
+    $admin::$db->join("`$t_users` u",'p.`user_id` = u.`user_id`','INNER');
+
+    if (is_numeric($filter_keyword)) {
+        $admin::$db->where('p.`post_id`',"$filter_keyword");
+    } else {
+        $admin::$db->where('p.`description`',"%$filter_keyword%",'LIKE');
+    }
+
+	$posts = $admin::$db->orderBy('p.`post_id`', 'DESC')->paginate("`$t_posts` p", $page,array(
+        'p.`post_id`',
+        'p.`time`',
+        'u.avatar',
+        'u.username'
+    ));
+} 
+
+else {
+	$admin::$db->join("`$t_users` u",'p.`user_id` = u.`user_id`','INNER');
+    $posts = $admin::$db->orderBy('p.`post_id`', 'DESC')->paginate("`$t_posts` p", $page,array(
+        'p.`post_id`',
+        'p.`time`',
+        'u.avatar',
+        'u.username'
+    ));
+}
+
+if (($page > $admin::$db->totalPages) && !empty($_GET['page-id'])) {
+	header("Location: " . pxp_acp_link('manage-posts'));
+	exit();
+}
+?>
+<div class="container-fluid">
+    <div>
+        <h3>Manage posts</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Manage Features</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Posts</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Manage posts</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Manage user posts</h6>
+                    <div class="row">
+                       <div class="col-md-6" style="margin-bottom:0;">
+                            <form method="get" action="<?php echo pxp_acp_link('manage-posts'); ?>">
+                              <div class="row">
+                                <div class="col-md-11">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <label class="form-label search-form">Search for ID, Post Description</label>
+                                            <input type="text" name="query" id="query" class="form-control" value="<?php echo($filter_keyword); ?>">
+                                            
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-1">
+                                     <div class="form-group form-float">
+                                            <div class="form-line">
+                                                <label class="col-md-12 p-0 mb-4" for="priceto"> </label>
+                                                <button class="btn btn-info">Search</button>
+                                            </div>
+                                        </div>
+                                  </div>
+                              </div>
+
+                              <div class="clearfix"></div>
+                           </form>
+                       </div>
+                   </div>
+
+                    <div class="table-responsive1">
+                        <table class="table table-bordered table-striped table-hover table-users">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="check-all" class="filled-in check-all" ><label for="check-all"></label></th>
+                                    <th>ID</th>
+                                    <th>Publisher</th>
+                                    <th>Post Link</th>
+                                    <th>Posted</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                    if (!empty($posts)) {
+                                        foreach ($posts as $key => $context['post']) {
+                                            $context['post'] = o2array($context['post']);
+                                            echo $admin->loadPage('manage-posts/list');
+                                        }
+                                    }  
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="wo-admincp-feturepager">
+                      <div class="pull-left">
+                        <span>
+                          <?php echo "Showing $page out of " . $admin::$db->totalPages; ?>
+                        </span>
+                      </div>
+                      <div class="pull-right">
+                        <nav>
+                          <ul class="pagination">
+                            <li>
+                              <a href="<?php echo pxp_acp_link('manage-posts?page-id=1').$link; ?>" data-ajax="?path=manage-posts&page-id=1<?php echo($link); ?>" class="waves-effect" title='First Page'>
+                                  <i class="material-icons">first_page</i>
+                              </a>
+                            </li>
+                            <?php if ($page > 1) {  ?>
+                              <li>
+                                  <a href="<?php echo pxp_acp_link('manage-posts?page-id=' . ($page - 1)).$link; ?>" data-ajax="?path=manage-posts&page-id=<?php echo($page - 1) ?><?php echo($link); ?>" class="waves-effect" title='Previous Page'>
+                                      <i class="material-icons">chevron_left</i>
+                                  </a>
+                              </li>
+                            <?php  } ?>
+
+                            <?php 
+                              $nums       = 0;
+                              $nums_pages = ($page > 4) ? ($page - 4) : $page;
+
+                              for ($i=$nums_pages; $i <= $admin::$db->totalPages; $i++) { 
+                                if ($nums < 20) {
+                            ?>
+                              <li class="<?php echo ($page == $i) ? 'active' : ''; ?>">
+                                <a href="<?php echo pxp_acp_link('manage-posts?page-id=' . ($i)).$link; ?>" data-ajax="?path=manage-posts&page-id=<?php echo($i) ?><?php echo($link); ?>" class="waves-effect">
+                                  <?php echo $i ?>   
+                                </a>
+                              </li>
+
+                            <?php } $nums++; }?>
+
+                            <?php if ($admin::$db->totalPages > $page) { ?>
+                              <li>
+                                  <a href="<?php echo pxp_acp_link('manage-posts?page-id=' . ($page + 1)).$link; ?>" data-ajax="?path=manage-posts&page-id=<?php echo($page + 1) ?><?php echo($link); ?>" class="waves-effect" title="Next Page">
+                                      <i class="material-icons">chevron_right</i>
+                                  </a>
+                              </li>
+                            <?php } ?>
+                            <li>
+                              <a href="<?php echo pxp_acp_link('manage-posts?page-id=' . ($admin::$db->totalPages)).$link; ?>" data-ajax="?path=manage-posts&page-id=<?php echo($admin::$db->totalPages) ?><?php echo($link); ?>" class="waves-effect" title='Last Page'>
+                                  <i class="material-icons">last_page</i>
+                              </a>
+                            </li>
+                          </ul>
+                        </nav>
+                      </div>
+                      <div class="clearfix"></div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3">
+                                <span>&nbsp;</span>
+                                <button type="button" class="btn btn-info waves-effect delete-selected d-block" disabled>Delete Selected<span></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<!-- #END# Vertical Layout -->
+<div class="modal fade" id="SelectedDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModal1Label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal1Label">Delete post?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure that you want to remove the selected post?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="DeleteSelected()" data-dismiss="modal">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModal1Label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal1Label">Delete post?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this post?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+$('.check-all').on('click', function(event) {
+    $('input:checkbox').not(this).prop('checked', this.checked);
+});
+$('.delete-checkbox, .check-all').change(function(event) {
+    $('.delete-selected').attr('disabled', false);
+    $('.delete-selected').find('span').text(' (' + $('.delete-checkbox:checked').size() + ')');
+});
+$('.delete-selected').on('click', function(event) {
+    event.preventDefault();
+    $('#SelectedDeleteModal').modal('show');
+});
+function DeleteSelected() {
+    data = new Array();
+    $('td input:checked').parents('tr').each(function () {
+        data.push($(this).attr('data_selected'));
+    });
+    $('.delete-selected').attr('disabled', true);
+    $('.delete-selected').text('Please wait..');
+    $.post(acpajax_url('delete-multi-post'), {ids: data}, function () {
+        $.each( data, function( index, value ){
+            $("#list-"+value).remove();
+        });
+        $('.delete-selected').text('Delete Selected');
+    });
+}
+function DeletePost(id,type = 'show'){
+  if (id && id > 0) {
+    if (type == 'hide') {
+      $('#DeleteModal').find('.btn-primary').attr('onclick', "DeletePost('"+id+"')");
+      $('#DeleteModal').modal('show');
+      return false;
+    }
+    $("#list-"+id).slideUp(function(){
+      $(this).remove();
+    });
+    $("#DeleteModal").modal("hide");
+    $.ajax({
+      url: acpajax_url('delete-post'),
+      type: 'POST',
+      dataType: 'json',
+      data: {id:id}
+    });
+  }
+}
+</script>

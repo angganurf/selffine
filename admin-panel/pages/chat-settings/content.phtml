@@ -1,0 +1,207 @@
+<div class="container-fluid">
+    <div>
+        <h3>Chat & Video/Audio Settings</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Settings</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Chat & Video/Audio Settings</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Video & Audio Chat Settings</h6>
+                    <form class="form site-settings-form">
+                        <div class="float-left">
+                            <label for="video_chat" class="main-label">Video chat</label>
+                            <br><small class="admin-info">Enable video chat feature for users to make video calls on your site.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="video_chat" value="0" />
+                            <input type="checkbox" name="video_chat" id="chck-video_chat" value="1" <?php echo ($config['video_chat'] == 1) ? 'checked': '';?>>
+                            <label for="chck-video_chat" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="video_chat" class="main-label">Audio Calls</label>
+                            <br><small class="admin-info">Enable audio chat feature for users to make audio calls on your site.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="audio_chat" value="0" />
+                            <input type="checkbox" name="audio_chat" id="chck-audio_chat" value="1" <?php echo ($config['audio_chat'] == 1) ? 'checked': '';?>>
+                            <label for="chck-audio_chat" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Agora API Configuration</h6>
+                    <form class="agora-settings" method="POST">
+                        <div class="float-left">
+                            <label for="agora_chat_video" class="main-label">Agora Video Calls</label>
+                            <br><small class="admin-info">Enable Agora to start video chat service in your website. <br> Note that enabling Agora will disable Twilio. Agora supports video calls only.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="agora_chat_video" value="off" />
+                            <input type="checkbox" name="agora_chat_video" id="chck-agora_chat_video" value="on" <?php echo ($config['agora_chat_video'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-agora_chat_video" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="alert alert-info">
+                            To start using this feature, you'll need to create an account in <a href="https://www.agora.io/en/">Agora</a>.
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">App ID</label>
+                                <input type="text" id="agora_chat_app_id" name="agora_chat_app_id" class="form-control" value="<?php echo $config['agora_chat_app_id'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">App Certificate</label>
+                                <input type="text" id="agora_chat_app_certificate" name="agora_chat_app_certificate" class="form-control" value="<?php echo $config['agora_chat_app_certificate'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Customer ID</label>
+                                <input type="text" id="agora_chat_customer_id" name="agora_chat_customer_id" class="form-control" value="<?php echo $config['agora_chat_customer_id'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Customer Secret</label>
+                                <input type="text" id="agora_chat_customer_certificate" name="agora_chat_customer_certificate" class="form-control" value="<?php echo $config['agora_chat_customer_certificate'];?>">
+                            </div>
+                        </div>
+                        <hr>
+                        <small class="admin-info">Looking for Live Stream Configuration? <a href="<?php echo pxp_acp_link('live'); ?>">Click here</a>.</small>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Twilio API Configuration</h6>
+                    <form class="form site-settings-form">
+                        <div class="float-left">
+                            <label for="twilio_video_chat" class="main-label">Twilio Video / Audio Calls</label>
+                            <br><small class="admin-info">Enable Twilio to start video chat service in your website. <br> Note that enabling Twilio will disable Agora. Twilio supports video and audio calls.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="twilio_video_chat" value="off" />
+                            <input type="checkbox" name="twilio_video_chat" id="chck-twilio_video_chat" value="on" <?php echo ($config['twilio_video_chat'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-twilio_video_chat" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="alert alert-info">
+                            To start using this feature, you'll need to create an account in Twilio and buy "Programmable Video" product.
+                        </div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Twilio account Sid</label>
+                                <input type="text" name="video_accountSid" class="form-control" value="<?php echo $config['video_accountSid']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Twilio api key Sid</label>
+                                <input type="text" name="video_apiKeySid" class="form-control" value="<?php echo $config['video_apiKeySid']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Twilio api key secret</label>
+                                <input type="text" name="video_apiKeySecret" class="form-control" value="<?php echo $config['video_apiKeySecret']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$(function() {
+    $('.switcher input[type=checkbox]').click(function () {
+        var configName = $(this).attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        if ($(this).is(":checked") === true) {
+            objData[configName] = $(this).val();
+        }
+        else{
+            if ($('input[name='+configName+']')[0]) {
+                objData[configName] = $($('input[name='+configName+']')[0]).val();
+            }
+        }
+        objData['hash_id'] = hash_id;
+        $.post(acpajax_url('email-settings'), objData);
+    });
+
+    var setTimeOutColor = setTimeout(function (){});
+    $('select').on('change', function() {
+         clearTimeout(setTimeOutColor);
+        var thisElement = $(this);
+        var configName = thisElement.attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        objData[configName] = thisElement.val();
+        objData['hash_id'] = hash_id;
+        thisElement.addClass('warning');
+        $.post(acpajax_url('email-settings'), objData, function (data) {
+            if (data.status == 200) {
+                thisElement.removeClass('warning');
+                thisElement.addClass('success');
+            } else {
+                thisElement.addClass('error');
+            }
+            var setTimeOutColor = setTimeout(function () {
+                thisElement.removeClass('success');
+                thisElement.removeClass('warning');
+                thisElement.removeClass('error');
+            }, 2000);
+        });
+    });
+    $('input[type=text], input[type=number] , textarea').on('input', delay(function() {
+            clearTimeout(setTimeOutColor);
+            var thisElement = $(this);
+            var configName = thisElement.attr('name');
+            var hash_id = $('input[name=hash_id]').val();
+            var objData = {};
+            objData[configName] = this.value;
+            objData['hash_id'] = hash_id;
+            thisElement.addClass('warning');
+            $.post(acpajax_url('email-settings'), objData, function (data) {
+                if (data.status == 200) {
+                    thisElement.removeClass('warning');
+                    thisElement.addClass('success');
+                } else {
+                    thisElement.addClass('error');
+                }
+                var setTimeOutColor = setTimeout(function () {
+                    thisElement.removeClass('success');
+                    thisElement.removeClass('warning');
+                    thisElement.removeClass('error');
+                }, 2000);
+                //thisElement.focus();
+            });
+    }, 500));
+});
+</script>

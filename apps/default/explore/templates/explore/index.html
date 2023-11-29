@@ -1,0 +1,162 @@
+
+	<div class="explore-page-container">
+		<div class="container">
+			<div class="reels_hdr explore_page">
+				<div class="circle_green"></div>
+				<div class="circle_blue"></div>
+				<div class="reels_hdr_title">{{LANG explore_posts}}</div>
+				<p><?php echo lang('explore_posts_desc') ?></p>
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#66757f" class="feather feather-compass"><defs xmlns="http://www.w3.org/2000/svg"><linearGradient x1="19.28%" y1="86.72%" x2="88.05%" y2="12.24%" id="explore"><stop stop-color="#3D3695" offset="0%"></stop><stop stop-color="#953594" offset="49.5%"></stop><stop stop-color="#DA2129" offset="100%"></stop></linearGradient></defs><path d="M12 10.9c-.61 0-1.1.49-1.1 1.1s.49 1.1 1.1 1.1c.61 0 1.1-.49 1.1-1.1s-.49-1.1-1.1-1.1zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19z" fill="url(#explore)"></path></svg>
+			</div>
+			
+			<div class="follow__suggestions-cr">
+				<div class="fluid">
+					<h5>{{LANG follow_suggestions}}<a href="<?php echo(pxp_link('explore/people')); ?>" data-ajax="ajax_loading.php?app=explore&apph=people" class="pull-right">{{LANG see_all}} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg></a>
+					</h5>
+				</div>
+				<?php if ($context['follow']) { ?>
+					<div class="owl-carousel" id="follow__suggestions-cr">
+						<?php foreach ($context['follow'] as $key => $user_data) { ?>
+							<div class="item">
+								<div class="avatar">
+									<img data-lazy="<?php echo($user_data['avatar']) ?>" class="img-circle">
+								</div>
+								<div class="uname">
+									<a href="<?php echo($user_data['url']) ?>" data-ajax="ajax_loading.php?app=profile&apph=profile&uname=<?php echo($user_data['username']) ?>">
+										<strong><?php echo($user_data['username']) ?></strong>
+									</a>
+									<span><?php echo($user_data['name']) ?></span>
+								</div>
+								<div class="button">
+									<button onclick="follow(<?php echo($user_data['user_id']) ?>,this);">
+										<span>{{LANG follow}}</span>
+									</button>
+								</div>
+							</div>
+						<?php } ?>
+					</div>
+				<?php } ?>
+			</div>
+		
+			<div class="explore-posts-container">
+				<?php if ($context['posts']) {
+					foreach ($context['posts'] as $key => $post_data) {
+						include 'includes/list.html';
+					}
+				} else{ 
+					include 'includes/no-posts-found.html';
+				} ?>
+			</div>
+		</div>
+	</div>
+	<?php
+	include $context['dirname_theme'].'/main/templates/modals/delete-post.html';
+	include $context['dirname_theme'].'/main/templates/modals/embed_post.html';
+	include $context['dirname_theme'].'/main/templates/includes/lazy-load.html';
+	include $context['dirname_theme'].'/main/templates/modals/delete-comment.html';
+?>
+
+	<script>
+		var myLazyLoad = new LazyLoad({
+		    elements_selector: ".lazy_"
+		});
+		
+		var gwidth = ($('.explore-posts-container').width() / 3);
+		var config = {
+			selector: '.item',
+			gutter: 0,
+			animate: true,
+			animationOptions: { 
+				speed: 100, 
+				duration: 200
+			}
+		}
+		
+		if ($(window).width() > 992){
+		    config.width = 303.34;
+		};
+		
+		
+		
+		jQuery(document).ready(function($) {
+			$(".container-explore .explore-posts-container").gridalicious(config);
+			var scrolled = 0;
+			var last_id  = 0;
+			$(window).unbind('scroll');
+
+			$(window).scroll(function() {
+			    if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+			    	if (scrolled == 0 && $('.explore-postset').length > 0) {
+		                scrolled = 1;
+		                var list_ids = $("div.explore-postset[id]").map(function() {
+							if($(this).attr('id') > 0) {
+								return $(this).attr('id');
+							}
+			            }).get();
+
+			            if (!list_ids) {
+			                return false;
+			            }
+			            
+        				var last_id  = Math.min.apply(Math,list_ids);
+
+						$.ajax({
+							url: link('posts/explore-posts'),
+							type: 'GET',
+							dataType: 'json',
+							data: {offset:last_id},
+						}).done(function(data) {
+							if (data.status == 200) {
+								$(".explore-posts-container").gridalicious('append', $(data.html));
+								scrolled = 0;
+							}
+							else{
+								$(window).unbind('scroll');
+							}
+						});
+		       		}
+			    }
+			});
+			
+			$(document).ready(function(){
+				$('#follow__suggestions-cr').slick({
+				prevArrow: '<button type="button" class="slick-prev" title="Previous"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg></button>',
+				nextArrow: '<button type="button" class="slick-next" title="Next"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" /></svg></button>',
+				infinite: false,
+				lazyLoad: 'ondemand',
+				slidesToShow: 5,
+				variableWidth: false,
+				slidesToScroll: 1,
+				autoplay: false,
+				autoplaySpeed: 2000,
+				responsive: [
+					{
+						breakpoint: 1024,
+						settings: {
+							slidesToShow: 4
+						}
+					},
+					{
+						breakpoint: 800,
+						settings: {
+							slidesToShow: 3
+						}
+					},
+					{
+						breakpoint: 600,
+						settings: {
+							slidesToShow: 2
+						}
+					},
+					{
+						breakpoint: 300,
+						settings: {
+							slidesToShow: 1
+						}
+					}
+				]
+				});
+			});
+		});
+
+	</script>

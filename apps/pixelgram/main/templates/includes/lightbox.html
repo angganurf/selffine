@@ -1,0 +1,421 @@
+<div class="light__box" data-post-id="<?php echo($context['post_data']['post_id']) ?>">
+	<div class="lightbox-ol"></div>
+	<div class="pp_light_close" onclick="$('.light__box').remove();$('body').removeClass('scroll_stop');window.history.pushState('', '', site_url( '' ) );">
+		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M18.3 5.71c-.39-.39-1.02-.39-1.41 0L12 10.59 7.11 5.7c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L10.59 12 5.7 16.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L12 13.41l4.89 4.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"/></svg>
+	</div>
+	<div class="lightbox-outer">
+		<div class="lightbox-inner">
+			<input type="text" value="<?php echo(pid2url($context['post_data']['post_id'])) ?>" id="copyLink" class="copyPostlink" tabindex='-1' aria-hidden='true'>
+			<div class="post-data">
+				<div class="heading">
+					<div class="avatar">
+						<img src="<?php echo(media($context['post_data']['avatar'])) ?>" class="img-circle">
+					</div>
+					<div class="uname">
+						<h6><a href="<?php echo(un2url($context['post_data']['username'])) ?>"  data-ajax="ajax_loading.php?app=profile&apph=profile&uname=<?php echo($context['post_data']['username']) ?>"><?php echo($context['post_data']['username']) ?></a>
+							<?php if ($context['post_data']['is_verified'] > 0) { ?>
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="verified-color feather"><path fill="currentColor" d="M23,12L20.56,9.22L20.9,5.54L17.29,4.72L15.4,1.54L12,3L8.6,1.54L6.71,4.72L3.1,5.53L3.44,9.21L1,12L3.44,14.78L3.1,18.47L6.71,19.29L8.6,22.47L12,21L15.4,22.46L17.29,19.28L20.9,18.46L20.56,14.78L23,12M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z"></path></svg>
+							<?php } ?>
+						</h6>
+						<time><?php echo(time2str($context['post_data']['time'])) ?></time>
+					</div>
+					<?php if (IS_LOGGED && $context['user']['user_id'] != $context['post_data']['user_id']) { ?>
+						<span class="btn btn-mat <?php if($context['is_following']){ ?>active<?php } ?>" id="lb-follow" data-user-id="<?php echo($context['post_data']['user_id']) ?>">
+							<?php if($context['is_following']){ ?>{{LANG following}}<?php } else{ ?>{{LANG follow}}<?php } ?>
+						</span>
+					<?php } ?>
+					<div class="pp_light_close" onclick="$('.light__box').remove();$('body').removeClass('scroll_stop');window.history.pushState('', '', site_url( '' ) );">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg>
+					</div>
+				</div>
+				<div class="posts-media-renderer post_pos_rel">
+					<?php if ($context['post_data']['type'] == 'video' ||$context['post_data']['type'] == 'reels') { 
+						if ($context['post_data']['is_should_hide']) {	?>
+						<div class="valign is_should_hide1 text_m_reprted-<?php echo($context['post_data']['post_id']) ?>">
+							<p class="is_should_hide3">{{LANG post_m_report}}</p>
+							<div class="is_should_hide4">
+								<a class="btn btn-mat is_should_hide5" href="javascript:void(0);" onclick="show_m_reprted(<?php echo($context['post_data']['post_id']) ?>)">See now</a>
+							</div>
+						</div>
+					<?php } } ?>
+					<?php if ($context['post_data']['parent']['type'] == 'image') { ?>
+						<div id="post-data-cr" class="carousel slide carousel-fade" data-ride="carousel" data-interval="false">
+							<div class="carousel-inner">
+								<?php foreach ($context['post_data']['parent']['media_set'] as $k => $medai_file) { ?>
+									<div class="item <?php if($k == 0){ ?> active<?php } ?>">
+										<img src="<?php echo(media($medai_file['file'])) ?>" alt="Image" class="img-res" />
+									</div>
+								<?php } ?>
+							</div>
+							<?php if (count($context['post_data']['parent']['media_set']) > 1) { ?>
+								<a class="valign carousel-control-prev cr-controls" href="#post-data-cr" role="button" data-slide="prev">
+									<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path opacity=".87" fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M16.62 2.99c-.49-.49-1.28-.49-1.77 0L6.54 11.3c-.39.39-.39 1.02 0 1.41l8.31 8.31c.49.49 1.28.49 1.77 0s.49-1.28 0-1.77L9.38 12l7.25-7.25c.48-.48.48-1.28-.01-1.76z"/></svg>
+								</a>
+								<a class="valign carousel-control-next cr-controls" href="#post-data-cr" role="button" data-slide="next">
+									<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path opacity=".87" fill="none" d="M24 24H0V0h24v24z"></path><path fill="currentColor" d="M7.38 21.01c.49.49 1.28.49 1.77 0l8.31-8.31c.39-.39.39-1.02 0-1.41L9.15 2.98c-.49-.49-1.28-.49-1.77 0s-.49 1.28 0 1.77L14.62 12l-7.25 7.25c-.48.48-.48 1.28.01 1.76z"></path></svg>
+								</a>
+							<?php } ?>
+							<?php if ($config['private_photos'] == 'on' && $context['post_data']['parent']['price'] > 0 && !$context['post_data']['parent']['is_owner'] && $context['post_data']['parent']['is_bought'] < 1) { ?>
+								<div class="alert_blurred_div">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="512" height="512" fill="currentColor"><g id="lock"><path d="M54,42H53V41a3,3,0,0,0-6,0v1H46a1,1,0,0,0-1,1v6a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1V43A1,1,0,0,0,54,42Zm-5-1a1,1,0,0,1,2,0v1H49Zm4,7H47V44h6Zm-4-2a1,1,0,1,1,1,1A.9994.9994,0,0,1,49,46Zm2-12.9493V12a3.0033,3.0033,0,0,0-3-3H6a3.0033,3.0033,0,0,0-3,3V43a3.0033,3.0033,0,0,0,3,3H39.1911A10.996,10.996,0,1,0,51,33.0507ZM6,11H48a1.001,1.001,0,0,1,1,1V33.0507a10.9108,10.9108,0,0,0-4.8367,1.6425l-7.6848-8.446A2.0044,2.0044,0,0,0,35.0273,25.5a1.9705,1.9705,0,0,0-1.5244.5825l-5.501,5.501-5.42-7.0889a1.9826,1.9826,0,0,0-1.5732-.8369,2.04,2.04,0,0,0-1.6162.75L5,42.3989V12A1.001,1.001,0,0,1,6,11ZM34.9763,44H6.2822L20.9736,25.6836Zm2.5185,0L29.2306,33.191l5.7274-5.6456,7.6109,8.3679A10.9607,10.9607,0,0,0,39,44ZM50,53a9,9,0,1,1,9-9A9.01,9.01,0,0,1,50,53ZM40,23a5,5,0,1,0-5-5A5.0059,5.0059,0,0,0,40,23Zm0-8a3,3,0,1,1-3,3A3.0033,3.0033,0,0,1,40,15Z"/></g></svg>
+									<p>{{LANG locked_post_text}}</p>
+									<button class="btn btn-info" onclick="PayToUnlock(<?php echo $context['post_data']['parent']['post_id']; ?>,'<?php echo($context['post_data']['parent']['price']); ?>','image','hide');">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20 4H4A2 2 0 0 0 2 6V18A2 2 0 0 0 4 20H20A2 2 0 0 0 22 18V6A2 2 0 0 0 20 4M20 11H4V8H20Z" /></svg> {{LANG unlock}} <?php echo $context['currency_symbol'].$context['post_data']['parent']['price']; ?>
+									</button>
+									<?php if (!empty($context['post_data']['parent']['user_data']) && !empty($context['post_data']['parent']['user_data']['subscribe_price'])) { ?>
+										<button class="btn btn-info" onclick="SubscribeToUser(<?php echo $context['post_data']['parent']['user_id']; ?>,<?php echo $context['post_data']['parent']['user_data']['subscribe_price']; ?>,'hide');">
+											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20 4H4A2 2 0 0 0 2 6V18A2 2 0 0 0 4 20H20A2 2 0 0 0 22 18V6A2 2 0 0 0 20 4M20 11H4V8H20Z" /></svg> {{LANG subscribe}} <?php echo $context['currency_symbol'].$context['post_data']['parent']['user_data']['subscribe_price']; ?>
+										</button>
+									<?php } ?>
+								</div>
+							<?php } ?>
+						</div>
+					<?php } elseif ($context['post_data']['parent']['type'] == 'gif') { 
+						foreach ($context['post_data']['parent']['media_set'] as $key => $media_file) { ?>
+							<img src="<?php echo(media($media_file['file'])) ?>" alt="Gif image" />
+					<?php } } elseif ($context['post_data']['parent']['type'] == 'video' || $context['post_data']['parent']['type'] == 'reels') { 
+						if ($context['post_data']['parent']['type'] == 'video' && $config['private_videos'] == 'on' && $context['post_data']['parent']['price'] > 0 && !$context['post_data']['parent']['is_owner'] && $context['post_data']['parent']['is_bought'] < 1) { ?>
+							<?php if (!empty($context['post_data']['parent']['media_set']) && !empty($context['post_data']['parent']['media_set'][0]) && !empty($context['post_data']['parent']['media_set'][0]['extra'])) { ?>
+								<img src="<?php echo(media($context['post_data']['parent']['media_set'][0]['extra'])) ?>" width="100%">
+								<div class="alert_blurred_div blur">
+									<svg enable-background="new 0 0 60 60" height="512" viewBox="0 0 60 60" width="512" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="m28 50c2.75 0 5.46-.52 8-1.51v-6.49c0-1.68 1.04-3.11 2.5-3.71v-.79c0-4.14 3.36-7.5 7.5-7.5 1.39 0 2.68.38 3.79 1.04.14-1 .21-2.01.21-3.04 0-12.13-9.87-22-22-22s-22 9.87-22 22 9.87 22 22 22zm-7-28c0-.35.18-.67.47-.85.3-.18.67-.2.98-.04l12 6c.34.16.55.51.55.89s-.21.73-.55.89l-12 6c-.14.07-.3.11-.45.11-.18 0-.37-.05-.53-.15-.29-.18-.47-.5-.47-.85z"/><path d="m52 40h-.5v-2.5c0-3.03-2.47-5.5-5.5-5.5s-5.5 2.47-5.5 5.5v2.5h-.5c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-10c0-1.1-.9-2-2-2zm-5 8c0 .55-.45 1-1 1s-1-.45-1-1v-2c0-.55.45-1 1-1s1 .45 1 1zm2.5-8h-7v-2.5c0-1.93 1.57-3.5 3.5-3.5s3.5 1.57 3.5 3.5z"/></svg>
+									<p>{{LANG locked_post_text}}</p>
+									<button class="btn btn-info" onclick="PayToUnlock(<?php echo $context['post_data']['parent']['post_id']; ?>,'<?php echo($context['post_data']['parent']['price']); ?>','video','hide');">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20 4H4A2 2 0 0 0 2 6V18A2 2 0 0 0 4 20H20A2 2 0 0 0 22 18V6A2 2 0 0 0 20 4M20 11H4V8H20Z" /></svg> {{LANG unlock}} <?php echo $context['currency_symbol'].$context['post_data']['parent']['price']; ?>
+									</button>
+									<?php if (!empty($context['post_data']['parent']['user_data']) && !empty($context['post_data']['parent']['user_data']['subscribe_price'])) { ?>
+										<button class="btn btn-info" onclick="SubscribeToUser(<?php echo $context['post_data']['parent']['user_id']; ?>,<?php echo $context['post_data']['parent']['user_data']['subscribe_price']; ?>,'hide');">
+											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20 4H4A2 2 0 0 0 2 6V18A2 2 0 0 0 4 20H20A2 2 0 0 0 22 18V6A2 2 0 0 0 20 4M20 11H4V8H20Z" /></svg> {{LANG subscribe}} <?php echo $context['currency_symbol'].$context['post_data']['parent']['user_data']['subscribe_price']; ?>
+										</button>
+									<?php } ?>
+								</div>
+								<button class="play_video_button" type="button"></button>
+							<?php } ?>
+						<?php } else {
+						foreach ($context['post_data']['media_set'] as $key => $media_file) {	?>
+							<video class="<?php echo($config['upload_360_videos'] == 'on' && $context['post_data']['video_type'] == 360 ? 'video-js vjs-matrix vjs-theme-sea vjs-16-9' : 'afterglow') ?>" id="postvideo-<?php echo(!empty($context['post_data']['rand_360']) ? $context['post_data']['rand_360'] : $context['post_data']['post_id']) ?>" data-autoresize="none" <?php echo($config['upload_360_videos'] == 'on' && $context['post_data']['video_type'] == 360 ? 'controls playsinline crossorigin="anonymous"' : '') ?>  onplay="px_add_view(<?php echo($context['post_data']['post_id']) ?>)">
+								<source src="<?php echo(media($media_file['file'])) ?>" type="video/mp4">
+								<source src="<?php echo(media($media_file['file'])) ?>" type="video/mov">
+								<source src="<?php echo(media($media_file['file'])) ?>" type="video/webm">
+								<source src="<?php echo(media($media_file['file'])) ?>" type="video/3gp">
+								<source src="<?php echo(media($media_file['file'])) ?>" type="video/ogg">
+							</video>
+					<?php } } } elseif ($context['post_data']['type'] == 'youtube') { ?>
+						<div class="pp_mobi_light_embed" style="height: 100%"><iframe src="https://www.youtube.com/embed/<?php echo($context['post_data']['youtube']) ?>" style="width: 100%; min-width: 700px; min-height: 335px; background-image: url('<?php echo($context['thumb']) ?>');height: 100% !important;"></iframe></div>
+					<?php } elseif ($context['post_data']['type'] == 'dailymotion') { ?>
+						<div class="pp_mobi_light_embed"><iframe style="width: 100%; min-width: 700px; min-height: 335px; background-image: url('<?php echo($context['thumb']) ?>');" src="//www.dailymotion.com/embed/video/<?php echo($context['post_data']['dailymotion']) ?>" frameborder="0"></iframe></div>
+					<?php } elseif ($context['post_data']['type'] == 'vimeo') { ?>
+						<div class="pp_mobi_light_embed"><iframe style="width: 100%; min-width: 700px; min-height: 335px; background-image: url('<?php echo($context['thumb']) ?>');" src="https://player.vimeo.com/video/<?php echo($context['post_data']['vimeo']) ?>" frameborder="0"></iframe></div>
+					<?php } elseif ($context['post_data']['type'] == 'playtube') { ?>
+						<div class="pp_mobi_light_embed" style="height: 100%"><iframe style="width: 100%; min-width: 700px; min-height: 335px; background-image: url('<?php echo($context['thumb']) ?>');height: 100% !important;margin-top: 40px;" src="{{CONFIG playtube_url}}/embed/<?php echo($context['post_data']['playtube']) ?>" frameborder="0"></iframe></div>
+					<?php } elseif ($context['post_data']['type'] == 'mp4') { ?>
+						<video class="afterglow" id="postvideo-<?php echo($context['post_data']['post_id']) ?>" data-autoresize="none">
+							<source src="<?php echo($context['post_data']['link']) ?>" type="video/mp4">
+						</video>
+					<?php } elseif ($context['post_data']['type'] == 'fetched') { ?>
+						<div id="post-data-cr" class="carousel slide carousel-fade" data-ride="carousel" data-interval="false">
+							<div class="carousel-inner">
+								<?php foreach ($context['post_data']['media_set'] as $k => $medai_file) { ?>
+									<div class="item <?php if($k == 0){ ?> active<?php } ?>">
+										<img src="<?php echo(media($medai_file['file'])) ?>" alt="Image" class="img-res" />
+									</div>
+								<?php } ?>
+							</div>
+							<?php if(count($context['post_data']['media_set']) > 1){ ?>
+								<a class="carousel-control-prev cr-controls" href="#post-data-cr" role="button" data-slide="prev">
+									<span class="carousel-control-prev-icon" aria-hidden="true">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left"><polyline points="15 18 9 12 15 6"></polyline></svg>
+									</span>
+								</a>
+								<a class="carousel-control-next cr-controls" href="#post-data-cr" role="button" data-slide="next">
+									<span class="carousel-control-next-icon" aria-hidden="true">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+									</span>
+								</a>
+							<?php } ?>
+						</div>
+					<?php } ?>
+				</div>
+				<div class="posts-votes">
+					<div class="posts-votes-inner">
+						<?php if ($context['post_data']['type'] == 'fetched' && $context['post_data']['link']) { ?>
+							<a href="<?php echo($context['post_data']['link']) ?>" target="_blank" class="ml_1_" >{{LANG click_to_visit}}</a>
+							<br>
+						<?php } ?>
+						<?php if ($context['post_data']['description']) { ?>
+							<div class="pp_light_caption">
+								<p data-caption><?php echo $context['post_data']['description']; ?></p>
+							</div>
+						<?php } ?>
+						<div class="comments">
+							<ul class="post-comments-list">
+								<span class="pp_light_comm_count"><?php echo $context['post_data']['votes']; ?> {{LANG comments}}</span>
+								<?php foreach ($context['post_data']['comments'] as $key => $comment) { ?>
+									<li data-post-comment="<?php echo($comment['id']) ?>">
+										<div class="user-avatar">
+											<img src="<?php echo(media($comment['avatar'])) ?>" class="img-circle" />
+										</div>
+										<div class="pp_com_body">
+											<span>
+												<strong><a href="<?php echo(un2url($comment['username'])) ?>"   data-ajax="ajax_loading.php?app=profile&apph=profile&uname=<?php echo($comment['username']) ?>"><?php echo($comment['username']) ?></a></strong> <?php echo($comment['text']) ?>
+												<div onclick="pxp_like_dis_comment(<?php echo($comment['id']) ?>,this)" class="like_comment comment_like_<?php echo($comment['id']) ?>">
+													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="<?php echo($comment['is_liked'] ? 'liked_color' : '') ?>"><path fill="currentColor" d="M12 22l-9.192-9.192c-2.18-2.568-2.066-6.42.353-8.84A6.5 6.5 0 0 1 12 3.64a6.5 6.5 0 0 1 9.179 9.154L12 22zm7.662-10.509a4.5 4.5 0 0 0-6.355-6.337L12 6.282l-1.307-1.128a4.5 4.5 0 0 0-6.355 6.337l.114.132L12 19.172l7.548-7.549.114-.132z"/><path fill="currentColor" class="lk_act_svg" d="M21.179 12.794l.013.014L12 22l-9.192-9.192.013-.014A6.5 6.5 0 0 1 12 3.64a6.5 6.5 0 0 1 9.179 9.154z"/></svg>
+												</div>
+											</span>
+										</div>
+										<div class="events_container">
+											<span class="evnt_cont_btns comment_like_span_<?php echo($comment['id']) ?>" id="comment_like_<?php echo($comment['id']) ?>"><span><?php echo($comment['likes']) ?></span> {{LANG likes}}</span>
+											<span class="middot">·</span>
+											<span onclick="pxp_get_comment_reply(<?php echo($comment['id']) ?>,this,'lightbox')" id="comment_reply_<?php echo($comment['id']) ?>" class="evnt_cont_btns pointer"><span><?php echo($comment['replies']) ?></span> {{LANG reply}}</span>
+											<div class="reply_list_lightbox_<?php echo $comment['id']; ?>"></div>
+											<form class="form add-comment" style="display: none;" id="lightbox_reply_form_<?php echo $comment['id']; ?>">
+												<div class="fluid">
+													<div class="form-group">
+														<input type="text" class="form-control comment" onkeydown="pxp_reply_comment(<?php echo $comment['id']; ?>,event);" placeholder="{{LANG write_comment}}" id="emojionearea_comment_lightbox_<?php echo $comment['id']; ?>">
+													</div>
+												</div>
+												<div class="reply_commenting_overlay hidden">
+													<div id="pp_loader"><div class="speeding_wheel"></div></div>
+												</div>
+											</form>
+										</div>
+										<?php if ($comment['is_owner']) { ?>
+											<span class="pull-right delcomment" title="{{LANG delete_comment}}" onclick="delete_commnet(<?php echo($comment['id']) ?>);">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm0-9.414l2.828-2.829 1.415 1.415L13.414 12l2.829 2.828-1.415 1.415L12 13.414l-2.828 2.829-1.415-1.415L10.586 12 7.757 9.172l1.415-1.415L12 10.586z"></path></svg>
+											</span>
+										<?php } ?>
+									</li>
+									<script type="text/javascript">add_comment_emoji_lightbox(<?php echo($comment['id']) ?>);</script>
+								<?php } ?>	
+							</ul>
+						</div>
+						<div class="comment-box">
+							<div class="valign votes">
+								<div class="valign">
+									<span id="lb-like-post" class="like-icon <?php if($context['post_data']['is_liked']){ ?>active<?php } ?>">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"></path></svg>
+									</span>
+									<div onclick="view_post_likes('<?php echo($context['post_data']['post_id']) ?>');" title="{{LANG likes}}">
+										<span data-likes="" data-post-likes="<?php echo($context['post_data']['post_id']) ?>"><?php echo $context['post_data']['likes']; ?></span>
+									</div>
+								</div>
+								<?php if ($context['post_data']['type'] == 'video' || $context['post_data']['type'] == 'reels') { ?>
+									<div class="valign">
+										<span>
+											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M1.181 12C2.121 6.88 6.608 3 12 3c5.392 0 9.878 3.88 10.819 9-.94 5.12-5.427 9-10.819 9-5.392 0-9.878-3.88-10.819-9zM12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-2a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"></path></svg>
+										</span>
+										<div class="video_views_ ml_" title="{{LANG views}}">
+											<span><?php echo $context['post_data']['views']; ?></span>
+										</div>
+									</div>
+								<?php } ?>
+								<div class="dropup" id="lb-embed-post">
+									<span class="dropdown-toggle" data-toggle="dropdown">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z"></path></svg>
+									</span>
+									<ul class="dropdown-menu pull-right">
+										<?php if ($context['post_data']['is_owner'] == true) { ?>
+											<li onclick="delete_post('<?php echo($context['post_data']['post_id']) ?>');"><a href="javascript:void(0);">{{LANG delete_post}}</a></li>
+										<?php } ?>
+										<?php if ($context['post_data']['is_owner'] == false) { ?>
+											<li onclick="report_post('<?php echo($context['post_data']['post_id']) ?>',this);">
+											    <a href="javascript:void(0);">
+											    	<?php if ($context['post_data']['reported']) {
+											    		echo lang('cancel_report');
+											    	}else{
+											    		echo lang('report_post');
+											    	} ?>
+										    	</a>
+											</li>
+										<?php } ?>
+										<li onclick="embed_post('<?php echo($context['post_data']['post_id']) ?>',this);"><a href="javascript:void(0);">{{LANG embed}}</a></li>
+									  	<li><a href="<?php echo(pid2url($context['post_data']['post_id'])) ?>" target="_blank">{{LANG go2post}}</a></li>
+										<li><a href="javascript:void(0);" onclick="copyLinkfn();">{{LANG copy_link}}</a></li>
+									</ul>
+								</div>
+								<div class="valign">
+									<span class="save-post <?php if($context['post_data']['is_saved']){ ?>active<?php } ?>" id="lb-save-post">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,3H7A2,2 0 0,0 5,5V21L12,18L19,21V5C19,3.89 18.1,3 17,3Z"></path></svg>
+									</span>
+								</div>
+							</div>
+							<form class="form">
+								<div class="text-input">
+									<?php if (IS_LOGGED) { ?>
+										<input type="text" class="form-control comment_light" id="lightbox_c" placeholder="{{LANG write_comment}}" onkeydown="lb_comment(<?php echo($context['post_data']['post_id']) ?>,event);">
+										<div class="commenting-overlay hidden">
+											<div id="pp_loader"><div class="speeding_wheel"></div></div>
+										</div>
+									<?php } else{ ?>
+										<div class="login-2comment">
+											<a href="<?php echo(pxp_link('welcome')) ?>">{{LANG login}}</a>
+											{{LANG login_to_lc_post}}
+										</div>
+									<?php } ?>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<?php if ($context['prev']) { ?>
+					<a href="javascript:void(0);" class="light__box-slide-controls prev" onclick="lightbox('<?php echo($context['prev']) ?>','<?php echo($context['page']) ?>');">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path opacity=".87" fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M16.62 2.99c-.49-.49-1.28-.49-1.77 0L6.54 11.3c-.39.39-.39 1.02 0 1.41l8.31 8.31c.49.49 1.28.49 1.77 0s.49-1.28 0-1.77L9.38 12l7.25-7.25c.48-.48.48-1.28-.01-1.76z"/></svg>
+					</a>
+				<?php } ?>
+				<?php if ($context['next']) { ?>
+					<a href="javascript:void(0);" class="light__box-slide-controls next" onclick="lightbox('<?php echo($context['next']) ?>','<?php echo($context['page']) ?>');">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path opacity=".87" fill="none" d="M24 24H0V0h24v24z"/><path fill="currentColor" d="M7.38 21.01c.49.49 1.28.49 1.77 0l8.31-8.31c.39-.39.39-1.02 0-1.41L9.15 2.98c-.49-.49-1.28-.49-1.77 0s-.49 1.28 0 1.77L14.62 12l-7.25 7.25c-.48.48-.48 1.28.01 1.76z"/></svg>
+					</a>
+				<?php } ?>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	jQuery(document).ready(function($) {
+
+		var ell = $("#lightbox_c").emojioneArea({
+			pickerPosition: "top",
+		    tonesStyle: "radio",
+		    events: {
+		     	keyup: function (editor, event) {
+			      $("#lightbox_c").val(ell[0].emojioneArea.getText());
+	              lb_comment(<?php echo($context['post_data']['post_id']) ?>,event);
+	              if (event.keyCode == 13 && event.shiftKey == 0) {
+					$('.emojionearea .emojionearea-editor').html('');
+	              }
+			    }
+		    },
+		    filters: {
+		        flags : false,
+		        objects : false,
+		        travel_places : false,
+		        activity : false
+		    }
+		});
+		var lbox = $(".light__box");
+		<?php if ($context['post_data']['type'] == 'video' || $context['post_data']['type'] == 'mp4' || $context['post_data']['type'] == 'reels') { ?>
+			<?php if ($config['upload_360_videos'] == 'on' && $context['post_data']['video_type'] == 360) { ?>
+			jQuery(document).ready(function($) {
+		      var player_<?php echo $context['post_data']['rand_360']; ?> = videojs("postvideo-<?php echo $context['post_data']['rand_360']; ?>");
+		      player_<?php echo $context['post_data']['rand_360']; ?>.mediainfo = player_<?php echo $context['post_data']['rand_360']; ?>.mediainfo || {};
+		      player_<?php echo $context['post_data']['rand_360']; ?>.mediainfo.projection = '360';
+		      var vr_<?php echo $context['post_data']['rand_360']; ?> = player_<?php echo $context['post_data']['rand_360']; ?>.vr({projection: 'AUTO', debug: true, forceCardboard: false});
+		    });
+		    <?php }else{ ?>
+			afterglow.init();
+			<?php } ?>
+		<?php } ?>
+
+
+		lbox.find('.lightbox-outer').click(function(event) {
+			if ($(event.target).hasClass('lightbox-outer')) {
+				$('.light__box').remove();
+				$('body').removeClass('scroll_stop');
+				window.history.pushState("", "", site_url( '' ) );
+			}
+		});
+
+		$(document).keyup(function(e) {
+		    if (e.keyCode == 27) {
+		    	$('.light__box').remove();
+				$('body').removeClass('scroll_stop');
+		    	window.history.pushState("", "", site_url( '' ) );
+		    }
+		});
+
+		lbox.find("#lb-like-post").click(function(event) {
+			var zis = $(this);
+			var lks = lbox.find('[data-likes]');
+			var pid = lbox.data('post-id');
+			if (not(is_logged())) {
+				redirect('welcome');
+				return false;
+			}
+
+			if (zis.hasClass('active')) {
+				zis.removeClass('active');
+
+				if (lks) {
+					let likes = int(lks.text());
+					if (likes >= 1) {
+						lks.text(likes - 1);
+					}
+				}
+			}
+			else{
+				zis.addClass('active');
+				if (lks) {
+					let likes = int(lks.text()) + 1;
+					lks.text(likes);
+				}
+			}
+
+			$.ajax({
+				url: link('posts/like'),
+				type: 'POST',
+				dataType: 'json',
+				data: {id:pid},
+			}).done(function(data) {
+				px_add_view(pid);
+			});
+		});
+
+		lbox.find("#lb-save-post").click(function(event) {
+			var zis = $(this);
+			var pid = lbox.data('post-id');
+
+			if (not(is_logged())) {
+				redirect('welcome');
+				return false;
+			}
+
+			if (zis.hasClass('active')) {
+				zis.removeClass('active');
+			}
+			else{
+				zis.addClass('active');
+			}
+
+			$.ajax({
+				url: link('posts/save'),
+				type: 'POST',
+				dataType: 'json',
+				data: {id:pid},
+			})
+			.done(function(data) {});
+		});
+
+		lbox.find('#lb-follow').click(function(event) {
+			var uid = $(this).data('user-id');
+			var zis = $(this);
+			if (not(is_logged())) {
+				redirect('welcome');
+				return false;
+			}
+
+			if (zis.hasClass('active')) {
+				zis.removeClass('active');
+				zis.html('{{LANG follow}}');
+			}
+			else{
+				zis.addClass('active');
+				zis.html('{{LANG following}}');
+			}
+
+			$.ajax({
+				url: link('main/follow'),
+				type: 'GET',
+				dataType: 'json',
+				data: {user_id:uid},
+			}).done(function(data) {});
+		});
+	});
+
+function copyLinkfn() {
+  var copyText = document.getElementById("copyLink");
+  copyText.select();
+  document.execCommand("copy");
+}
+</script>

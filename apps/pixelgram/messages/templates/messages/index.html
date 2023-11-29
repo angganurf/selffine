@@ -1,0 +1,152 @@
+<div class="messages-container open">
+		<div class="row content">
+			<div class="col-sm-5 col-md-4">
+				<div class="valign msg_header">
+					<h2>{{LANG messages}}</h2>
+                    <a href="{{CONFIG site_url}}/settings/privacy/{{ME username}}" data-ajax="ajax_loading.php?app=settings&apph=settings&user={{ME username}}&page=privacy" class="btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26"><path d="M5.334 4.545a9.99 9.99 0 0 1 3.542-2.048A3.993 3.993 0 0 0 12 3.999a3.993 3.993 0 0 0 3.124-1.502 9.99 9.99 0 0 1 3.542 2.048 3.993 3.993 0 0 0 .262 3.454 3.993 3.993 0 0 0 2.863 1.955 10.043 10.043 0 0 1 0 4.09c-1.16.178-2.23.86-2.863 1.955a3.993 3.993 0 0 0-.262 3.455 9.99 9.99 0 0 1-3.542 2.047A3.993 3.993 0 0 0 12 20a3.993 3.993 0 0 0-3.124 1.502 9.99 9.99 0 0 1-3.542-2.047 3.993 3.993 0 0 0-.262-3.455 3.993 3.993 0 0 0-2.863-1.954 10.043 10.043 0 0 1 0-4.091 3.993 3.993 0 0 0 2.863-1.955 3.993 3.993 0 0 0 .262-3.454zM13.5 14.597a3 3 0 1 0-3-5.196 3 3 0 0 0 3 5.196z" fill="currentColor"></path></svg></a>
+				</div>
+				<div class="pp_srch_msg">
+					<form class="form search-users">
+						<div class="text-input">
+							<input type="text" class="form-control" placeholder="{{LANG search}}.." id="search-chats">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 2c4.968 0 9 4.032 9 9s-4.032 9-9 9-9-4.032-9-9 4.032-9 9-9zm0 16c3.867 0 7-3.133 7-7 0-3.868-3.133-7-7-7-3.868 0-7 3.132-7 7 0 3.867 3.132 7 7 7zm8.485.071l2.829 2.828-1.415 1.415-2.828-2.829 1.414-1.414z"></path></svg>
+						</div>			
+					</form>
+				</div>
+				<div class="chat-list">
+					<ul>
+						<?php foreach ($context['chats_history'] as $key => $chat_data) { ?>
+							<li <?php if($context['user_data'] && $context['user_data']['user_id'] == $chat_data['user_id']){ ?> class="active" <?php } ?>>
+								<a href="{{CONFIG site_url}}/messages/<?php echo($chat_data['username']) ?>" data-ajax="ajax_loading.php?app=messages&apph=messages&uname=<?php echo($chat_data['username']) ?>">
+								<div class="valign chat-list-item" data-chat="<?php echo($chat_data['user_id']) ?>">
+									<div class="avatar">
+										<img src="<?php echo(media($chat_data['avatar'])) ?>" class="img-circle">
+										<?php if ($chat_data['new_message']) { ?>
+											<small><?php echo $chat_data['new_message']; ?></small>
+										<?php } ?>
+									</div>
+									<div class="chat-desc">
+										<time><span class="time-ago" title="<?php echo(ToDate($chat_data['time'])) ?>"><?php echo(time2str($chat_data['time'])) ?></span></time>
+										<div class="uname">
+											<span class="username"><?php echo($chat_data['username']) ?></span>
+										</div>
+										<div class="message">
+											<span><?php echo(croptxt($chat_data['last_message'],40,'..')) ?></span>
+										</div>
+									</div>
+								</div>
+								</a>
+							</li>
+						<?php } ?>
+					</ul>
+				</div>
+			</div>
+			<div class="col-sm-7 col-md-8">
+				<div class="header-composition"><?php if ($context['user_data']) { ?>
+						<div class="valign interlocutor-info">
+							<div class="valign left">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="mobile_msg_close"><path fill="currentColor" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path></svg>
+								<div class="avatar">
+									<img src="<?php echo(media($context['user_data']['avatar'])) ?>" class="img-circle">
+								</div>
+								<div class="uname">
+									<a href="<?php echo(un2url($context['user_data']['username'])) ?>"><?php echo($context['user_data']['username']) ?></a>
+									<span class="fluid">
+										<time title="{{LANG last_seen}}"><span class="time-ago" title="<?php echo(ToDate($context['user_data']['last_seen'])) ?>"><?php echo(time2str($context['user_data']['last_seen'])) ?></span></time>
+									</span>
+								</div>
+							</div>
+							<div class="right">
+								<div class="dropdown">
+									<span class="dropdown-toggle" type="button" data-toggle="dropdown"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"><path fill="currentColor" d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z"></path></svg></span>
+									<ul class="dropdown-menu pull-right">
+										<li id="clear_messages"><a href="javascript:void(0);">{{LANG clear_messages}}</a></li>
+										<li id="delete__chat"><a href="javascript:void(0);">{{LANG delete_chat}}</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					<?php } ?><?php if ($context['old_messages']) { ?>
+					<div class="old_messages_1" id="old_messages" onclick="get_old_messages()">
+						<span class="old_messages_2" >{{LANG get_old_messages}}</span>
+					</div>
+					<?php } ?></div>
+				<div class="conversation">	
+				<?php if ($context['user_data']) { ?>	
+						<div class="messages clearfix" id="conversation-list">
+							<?php foreach ($context['conversation'] as $key => $msg_data) {
+								include 'includes/messages-list.html';
+							} ?>
+						</div>
+						<div class="clear"></div>
+						<?php if ($context['c_privacy']) { ?>
+						<div class="send-message">
+							<form id="send-message-form">
+								<div class="overlay hidden">
+									<div id="pp_loader"><div class="speeding_wheel"></div></div>
+								</div>
+								<div class="valign text-input">
+									<div class="chat_text">
+										<input name="text" class="form-control" placeholder="{{LANG type_message}}" id="mgs-text-input" autocomplete="off">
+										<button type="button" class="btn" onclick="upload_chat_file()">
+											<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24"><path fill="currentColor" d="M3 8l6.003-6h10.995C20.55 2 21 2.455 21 2.992v18.016a.993.993 0 0 1-.993.992H3.993A1 1 0 0 1 3 20.993V8zm7-4v5H5v11h14V4h-9z"></path></svg>
+										</button>
+									</div>
+									<input type="file" class="hidden" id="send_file" name="send_file" onchange="submit_form();" accept="video/*,image/*" />
+									<div class="controls">
+										<button type="submit" class="btn btn-main btn-mat"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M2,21L23,12L2,3V10L17,12L2,14V21Z" /></svg></button>
+									</div>
+								</div>
+								<input type="hidden" name="hash" value="<?php echo($context['csrf_token']) ?>">
+							</form>
+							<div class="valign delete-selected hidden">
+								<button class="delselected-messages">{{LANG delete_selected}}<b></b></button>
+								<button class="deselect-messages">{{LANG cancel}}</button>
+							</div>
+						</div>
+						<?php } else{ ?>
+							<div class="send-message">
+								<div class="blocked">
+									<svg xmlns="http://www.w3.org/2000/svg" class="feather feather-lock" width="24" height="24" viewBox="0 0 24 24"><path d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z" /></svg>
+								</div>
+							</div>
+						<?php } ?>
+					<?php } else{ ?>
+						<div class="select-chat">
+							<div class="empty_state">
+								<span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M6.455 19L2 22.5V4a1 1 0 0 1 1-1h18a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H6.455zM11 10H8v2h3v3h2v-3h3v-2h-3V7h-2v3z"/></svg></span>
+								<p>{{LANG select_chat}}</p>
+								<button class="btn btn-main btn-mat btn-mat-raised btn_select_chat" onclick="select_chat()">{{LANG select}}</button>
+							</div>
+						</div>
+					<?php } ?>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+	function submit_form() {
+		$('#send-message-form').submit();
+	}
+	function upload_chat_file() {
+		$('#send_file').click();
+	}
+	function select_chat(){
+		$('.messages-container').removeClass('open');
+	}
+	</script>
+	<style>
+	@media (max-width: 768px) {
+		footer, .pg_scnd_nav {display: none !important;}
+		body {padding-bottom: 0;}
+	}
+	</style>
+	<?php 
+	include $context['dirname_theme'].'/main/templates/modals/clear-chat.html';
+	include $context['dirname_theme'].'/main/templates/modals/delete-chat.html';
+	include $context['dirname_theme'].'/main/templates/modals/delete-messages.html';
+	 ?>
+
+	 <?php if ($context['user_data']) { 
+	 	include "js/script.html";
+	 } ?>	

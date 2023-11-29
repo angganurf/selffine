@@ -1,0 +1,19 @@
+<div class="confirm--modal embedpost--modal" style="display: none !important;">
+	<div class="confirm--modal--inner">
+		<div class="confirm--modal--body">
+			<h5>{{LANG embed}}</h5>
+			<textarea cols="30" rows="3" class="form-control" id="embed_post" onclick="select();document.execCommand('Copy');"></textarea>
+		</div>
+		<div class="confirm--modal--footer">
+			<button class="btn btn-default" data-confirm--modal-dismiss>{{LANG cancel}}</button>
+			<button class="btn btn-success copy-embed-code">Copy</button>
+		</div>
+	</div>
+</div>
+
+<script>
+$(".copy-embed-code").click(function(){
+    $("#embed_post").select();
+    document.execCommand('copy');
+});
+</script>

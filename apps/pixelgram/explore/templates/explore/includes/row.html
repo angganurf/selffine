@@ -1,0 +1,17 @@
+<div class="pg_folw_sugg_carousel explore-people__item" id="<?php echo($udata['user_id']) ?>">
+	<div class="item">
+		<div class="avatar">
+			<img src="<?php echo(media($udata['avatar'])) ?>" alt="Picture">
+			<div class="valign uname">
+				<a href="<?php echo(un2url($udata['username'])) ?>" data-ajax="ajax_loading.php?app=profile&apph=profile&uname=<?php echo($udata['username']) ?>"><h4><?php echo($udata['username']) ?></h4></a>
+			</div>
+		</div>
+		<div class="user_stat">
+			<p><?php echo($udata['followers']) ?> {{LANG followers}}</p>
+			<p><?php echo $udata['posts']; ?> {{LANG posts}}</p>
+		</div>
+		<div class="button">
+			<button class="btn btn-mat" onclick="follow(<?php echo($udata['user_id']) ?>,this);"><span>{{LANG follow}}</span></button>
+		</div>
+	</div>
+</div>

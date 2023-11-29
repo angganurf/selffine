@@ -1,0 +1,232 @@
+<div class="container-fluid">
+    <div>
+        <h3>Website Information</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Settings</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Website Information</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Website Information</h6>
+                    <form class="form site-settings-form">
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Site name</label>
+                                <input type="text" name="site_name" class="form-control" value="<?php echo $config['site_name']?>"><small class="admin-info">Your website general title, it will appear on Google and on your browser tab.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Site keywords</label>
+                                <input type="text" name="meta_keywords" class="form-control" value="<?php echo $config['meta_keywords']?>"><small class="admin-info">Your website's keyword, used mostly for SEO and search engines.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Site description</label>
+                                <textarea name="site_desc" class="form-control"><?php echo $config['site_desc']?></textarea>
+                                <small class="admin-info">Your website's description, used mostly for SEO and search engines, Max of 100 characters is recommended</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Image Watermark</h6>
+                    <form class="form site-settings-form">
+                        <div class="float-left">
+                            <label for="watermark" class="main-label">Image Watermark System</label>
+                            <br><small class="admin-info">Example :: media/img/icon.png</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="watermark" value="off" />
+                            <input type="checkbox" name="watermark" id="chck-watermark" value="on" <?php echo ($config['watermark'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-watermark" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Image watermark, (jpg, png, jpeg) url.</label>
+                                <input type="text" name="watermark_link" class="form-control" value="<?php echo $config['watermark_link']?>"><small class="admin-info">Image watermark, (jpg, png, jpeg) url.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Post Settings</h6>
+                    <form class="form site-settings-form">
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Max Caption Characters Length</label>
+                                <input type="text" name="caption_len" class="form-control" value="<?php echo $config['caption_len']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Max Comment Characters Length</label>
+                                <input type="text" name="comment_len" class="form-control" value="<?php echo $config['comment_len']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Features API Keys & Information</h6>
+                    <form class="form general-settings-form">
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">YouTube API key</label>
+                                <input type="text" name="yt_api" class="form-control" value="<?php echo $config['yt_api']?>"><small class="admin-info">Youtube api key..</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Giphy API key</label>
+                                <input type="text" name="giphy_api" class="form-control" value="<?php echo $config['giphy_api']?>"><small class="admin-info">Youtube api key..</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="google_map" class="main-label">Google Map</label>
+                            <br><small class="admin-info">Show Google Map on the site.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="google_map" value="off" />
+                            <input type="checkbox" name="google_map" id="chck-google_map" value="on" <?php echo ($config['google_map'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-google_map" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Google Map API</label>
+                                <input type="text" name="google_map_api" class="form-control" value="<?php echo $config['google_map_api']?>"><small class="admin-info">This key is required for GEO and viewing Google Maps.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Google Analytics Code</label>
+                                <textarea name="google_analytics" class="form-control"><?php echo $config['google_analytics']?></textarea>
+                                <small class="admin-info">Paste your full Google Analytics Code here to track traffic.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Other settings</h6>
+                    <form class="form site-settings-form">
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Obscene words and expressions</label>
+                                <input type="text" name="obscene" class="form-control" value="<?php echo $config['obscene']?>"><small class="admin-info"><a href="https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words">
+                                    https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words
+                                </a></small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+$(function() {
+    $('.switcher input[type=checkbox]').click(function () {
+        var configName = $(this).attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        if ($(this).is(":checked") === true) {
+            objData[configName] = $(this).val();
+        }
+        else{
+            if ($('input[name='+configName+']')[0]) {
+                objData[configName] = $($('input[name='+configName+']')[0]).val();
+            }
+        }
+        objData['hash_id'] = hash_id;
+        $.post(acpajax_url('site-settings'), objData);
+    });
+
+    var setTimeOutColor = setTimeout(function (){});
+    $('select').on('change', function() {
+         clearTimeout(setTimeOutColor);
+        var thisElement = $(this);
+        var configName = thisElement.attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        objData[configName] = thisElement.val();
+        objData['hash_id'] = hash_id;
+        thisElement.addClass('warning');
+        $.post(acpajax_url('site-settings'), objData, function (data) {
+            if (data.status == 200) {
+                thisElement.removeClass('warning');
+                thisElement.addClass('success');
+            } else {
+                thisElement.addClass('error');
+            }
+            var setTimeOutColor = setTimeout(function () {
+                thisElement.removeClass('success');
+                thisElement.removeClass('warning');
+                thisElement.removeClass('error');
+            }, 2000);
+        });
+    });
+    $('input[type=text], input[type=number] , textarea').on('input', delay(function() {
+            clearTimeout(setTimeOutColor);
+            var thisElement = $(this);
+            var configName = thisElement.attr('name');
+            var hash_id = $('input[name=hash_id]').val();
+            var objData = {};
+            objData[configName] = this.value;
+            objData['hash_id'] = hash_id;
+            thisElement.addClass('warning');
+            $.post(acpajax_url('site-settings'), objData, function (data) {
+                if (data.status == 200) {
+                    thisElement.removeClass('warning');
+                    thisElement.addClass('success');
+                } else {
+                    thisElement.addClass('error');
+                }
+                var setTimeOutColor = setTimeout(function () {
+                    thisElement.removeClass('success');
+                    thisElement.removeClass('warning');
+                    thisElement.removeClass('error');
+                }, 2000);
+                //thisElement.focus();
+            });
+    }, 500));
+});
+</script>

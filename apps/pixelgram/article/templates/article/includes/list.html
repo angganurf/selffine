@@ -1,0 +1,119 @@
+<div class="timeline-posts content-shadow pp_blog_posts" data-article-id="<?php echo $post_data['id'];?>">
+    <div class="header">
+        <h2><a href="<?php echo un2url('blog/article/'.$post_data['id']);?>" data-ajax="ajax_loading.php?app=article&amp;apph=article&amp;id=<?php echo $post_data['id'];?>"><?php echo $post_data['title'];?></a></h2>
+        <div>
+			<span class="time-ago" title="<?php echo(ToDate($post_data['created_at'])) ?>"><?php echo(time2str($post_data['created_at'])); ?></span>
+			<span class="middot">·</span>
+			<span><?php echo $post_data['category_name'];?></span>
+			<span class="middot">·</span>
+            <span><?php echo $post_data['view'];?> {{LANG views}}</span>
+		</div>
+    </div>
+    <div class="post-images fluid">
+        <a href="<?php echo un2url('blog/article/'.$post_data['id']);?>" class="image-lightbox">
+            <img src="<?php echo $post_data['full_thumbnail'];?>" class="img-res">
+        </a>
+    </div>
+	<div class="caption" data-caption="">
+		<blockquote><?php echo $post_data['description'];?></blockquote>
+        <?php echo trim( br2nl( html_entity_decode(str_replace("&nbsp;",'',$post_data['content'])) ) );?>
+    </div>
+</div>
+
+<div class="home-page-container pp_blog_comms">
+	<div class="home-posts-container">
+		<div class="timeline-posts content-shadow">
+			<h4><?php echo $post_data['votes']; ?> {{LANG comments}}</h4>
+
+			<div class="comments-area">
+				<?php if(IS_LOGGED === true){ ?>
+					<form class="form add-comment" id="vote-postf">
+						<div class="fluid">
+							<div class="form-group">
+								<input type="text" data-post-id="<?php echo $post_data['post_id']; ?>" class="form-control comment"  placeholder="{{LANG write_comment}}" id="emojionearea<?php echo $post_data['post_id']; ?>">
+							</div>
+						</div>
+						<div class="commenting-overlay hidden">
+							<div id="pp_loader"><div class="speeding_wheel"></div></div>
+						</div>
+					</form>
+				<?php } else { ?>
+					<form class="form add-comment" id="vote-postf">
+						<div class="fluid">
+							<div class="form-group">
+								<input type="text" data-post-id="<?php echo $post_data['post_id']; ?>" class="form-control comment"  placeholder="{{LANG write_comment}}" id="emojionearea<?php echo $post_data['post_id']; ?>">
+							</div>
+						</div>
+						<div class="commenting-overlay hidden">
+							<div id="pp_loader"><div class="speeding_wheel"></div></div>
+						</div>
+					</form>
+				<?php } ?>
+				<ul class="post-comments-list">
+					<li class="pp_post_comms hidden"></li>
+					<?php if ($post_data['comments']) {
+						foreach ($post_data['comments'] as $key => $comment) {
+							include 'comments.html';
+						} } ?>
+		
+					<?php if ($post_data['votes'] > 4) { ?>
+						<li class="load-comments">
+							<button onclick="load_tlp_comments(<?php echo $post_data['post_id']; ?>,this);">{{LANG show_more}} {{LANG comments}}</button>
+						</li>
+					<?php } ?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<?php
+include $context['dirname_theme'].'/main/templates/modals/delete-blog-comment.html';
+?>
+<script>
+    jQuery(document).ready(function($) {
+        var pd_cont = $(".post-data-container");
+
+        function insert_b_comment() {
+            $(".post-data-container").find('.commenting-overlay').removeClass('hidden');
+            var zis  = $("#emojionearea<?php echo $post_data['post_id']; ?>");
+            var text = zis.val();
+            var list = $(".post-data-container").find('.post-comments-list');
+            var id   = "<?php echo $post_data['post_id']; ?>";
+            if (!text) { return false; }
+            $.post(link('blogs/add-comment'), {post_id:id,text:text}, function(data, textStatus, xhr) {
+                if (data.status == 200) {
+                    $(data.html).insertAfter($('.pp_post_comms'));
+                }
+
+                zis.val('');
+                $(".post-data-container").find('.commenting-overlay').addClass('hidden');
+            });
+        }
+
+        var ell = $("#emojionearea<?php echo $post_data['post_id']; ?>").emojioneArea({
+            pickerPosition: "top",
+            tonesStyle: "radio",
+            events: {
+                 keyup: function (editor, event) {
+					$("#emojionearea<?php echo $post_data['post_id']; ?>").val(ell[0].emojioneArea.getText());
+					if (event.keyCode == 13 && event.shiftKey == 0) {
+                        <?php if(IS_LOGGED === true){ ?>
+                            insert_b_comment();
+                        <?php } else { ?>
+                            redirect('welcome');
+                        <?php } ?>
+                        $('.emojionearea .emojionearea-editor').html('');
+					}
+                }
+            },
+            filters: {
+                flags : false,
+                objects : false,
+                travel_places : false,
+                activity : false
+            }
+        });
+        $('.emojionearea').css('border', '0');
+    });
+</script>

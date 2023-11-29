@@ -1,0 +1,16 @@
+<div class="delt-active">
+	<h2 class="user_sttng_panel_hd">{{LANG delete_account}}?</h2>
+	<p class="user_sttng_panel_sb">{{LANG confirm_del_account}}</p>
+	<form class="form pp_sett_form" id="delete-account-settings">
+		<div class="pg_mat_input">
+			<input required="true" type="password" name="password" placeholder="{{LANG password}}">
+			<label>{{LANG password}}</label>
+		</div>
+		<div class="pg_sett_save"><button class="btn btn-main btn-mat btn-mat-raised pp_flat_btn" type="submit">{{LANG continue}}</button></div>
+		<input type="hidden" name="user_id" value="<?php echo($context['me']['user_id']) ?>">
+		<input type="hidden" name="hash" value="<?php echo($context['csrf_token']) ?>">
+	</form>
+</div>
+<?php 
+include $context['dirname_theme'].'/settings/templates/settings/js/script.html';
+ ?>

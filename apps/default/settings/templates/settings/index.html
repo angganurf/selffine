@@ -1,0 +1,118 @@
+<div class="settings-page-container content-shadow">
+<div class="page-content sett_avatr_chng">
+	<div class="header">
+		<div class="avatar-wrapper">
+			<img src="<?php echo($context['me']['avatar']) ?>" class="img-circle" width="60px" height="60px">
+		</div>
+		<div class="edit-avatar">
+			<form id="edit-avatar">
+				<h5><?php echo($context['me']['name']) ?></h5>
+				<button type="button" class="btn btn-info btn-shadow" onclick="$('#avatar').trigger('click');">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-upload"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg> {{LANG change_avatar}}
+				</button>
+				<input type="file" accept="image/*" name="avatar" id="avatar" class="hidden">
+				<input type="hidden" name="hash" value="<?php echo($context['csrf_token']) ?>">
+			</form>
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>
+	<div class="col-xs-4 col-sm-4 col-md-3 sidenav">
+		<ul class="list-group">
+			<li class="list-group-item sett-hover <?php if($context['page'] == 'general'){ ?>active sett-active<?php } ?>">
+				<a href="{{CONFIG site_url}}/settings/general/<?php echo $context['me']['user_id'] ?>" data-ajax="ajax_loading.php?app=settings&apph=settings&user=<?php echo($context['me']['username']) ?>&page=general">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M8.686 4l2.607-2.607a1 1 0 0 1 1.414 0L15.314 4H19a1 1 0 0 1 1 1v3.686l2.607 2.607a1 1 0 0 1 0 1.414L20 15.314V19a1 1 0 0 1-1 1h-3.686l-2.607 2.607a1 1 0 0 1-1.414 0L8.686 20H5a1 1 0 0 1-1-1v-3.686l-2.607-2.607a1 1 0 0 1 0-1.414L4 8.686V5a1 1 0 0 1 1-1h3.686zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg> {{LANG general}}
+				</a>
+			</li>
+			<li class="list-group-item prof-hover <?php if($context['page'] == 'profile'){ ?>active prof-active<?php } ?>">
+				<a href="{{CONFIG site_url}}/settings/profile/<?php echo $context['me']['user_id'] ?>" data-ajax="ajax_loading.php?app=settings&apph=settings&user=<?php echo($context['me']['username']) ?>&page=profile">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 14v8H4a8 8 0 0 1 8-8zm0-1c-3.315 0-6-2.685-6-6s2.685-6 6-6 6 2.685 6 6-2.685 6-6 6zm2.595 5.812a3.51 3.51 0 0 1 0-1.623l-.992-.573 1-1.732.992.573A3.496 3.496 0 0 1 17 14.645V13.5h2v1.145c.532.158 1.012.44 1.405.812l.992-.573 1 1.732-.992.573a3.51 3.51 0 0 1 0 1.622l.992.573-1 1.732-.992-.573a3.496 3.496 0 0 1-1.405.812V22.5h-2v-1.145a3.496 3.496 0 0 1-1.405-.812l-.992.573-1-1.732.992-.572zM18 17a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg> {{LANG profile_settings}}
+				</a>
+			</li>
+			<li class="list-group-item pass-hover <?php if($context['page'] == 'password'){ ?>active pass-active<?php } ?>">
+				<a href="{{CONFIG site_url}}/settings/password/<?php echo $context['me']['user_id'] ?>" data-ajax="ajax_loading.php?app=settings&apph=settings&user=<?php echo($context['me']['username']) ?>&page=password">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M18 8h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1h2V7a6 6 0 1 1 12 0v1zm-2 0V7a4 4 0 1 0-8 0v1h8zm-5 6v2h2v-2h-2zm-4 0v2h2v-2H7zm8 0v2h2v-2h-2z"/></svg> {{LANG password}}
+				</a>
+			</li>
+			<li class="list-group-item priv-hover <?php if($context['page'] == 'privacy'){ ?>active priv-active<?php } ?>">
+				<a href="{{CONFIG site_url}}/settings/privacy/<?php echo $context['me']['user_id'] ?>" data-ajax="ajax_loading.php?app=settings&apph=settings&user=<?php echo($context['me']['username']) ?>&page=privacy">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M3.783 2.826L12 1l8.217 1.826a1 1 0 0 1 .783.976v9.987a6 6 0 0 1-2.672 4.992L12 23l-6.328-4.219A6 6 0 0 1 3 13.79V3.802a1 1 0 0 1 .783-.976zM12 11a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm-4.473 5h8.946a4.5 4.5 0 0 0-8.946 0z"/></svg> {{LANG privacy}}
+				</a>
+			</li>
+			<li class="list-group-item noti-hover <?php if($context['page'] == 'notifications'){ ?>active noti-active<?php } ?>">
+				<a href="{{CONFIG site_url}}/settings/notifications/<?php echo $context['me']['user_id'] ?>"  data-ajax="ajax_loading.php?app=settings&apph=settings&user=<?php echo($context['me']['username']) ?>&page=notifications">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M20 18.667l.4.533a.5.5 0 0 1-.4.8H4a.5.5 0 0 1-.4-.8l.4-.533V10a8 8 0 1 1 16 0v8.667zM9.5 21h5a2.5 2.5 0 1 1-5 0z"/></svg> {{LANG notifications}}
+				</a>
+			</li>
+			<?php if ($context['me']['p_privacy'] == 0 || $context['me']['p_privacy'] == 1) { ?>
+			<li class="list-group-item blok-hover <?php if($context['page'] == 'requests'){ ?>active blok-active<?php } ?>">
+				<a href="{{CONFIG site_url}}/settings/requests/<?php echo $context['me']['user_id'] ?>"  data-ajax="ajax_loading.php?app=settings&apph=settings&user=<?php echo($context['me']['username']) ?>&page=requests">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M14 14.252V22H4a8 8 0 0 1 10-7.748zM12 13c-3.315 0-6-2.685-6-6s2.685-6 6-6 6 2.685 6 6-2.685 6-6 6zm6 4v-3h2v3h3v2h-3v3h-2v-3h-3v-2h3z"/></svg> {{LANG follow_requests}}
+				</a>
+			</li>
+			<?php } ?>
+			<?php if ($context['me']['business_account'] == 0 && $config['business_account'] == 'on') { ?>
+			<li class="list-group-item sett-hover <?php if($context['page'] == 'business_account'){ ?>active sett-active<?php } ?>">
+				<a href="{{CONFIG site_url}}/settings/business_account/<?php echo $context['me']['user_id'] ?>"  data-ajax="ajax_loading.php?app=settings&apph=settings&user=<?php echo($context['me']['username']) ?>&page=business_account">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M7 5V2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v3h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h4zM4 15v4h16v-4H4zm7-4v2h2v-2h-2zM9 3v2h6V3H9z"/></svg> {{LANG business_account}}
+				</a>
+			</li>
+			<?php } ?>
+			<?php if (!$context['me']['verified']) { ?>
+			<li class="list-group-item verf-hover <?php if($context['page'] == 'verification'){ ?>active verf-active<?php } ?>">
+				<a href="{{CONFIG site_url}}/settings/verification/<?php echo $context['me']['user_id'] ?>"  data-ajax="ajax_loading.php?app=settings&apph=settings&user=<?php echo($context['me']['username']) ?>&page=verification">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-.997-6l7.07-7.071-1.414-1.414-5.656 5.657-2.829-2.829-1.414 1.414L11.003 16z"/></svg> {{LANG verification}}
+				</a>
+			</li>
+			<?php } ?>
+			<li class="list-group-item sess-hover <?php if($context['page'] == 'manage_sessions'){ ?>active sess-active<?php } ?>">
+				<a href="{{CONFIG site_url}}/settings/manage_sessions/<?php echo $context['me']['user_id'] ?>" data-ajax="ajax_loading.php?app=settings&apph=settings&user=<?php echo($context['me']['username']) ?>&page=manage_sessions">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 1a9 9 0 0 1 9 9v4a8.99 8.99 0 0 1-3.81 7.354c.474-1.522.75-3.131.802-4.797L18 16v-2.001h-2V16l-.003.315a15.932 15.932 0 0 1-1.431 6.315 9.045 9.045 0 0 1-3.574.314 12.935 12.935 0 0 0 2.001-6.52L13 16V9h-2v7l-.004.288a10.95 10.95 0 0 1-2.087 6.167 8.98 8.98 0 0 1-2.626-1.504 7.959 7.959 0 0 0 1.71-4.623L8 16v-6l.005-.2a3.978 3.978 0 0 1 .435-1.625l.114-.207-1.445-1.445a5.969 5.969 0 0 0-1.102 3.18L6 10v6l-.004.225a5.968 5.968 0 0 1-1.121 3.273A8.958 8.958 0 0 1 3 14v-4a9 9 0 0 1 9-9zm0 3c-1.196 0-2.31.35-3.246.953l-.23.156 1.444 1.445a3.977 3.977 0 0 1 1.787-.547L12 6l.2.005a4 4 0 0 1 3.795 3.789L16 10v2h2v-2a6 6 0 0 0-6-6z"/></svg> {{LANG manage_sessions}}
+				</a>
+			</li>
+			<li class="list-group-item blok-hover <?php if($context['page'] == 'blocked'){ ?>active blok-active<?php } ?>">
+				<a href="{{CONFIG site_url}}/settings/blocked/<?php echo $context['me']['user_id'] ?>"  data-ajax="ajax_loading.php?app=settings&apph=settings&user=<?php echo($context['me']['username']) ?>&page=blocked">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zM8.523 7.109A6.04 6.04 0 0 0 7.11 8.523l8.368 8.368a6.04 6.04 0 0 0 1.414-1.414L8.523 7.109z"/></svg> {{LANG blocked_users}}
+				</a>
+			</li>
+			<?php if ($config['two_factor'] == 1) { ?>
+			<li class="list-group-item affiliates-hover <?php if($context['page'] == 'two_factor'){ ?>active affiliates-active<?php } ?>">
+				<a href="{{CONFIG site_url}}/settings/two_factor/<?php echo $context['me']['user_id'] ?>"  data-ajax="ajax_loading.php?app=settings&apph=settings&user=<?php echo($context['me']['username']) ?>&page=two_factor">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M2,7V9H6V11H4A2,2 0 0,0 2,13V17H8V15H4V13H6A2,2 0 0,0 8,11V9C8,7.89 7.1,7 6,7H2M9,7V17H11V13H14V11H11V9H15V7H9M18,7A2,2 0 0,0 16,9V17H18V14H20V17H22V9A2,2 0 0,0 20,7H18M18,9H20V12H18V9Z"></path></svg> {{LANG two_factor}}
+				</a>
+			</li>
+			<?php } ?>
+			<?php if ($config['affiliate_system'] == 1) { ?>
+			<li class="list-group-item affiliates-hover <?php if($context['page'] == 'my_affiliates'){ ?>active affiliates-active<?php } ?>">
+				<a href="{{CONFIG site_url}}/settings/my_affiliates/<?php echo $context['me']['user_id'] ?>"  data-ajax="ajax_loading.php?app=settings&apph=settings&user=<?php echo($context['me']['username']) ?>&page=my_affiliates">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M2 22a8 8 0 1 1 16 0H2zm8-9c-3.315 0-6-2.685-6-6s2.685-6 6-6 6 2.685 6 6-2.685 6-6 6zm7.363 2.233A7.505 7.505 0 0 1 22.983 22H20c0-2.61-1-4.986-2.637-6.767zm-2.023-2.276A7.98 7.98 0 0 0 18 7a7.964 7.964 0 0 0-1.015-3.903A5 5 0 0 1 21 8a4.999 4.999 0 0 1-5.66 4.957z"/></svg> {{LANG my_affiliates}}
+				</a>
+			</li>
+			<?php } ?>
+			<?php if ($config['withdraw_system'] == 'on') { ?>
+			<li class="list-group-item withdraw-hover <?php if($context['page'] == 'withdraw'){ ?>active withdraw-active<?php } ?>">
+				<a href="{{CONFIG site_url}}/settings/withdraw/<?php echo $context['me']['user_id'] ?>"  data-ajax="ajax_loading.php?app=settings&apph=settings&user=<?php echo($context['me']['username']) ?>&page=withdraw">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-13H8v2h9l-5-5v3zm-5 4l5 5v-3h4v-2H7z"/></svg> {{LANG withdraw}}
+				</a>
+			</li>
+			<?php } ?>
+			<li class="list-group-item wallet <?php if($context['page'] == 'wallet'){ ?>wallet-active<?php } ?>">
+				<a href="{{CONFIG site_url}}/settings/wallet/<?php echo $context['me']['username'] ?>" data-ajax="ajax_loading.php?app=settings&apph=settings&user=<?php echo($context['me']['username']) ?>&page=wallet">
+					<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M22 6h-7a6 6 0 1 0 0 12h7v2a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h18a1 1 0 0 1 1 1v2zm-7 2h8v8h-8a4 4 0 1 1 0-8zm0 3v2h3v-2h-3z"></path></svg></span> {{LANG wallet}}
+				</a>
+			</li>
+			<?php if ($config['delete_account'] == 'on') { ?>
+				<li class="list-group-item delt-hover <?php if($context['page'] == 'delete'){ ?>active delt-active<?php } ?>">
+					<a href="{{CONFIG site_url}}/settings/delete/<?php echo $context['me']['user_id'] ?>" data-ajax="ajax_loading.php?app=settings&apph=settings&user=<?php echo($context['me']['username']) ?>&page=delete">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"/><path d="M7 6V3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v3h5v2h-2v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8H2V6h5zm2-2v2h6V4H9z"/></svg> {{LANG delete_account}}
+					</a>
+				</li>
+
+			<?php } ?>
+		</ul>
+	</div>
+	<div class="col-xs-8 col-sm-8 col-md-9 page-content">
+		<div><?php include 'includes/'.$context['page'].'.html'; ?></div>
+	</div>
+	<div class="clear"></div>
+</div>

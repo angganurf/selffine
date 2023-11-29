@@ -1,0 +1,156 @@
+<div class="page-content">
+	<div class="ads_header">
+		<div class="ma_tabs">
+			<ul class="list-unstyled mb-0">
+				<li>
+					<a href="{{CONFIG site_url}}/ads" data-ajax="ajax_loading.php?app=ads&apph=ads"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,8H4A2,2 0 0,0 2,10V14A2,2 0 0,0 4,16H5V20A1,1 0 0,0 6,21H8A1,1 0 0,0 9,20V16H12L17,20V4L12,8M21.5,12C21.5,13.71 20.54,15.26 19,16V8C20.53,8.75 21.5,10.3 21.5,12Z" /></svg> {{LANG advertising}}</a>
+				</li>
+				<li>
+					<a href="{{CONFIG site_url}}/ads/wallet" data-ajax="ajax_loading.php?app=ads&apph=ads&page=wallet"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M22 6h-7a6 6 0 1 0 0 12h7v2a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h18a1 1 0 0 1 1 1v2zm-7 2h8v8h-8a4 4 0 1 1 0-8zm0 3v2h3v-2h-3z" /></svg> {{LANG wallet}}</a>
+				</li>
+				<li>
+					<a href="{{CONFIG site_url}}/ads/create" data-ajax="ajax_loading.php?app=ads&apph=ads&page=create"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg> {{LANG create}}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<form class="form pp_sett_form pg_page padd create-new-ad-container" id="edit_ad" enctype="multipart/form-data">
+		<h2 class="user_sttng_panel_hd">{{LANG edit_ad}}</h2>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="pg_mat_input">
+					<input type="text" name="company" placeholder="{{LANG company}}" required="true" value="<?php echo($context['user_ad']->name) ?>">
+					<label>{{LANG company}}</label>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="pg_mat_input">
+					<input required="true" type="url" name="url" placeholder="{{LANG url}}" value="<?php echo($context['user_ad']->url) ?>">
+					<label>{{LANG url}}</label>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="pg_mat_input">
+					<input type="text" name="title" placeholder="{{LANG title}}" required="true" value="<?php echo($context['user_ad']->headline) ?>">
+					<label>{{LANG title}}</label>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="pg_mat_input" id="review-ads-location">
+					<input required="true" type="text" name="location" placeholder="{{LANG location}}" value="<?php echo($context['user_ad']->location) ?>" id="ads-location">
+					<label>{{LANG location}}</label>
+					<div id="place"></div>
+				</div>
+			</div>
+		</div>
+		<div class="pg_mat_input">
+			<textarea placeholder="{{LANG description}}" name="description" rows="3"><?php echo($context['user_ad']->description) ?></textarea>
+			<label>{{LANG description}}</label>
+		</div>
+		<div class="pg_mat_input">
+			<select class="form-control selectpicker show-menu-arrow show-tick" multiple name="country[]" data-live-search="true" title="{{LANG country}}" data-actions-box="true">
+				<?php foreach ($context['countries_name'] as $cid => $cname) { ?>
+					<option value="<?php echo($cid) ?>" <?php echo (!empty($context['user_ad']->audience) && in_array('{'.$cid.'}', explode(',', $context['user_ad']->audience)) ? 'selected' : ''); ?>><?php echo $cname; ?></option>
+				<?php } ?>
+			</select>
+			<label>{{LANG country}}</label>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="pg_mat_input">
+					<select name="appears" class="pg_select_has_label">
+						<option value="post" <?php echo ($context['user_ad']->appears == 'post' ? 'selected' : ''); ?>><?php echo $context['lang']['post']; ?></option>
+						<option value="sidebar" <?php echo ($context['user_ad']->appears == 'sidebar' ? 'selected' : ''); ?>><?php echo $context['lang']['sidebar']; ?></option>
+					</select>
+					<label>{{LANG placement}}</label>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="pg_mat_input">
+					<select name="gender" class="pg_select_has_label">
+						<option value="all" <?php echo ($context['user_ad']->gender == 'all' ? 'selected' : ''); ?>>{{LANG all}}</option>
+						<option value="male" <?php echo ($context['user_ad']->gender == 'male' ? 'selected' : ''); ?>>{{LANG male}}</option>
+						<option value="female" <?php echo ($context['user_ad']->gender == 'female' ? 'selected' : ''); ?>>{{LANG female}}</option>
+					</select>
+					<label>{{LANG gender}}</label>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="pg_mat_input">
+					<select name="status" class="pg_select_has_label">
+						<option value="1" <?php echo ($context['user_ad']->status == 1 ? 'selected' : ''); ?>>{{LANG active}}</option>
+						<option value="0" <?php echo ($context['user_ad']->status == 0 ? 'selected' : ''); ?>>{{LANG not_active}}</option>
+					</select>
+					<label>{{LANG status}}</label>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="pg_mat_input">
+					<select name="bidding" class="pg_select_has_label">
+						<option value="clicks" <?php echo ($context['user_ad']->bidding == 'clicks' ? 'selected' : ''); ?>><?php echo str_replace('{{PRICE}}',  $context['currency_symbol'] . $config['ad_c_price'], $context['lang']['pay_per_click']); ?></option>
+						<option value="views" <?php echo ($context['user_ad']->bidding == 'views' ? 'selected' : ''); ?>><?php echo str_replace('{{PRICE}}', $context['currency_symbol'] . $config['ad_v_price'], $context['lang']['pay_per_imprssion']); ?></option>
+					</select>
+					<label>{{LANG bidding}}</label>
+				</div>
+			</div>
+		</div>
+		<input type="hidden" name="hash" value="<?php echo($context['csrf_token']) ?>">
+		<input type="hidden" name="id" value="<?php echo($context['user_ad']->id) ?>">
+		<div class="clear"></div>
+		<div class="pg_sett_save"><button class="btn btn-main btn-mat btn-mat-raised pp_flat_btn" type="submit">{{LANG submit}}</button></div>
+	</form>
+</div>
+
+<script src="{{THEME_URL}}/main/static/js/bootstrap-select.min.js"></script>
+<link rel="stylesheet" href="{{THEME_URL}}/main/static/css/bootstrap-select.min.css">
+
+<script type="text/javascript">
+	<?php if ($config['google_map']) { ?>
+    $("#ads-location").keyup(function(event) {
+        if ($(this).val().length >= 3) {
+        	setTimeout(function () {
+        		$("#review-ads-location #place").html('<iframe width="100%" frameborder="0" style="border:0;margin-top: 10px;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $config['google_map_api']; ?>&q=' + $("#ads-location").val() + '&language=en"></iframe>');
+        	},1000);
+        }
+        else{
+        	setTimeout(function () {
+        		$("#review-ads-location #place").html('<iframe width="100%" frameborder="0" style="border:0;margin-top: 10px;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $config['google_map_api']; ?>&q=us&language=en"></iframe>');
+        	},1000);
+        }
+  	});
+   <?php } ?>
+
+	jQuery(document).ready(function($) {
+		$("form#edit_ad").ajaxForm({
+			url: link('profile/edit_ad'),
+			type: 'POST',
+			dataType: 'json',
+			beforeSubmit: function(arr,form){
+				$(form).find('.pp_load_loader').addClass('loadingg');
+				$(form).find('button[type="submit"]').attr('disabled','true');
+			},
+			success: function(data,stat,xhr,form){
+				scroll2top();
+				$.toast(data.message,{
+                	duration: 5000, 
+                	type: 'success',
+                	align: 'bottom',
+                	singleton: true
+                });
+                if (data.status == 200) {
+                	setTimeout(function () {
+                		window.location.href = "{{CONFIG site_url}}/ads";
+                	},2000);
+                }
+				$(form).find('.pp_load_loader').removeClass('loadingg');
+                $(form).find('button[type="submit"]').removeAttr('disabled');
+			}
+		});
+	});
+
+	$('.selectpicker').selectpicker({});
+</script>

@@ -1,0 +1,990 @@
+<?php
+$playtube_links_on = ($config['playtube_links'] == 'on') ? 'checked' : '';
+$playtube_links_off = ($config['playtube_links'] == 'off') ? 'checked' : '';
+ ?>
+<div class="container-fluid">
+    <div>
+        <h3>Payment Configuration</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Payments & Ads</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Payment Configuration</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="alert alert-success">
+      <i class="fa fa-question-circle fa-fw"></i> Looking to manage currencies? <a href="<?php echo pxp_acp_link('manage-currencies'); ?>">Click Here.</a>
+    </div>
+    <div class="alert alert-warning">
+      <i class="fa fa-question-circle fa-fw"></i> Please note that only the supported currencies from the payment provider are showing for each payment method.
+    </div>
+    <div class="row clearfix">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Withdrawal Settings</h6>
+                    <div class="affiliates-settings-alert"></div>
+                    <form class="affiliates-settings" method="POST">
+                        <div class="alert alert-info">
+                            Users can send withdrawal requests via any of these methods
+                        </div>
+                        <div class="clearfix"></div>
+                        <br>
+                        <div class="float-left">
+                            <label for="bank" class="main-label">Bank Transfer</label>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="bank" value="0" />
+                            <input type="checkbox" name="bank" id="chck-bank" value="1" <?php echo ($config['withdrawal_payment_method']['bank'] == 1) ? 'checked': '';?>>
+                            <label for="chck-bank" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="float-left">
+                            <label for="p_paypal" class="main-label">Paypal</label>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="p_paypal" value="0" />
+                            <input type="checkbox" name="p_paypal" id="chck-p_paypal" value="1" <?php echo ($config['withdrawal_payment_method']['paypal'] == 1) ? 'checked': '';?>>
+                            <label for="chck-p_paypal" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="float-left">
+                            <label for="skrill" class="main-label">Skrill</label>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="skrill" value="0" />
+                            <input type="checkbox" name="skrill" id="chck-skrill" value="1" <?php echo ($config['withdrawal_payment_method']['skrill'] == 1) ? 'checked': '';?>>
+                            <label for="chck-skrill" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="float-left">
+                            <label for="custom" class="main-label">Custom Method</label>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="custom" value="0" />
+                            <input type="checkbox" name="custom" id="chck-custom" value="1" <?php echo ($config['withdrawal_payment_method']['custom'] == 1) ? 'checked': '';?> onclick="CustomName(this)">
+                            <label for="chck-custom" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group form-float <?php echo ($config['withdrawal_payment_method']['custom'] == 1) ? '': 'hidden';?> custom_name_class">
+                            <div class="form-line">
+                                <label class="form-label">Custom Method Name</label>
+                                <input type="text" id="custom_name" name="custom_name" class="form-control" value="<?php echo $config['custom_name']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Minimum withdrawal request</label>
+                                <input type="text" id="m_withdrawal" name="m_withdrawal" class="form-control" value="<?php echo $config['m_withdrawal']?>">
+                                <small class="admin-info">Minimum withdrawal the users can request</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Configure PayPal Payment Method</h6>
+                    <form class="form general-settings-form">
+                        <div class="float-left">
+                            <label for="paypal_payment" class="main-label">PayPal Payment Method</label>
+                            <br><small class="admin-info">Enable PayPal to receive payments from ads and pro packages.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="paypal_payment" value="off" />
+                            <input type="checkbox" name="paypal_payment" id="chck-paypal_payment" value="on" <?php echo ($config['paypal_payment'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-paypal_payment" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <label for="paypal_mode" class="main-label">PayPal Mode</label>
+                        <br><small class="admin-info">Choose the mode your application is using, for testing use the SandBox mode.</small>
+                        <div class="form-group">
+                            <select class="form-control show-tick" name="paypal_mode">
+                                <option value="live" <?php if($config['paypal_mode'] == 'live'){ echo("selected");}?>>Live</option>
+                                <option value="sandbox" <?php if($config['paypal_mode'] == 'sandbox'){ echo("selected");}?>>SandBox</option>
+                            </select>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">PayPal Clinet ID</label>
+                                <input type="text" name="paypal_id" class="form-control" value="<?php echo $config['paypal_id']?>"><small class="admin-info">Set your PayPal application ID.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">PayPal Secret Key</label>
+                                <input type="text" name="paypal_secret" class="form-control" value="<?php echo $config['paypal_secret']?>"><small class="admin-info">Set your PayPal application secret key.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Amount</label>
+                                <input type="number" name="donate_percentage" class="form-control" value="<?php echo $config['donate_percentage']?>" onkeyup="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"><small class="admin-info">The price that the user will pay to you for each new user donate</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <label for="paypal_currency">PayPal Currency</label>
+                        <select class="form-control show-tick" id="paypal_currency" name="paypal_currency">
+                          <option value="USD" <?php echo ($config['paypal_currency'] == 'USD')  ? ' selected': '';?>>USD</option>
+                          <option value="EUR" <?php echo ($config['paypal_currency'] == 'EUR')  ? ' selected': '';?>>EUR</option>
+                          <option value="AUD" <?php echo ($config['paypal_currency'] == 'AUD')  ? ' selected': '';?>>AUD</option>
+                          <option value="BRL" <?php echo ($config['paypal_currency'] == 'BRL')  ? ' selected': '';?>>BRL</option>
+                          <option value="CAD" <?php echo ($config['paypal_currency'] == 'CAD')  ? ' selected': '';?>>CAD</option>
+                          <option value="CZK" <?php echo ($config['paypal_currency'] == 'CZK')  ? ' selected': '';?>>CZK</option>
+                          <option value="DKK" <?php echo ($config['paypal_currency'] == 'DKK')  ? ' selected': '';?>>DKK</option>
+                          <option value="HKD" <?php echo ($config['paypal_currency'] == 'HKD')  ? ' selected': '';?>>HKD</option>
+                          <option value="HUF" <?php echo ($config['paypal_currency'] == 'HUF')  ? ' selected': '';?>>HUF</option>
+                          <option value="INR" <?php echo ($config['paypal_currency'] == 'INR')  ? ' selected': '';?>>INR</option>
+                          <option value="ILS" <?php echo ($config['paypal_currency'] == 'ILS')  ? ' selected': '';?>>ILS</option>
+                          <option value="JPY" <?php echo ($config['paypal_currency'] == 'JPY')  ? ' selected': '';?>>JPY</option>
+                          <option value="MYR" <?php echo ($config['paypal_currency'] == 'MYR')  ? ' selected': '';?>>MYR</option>
+                          <option value="MXN" <?php echo ($config['paypal_currency'] == 'MXN')  ? ' selected': '';?>>MXN</option>
+                          <option value="TWD" <?php echo ($config['paypal_currency'] == 'TWD')  ? ' selected': '';?>>TWD</option>
+                          <option value="NZD" <?php echo ($config['paypal_currency'] == 'NZD')  ? ' selected': '';?>>NZD</option>
+                          <option value="NOK" <?php echo ($config['paypal_currency'] == 'NOK')  ? ' selected': '';?>>NOK</option>
+                          <option value="PHP" <?php echo ($config['paypal_currency'] == 'PHP')  ? ' selected': '';?>>PHP</option>
+                          <option value="PLN" <?php echo ($config['paypal_currency'] == 'PLN')  ? ' selected': '';?>>PLN</option>
+                          <option value="GBP" <?php echo ($config['paypal_currency'] == 'GBP')  ? ' selected': '';?>>GBP</option>
+                          <option value="RUB" <?php echo ($config['paypal_currency'] == 'RUB')  ? ' selected': '';?>>RUB</option>
+                          <option value="SGD" <?php echo ($config['paypal_currency'] == 'SGD')  ? ' selected': '';?>>SGD</option>
+                          <option value="SEK" <?php echo ($config['paypal_currency'] == 'SEK')  ? ' selected': '';?>>SEK</option>
+                          <option value="CHF" <?php echo ($config['paypal_currency'] == 'CHF')  ? ' selected': '';?>>CHF</option>
+                          <option value="THB" <?php echo ($config['paypal_currency'] == 'THB')  ? ' selected': '';?>>THB</option>
+                        </select>
+                        <small class="admin-info">Set your PayPal currency, this will be used only on PayPal.</small>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Configure PaySera Payment Method</h6>
+                    <form class="form general-settings-form">
+                        <div class="float-left">
+                            <label for="paysera" class="main-label">PaySera Payment Method</label>
+                            <br><small class="admin-info">Get paid by PaySera payment provider.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="paysera" value="off" />
+                            <input type="checkbox" name="paysera" id="chck-paysera" value="on" <?php echo ($config['paysera'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-paysera" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Project ID</label>
+                                <input type="text" name="paysera_project_id" class="form-control" value="<?php echo $config['paysera_project_id']?>"><small class="admin-info">Your PaySera project ID.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Account Password</label>
+                                <input type="text" name="paysera_password" class="form-control" value="<?php echo $config['paysera_password']?>"><small class="admin-info">Your PaySera account password.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <label for="paysera_test_mode" class="main-label">Paysera Mode</label>
+                        <br><small class="admin-info">Choose the mode your application is using, for testing use the SandBox mode.</small>
+                        <div class="form-group">
+                            <select class="form-control show-tick" name="paysera_test_mode">
+                                <option value="test" <?php if($config['paysera_test_mode'] == 'test'){ echo("selected");}?>>Test Mode</option>
+                                <option value="live" <?php if($config['paysera_test_mode'] == 'live'){ echo("selected");}?>>Live Mode</option>
+                            </select>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Configure RazorPay (Credit Cards) Payment Method</h6>
+                    <form class="form general-settings-form">
+                        <div class="float-left">
+                            <label for="razorpay" class="main-label">RazorPay Payment Method</label>
+                            <br><small class="admin-info">Get paid by RazorPay payment provider.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="razorpay" value="off" />
+                            <input type="checkbox" name="razorpay" id="chck-razorpay" value="on" <?php echo ($config['razorpay'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-razorpay" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Application ID</label>
+                                <input type="text" name="razorpay_key" class="form-control" value="<?php echo $config['razorpay_key']?>"><small class="admin-info">Your application client ID.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Application Secret</label>
+                                <input type="text" name="razorpay_secret" class="form-control" value="<?php echo $config['razorpay_secret']?>"><small class="admin-info">Your application secret key.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Configure PayStack (Credit Cards) Payment Method</h6>
+                    <form class="form general-settings-form">
+                        <div class="float-left">
+                            <label for="paystack" class="main-label">Paystack Payment Method</label>
+                            <br><small class="admin-info">Get paid by Paystack payment provider.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="paystack" value="off" />
+                            <input type="checkbox" name="paystack" id="chck-paystack" value="on" <?php echo ($config['paystack'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-paystack" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <!-- <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Paystack public key</label>
+                                <input type="text" name="paystack_public_key" class="form-control" value="<?php echo $config['paystack_public_key']?>"><small class="admin-info">Your paystack account  public key</small>
+                            </div>
+                        </div> -->
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Secret Key</label>
+                                <input type="text" name="paystack_secret_key" class="form-control" value="<?php echo $config['paystack_secret_key']?>"><small class="admin-info">Your paystack account secret key.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="clearfix"></div>
+                        <label for="paystack_currency">Paystack Currency</label>
+                        <select class="form-control show-tick" id="paystack_currency" name="paystack_currency">
+                          <option value="USD" <?php echo ($config['paystack_currency'] == 'USD')  ? ' selected': '';?>>USD</option>
+                          <option value="GHS" <?php echo ($config['paystack_currency'] == 'GHS')  ? ' selected': '';?>>GHS</option>
+                          <option value="NGN" <?php echo ($config['paystack_currency'] == 'NGN')  ? ' selected': '';?>>NGN</option>
+                          <option value="ZAR" <?php echo ($config['paystack_currency'] == 'ZAR')  ? ' selected': '';?>>ZAR</option>
+                        </select>
+                        <small class="admin-info">Set your Paystack currency, this will be used only on Paystack.</small>
+                        <div class="alert alert-info">
+                            <a href="https://support.paystack.com/hc/en-us/articles/360009973779-What-currency-is-available-to-my-business-">What currency is available to my business?</a>.
+                            <br>
+                            <a href="https://support.paystack.com/hc/en-us/articles/360009973799-Can-I-accept-payments-in-USD-">Can I accept payments in USD?</a>.
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Configure CashFree (Credit Cards) Payment Method</h6>
+                    <form class="cashfree-settings" method="POST">
+                    <div class="float-left">
+                        <label for="cashfree_payment" class="main-label">CashFree Payment Method</label>
+                        <br><small class="admin-info">Enable CashFree to receive payments by credit cards.</small>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="cashfree_payment" value="no" />
+                        <input type="checkbox" name="cashfree_payment" id="chck-cashfree_payment" value="yes" <?php echo ($config['cashfree_payment'] == 'yes') ? 'checked': '';?>>
+                        <label for="chck-cashfree_payment" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <label for="cashfree_mode" class="main-label">CashFree Mode</label>
+                    <br><small class="admin-info">Choose the mode your application is using, for testing use the SandBox mode.</small>
+                    <div class="form-group">
+                        <select class="form-control show-tick" name="cashfree_mode">
+                            <option value="sandBox" <?php if($config['cashfree_mode'] == 'sandBox'){ echo("selected");}?>>SandBox</option>
+                            <option value="live" <?php if($config['cashfree_mode'] == 'live'){ echo("selected");}?>>Live Mode</option>
+                        </select>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="form-group">
+                        <div class="form-line">
+                            <label class="form-label" class="main-label">Client ID</label>
+                            <input type="text" name="cashfree_client_key" class="form-control" value="<?php echo $config['cashfree_client_key']?>"><small class="admin-info">Your application client ID.</small>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="form-group">
+                        <div class="form-line">
+                            <label class="form-label" class="main-label">Client Secret</label>
+                            <input type="text" name="cashfree_secret_key" class="form-control" value="<?php echo $config['cashfree_secret_key']?>"><small class="admin-info">Your application client ID secret key.</small>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <label for="cashfree_currency">CashFree Currency</label>
+                    <select class="form-control show-tick" id="cashfree_currency" name="cashfree_currency">
+                        <?php foreach ($config['cashfree_currency_array'] as $key => $value) { ?>
+                            <option value="<?php echo($value); ?>" <?php echo ($config['cashfree_currency'] == $value)  ? ' selected': '';?>><?php echo($value); ?></option>
+                        <?php } ?>
+                    </select>
+                    <small class="admin-info">Set your CashFree currency, this will be used only on CashFree.</small>
+                    <div class="alert alert-info">
+                        <a href="https://docs.cashfree.com/docs/currencies-supported">By default, only INR is available. Write to care@cashfree.com to enable new currencies.</a>.
+                    </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Authorize.Net payment</h6>
+                    <div class="authorize-settings-alert"></div>
+                    <form class="authorize-settings" method="POST">
+                        <div>
+                            <div class="float-left">
+                                <label for="authorize_payment" class="main-label">Authorize.Net Payment Method</label>
+                                <br><small class="admin-info">Enable Authorize.Net to receive payments by credit cards.</small>
+                            </div>
+                            <div class="form-group float-right switcher">
+                                <input type="hidden" name="authorize_payment" value="off">
+                                <input type="checkbox" name="authorize_payment" id="authorize_payment-enabled" value="on" <?php echo ($config['authorize_payment'] == 'on') ? 'checked': '';?>>
+                                <label for="authorize_payment-enabled" class="check-trail"><span class="check-handler"></span></label>
+                            </div>
+                            <div class="clearfix"></div>
+                            <label for="authorize_test_mode">Test mode</label>
+                        <select class="form-control show-tick" id="authorize_test_mode" name="authorize_test_mode">
+                          <option value="PRODUCTION" <?php echo ($config['authorize_test_mode'] == 'PRODUCTION') ? 'selected': '';?>>Live</option>
+                          <option value="SANDBOX" <?php echo ($config['authorize_test_mode'] == 'SANDBOX') ? 'selected': '';?>>Test</option>
+                        </select>
+                        <small class="admin-info">Choose the mode your application is using, for testing use the SandBox mode.</small>
+                        <div class="clearfix"></div>
+                            <hr>
+                        </div>
+
+                        <label for="authorize_login_id">Authorize.Net API LOGIN ID</label>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="authorize_login_id" name="authorize_login_id" class="form-control" value="<?php echo $config['authorize_login_id'];?>">
+                                <small class="admin-info">Your Authorize.Net API LOGIN ID.</small>
+                            </div>
+                        </div>
+                        <label class="form-check-label" for="authorize_transaction_key">Authorize.Net TRANSACTION KEY</label>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="authorize_transaction_key" name="authorize_transaction_key" class="form-control" value="<?php echo $config['authorize_transaction_key'];?>">
+                                <small class="admin-info">Your Authorize.Net TRANSACTION KEY.</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                  <h6 class="card-title">Coinbase Payment</h6>
+                    <form class="coinbase_payment-settings" method="POST">
+                        <div class="float-left">
+                            <label for="coinbase_payment" class="main-label">Coinbase Payment Method</label>
+                            <br><small class="admin-info">Get paid by Coinbase, simple and easy.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="coinbase_payment" value="off" />
+                            <input type="checkbox" name="coinbase_payment" id="chck-coinbase_payment" value="on" <?php echo ($config['coinbase_payment'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-coinbase_payment" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                              <label class="form-label">API key </label>
+                                <input type="text" id="coinbase_key" name="coinbase_key" class="form-control" value="<?php echo $config['coinbase_key'];?>">
+                                <small class="admin-info">Your Coinbase API key.</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                  <h6 class="card-title">Configure Yoomoney Payment Method</h6>
+                    <form class="yoomoney-settings" method="POST">
+                        <div class="float-left">
+                            <label for="yoomoney_payment" class="main-label">Yoomoney Payment Method</label>
+                            <br><small class="admin-info">Get paid by Yoomoney payment provider.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="yoomoney_payment" value="off" />
+                            <input type="checkbox" name="yoomoney_payment" id="chck-yoomoney_payment" value="on" <?php echo ($config['yoomoney_payment'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-yoomoney_payment" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                              <label class="form-label">Wallet ID</label>
+                                <input type="text" id="yoomoney_wallet_id" name="yoomoney_wallet_id" class="form-control" value="<?php echo $config['yoomoney_wallet_id'];?>">
+                                <small class="admin-info">Your Yoomoney Wallet ID.</small>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                              <label class="form-label">Notifications Authentication Secret</label>
+                                <input type="text" id="yoomoney_notifications_secret" name="yoomoney_notifications_secret" class="form-control" value="<?php echo $config['yoomoney_notifications_secret'];?>">
+                                <small class="admin-info">Your Yoomoney Notifications Authentication Secret.</small>
+                            </div>
+                        </div>
+                        <small class="admin-info">Please add this url <?php echo($config['site_url']) ?>/aj/go_pro/yoomoney_success <a href="https://yoomoney.ru/transfer/myservices/http-notification" target="_blank">in HTTP notifications</a></small>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Configure Stripe (Credit Cards) Payment Method</h6>
+                    <form class="form general-settings-form">
+                        <div class="float-left">
+                            <label for="credit_card" class="main-label">Stripe Payment Method</label>
+                            <br><small class="admin-info">Enable Stripe to receive payments by credit cards.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="credit_card" value="off" />
+                            <input type="checkbox" name="credit_card" id="chck-credit_card" value="on" <?php echo ($config['credit_card'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-credit_card" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Stripe API Secret Key</label>
+                                <input type="text" name="stripe_secret" class="form-control" value="<?php echo $config['stripe_secret']?>"><small class="admin-info">Your Stripe secret key that starts with sk_</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Stripe Publishable Key</label>
+                                <input type="text" name="stripe_id" class="form-control" value="<?php echo $config['stripe_id']?>"><small class="admin-info">Your Stripe publishable key that starts with pk_</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <label for="stripe_currency">Stripe Currency</label>
+                        <select class="form-control show-tick" id="stripe_currency" name="stripe_currency">
+                          <option value="USD" <?php echo ($config['stripe_currency'] == 'USD')  ? ' selected': '';?>>USD</option>
+                          <option value="EUR" <?php echo ($config['stripe_currency'] == 'EUR')  ? ' selected': '';?>>EUR</option>
+                          <option value="AUD" <?php echo ($config['stripe_currency'] == 'AUD')  ? ' selected': '';?>>AUD</option>
+                          <option value="BRL" <?php echo ($config['stripe_currency'] == 'BRL')  ? ' selected': '';?>>BRL</option>
+                          <option value="CAD" <?php echo ($config['stripe_currency'] == 'CAD')  ? ' selected': '';?>>CAD</option>
+                          <option value="CZK" <?php echo ($config['stripe_currency'] == 'CZK')  ? ' selected': '';?>>CZK</option>
+                          <option value="DKK" <?php echo ($config['stripe_currency'] == 'DKK')  ? ' selected': '';?>>DKK</option>
+                          <option value="HKD" <?php echo ($config['stripe_currency'] == 'HKD')  ? ' selected': '';?>>HKD</option>
+                          <option value="HUF" <?php echo ($config['stripe_currency'] == 'HUF')  ? ' selected': '';?>>HUF</option>
+                          <option value="ILS" <?php echo ($config['stripe_currency'] == 'ILS')  ? ' selected': '';?>>ILS</option>
+                          <option value="JPY" <?php echo ($config['stripe_currency'] == 'JPY')  ? ' selected': '';?>>JPY</option>
+                          <option value="MYR" <?php echo ($config['stripe_currency'] == 'MYR')  ? ' selected': '';?>>MYR</option>
+                          <option value="MXN" <?php echo ($config['stripe_currency'] == 'MXN')  ? ' selected': '';?>>MXN</option>
+                          <option value="TWD" <?php echo ($config['stripe_currency'] == 'TWD')  ? ' selected': '';?>>TWD</option>
+                          <option value="NZD" <?php echo ($config['stripe_currency'] == 'NZD')  ? ' selected': '';?>>NZD</option>
+                          <option value="NOK" <?php echo ($config['stripe_currency'] == 'NOK')  ? ' selected': '';?>>NOK</option>
+                          <option value="PHP" <?php echo ($config['stripe_currency'] == 'PHP')  ? ' selected': '';?>>PHP</option>
+                          <option value="PLN" <?php echo ($config['stripe_currency'] == 'PLN')  ? ' selected': '';?>>PLN</option>
+                          <option value="RUB" <?php echo ($config['stripe_currency'] == 'RUB')  ? ' selected': '';?>>RUB</option>
+                          <option value="SGD" <?php echo ($config['stripe_currency'] == 'SGD')  ? ' selected': '';?>>SGD</option>
+                          <option value="SEK" <?php echo ($config['stripe_currency'] == 'SEK')  ? ' selected': '';?>>SEK</option>
+                          <option value="CHF" <?php echo ($config['stripe_currency'] == 'CHF')  ? ' selected': '';?>>CHF</option>
+                          <option value="THB" <?php echo ($config['stripe_currency'] == 'THB')  ? ' selected': '';?>>THB</option>
+                          <option value="GBP" <?php echo ($config['stripe_currency'] == 'GBP')  ? ' selected': '';?>>GBP</option>
+                        </select>
+                        <small class="admin-info">Set your Stripe currency, this will be used only on Stripe.</small>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Configure Local Bank Payment Method</h6>
+                    <form class="form bank-settings" method="POST">
+                        <div class="float-left">
+                            <label for="bank_payment" class="main-label">Bank Payment Method</label>
+                            <br><small class="admin-info">Get paid by bank transfers.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="bank_payment" value="off" />
+                            <input type="checkbox" name="bank_payment" id="chck-bank_payment" value="on" <?php echo ($config['bank_payment'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-bank_payment" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Bank Description Code</label>
+                                <textarea name="bank_description" class="form-control" cols="30" rows="5"><?php echo $config['bank_description'];?>
+                                </textarea><small class="admin-info">Set your IBAN, SWIFT code from the code above.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Bank Transfer Note</label>
+                                <textarea name="bank_transfer_note" class="form-control" cols="30" rows="5"><?php echo $config['bank_transfer_note'];?>
+                                </textarea><small class="admin-info">Your note to the custoemr after he submits the payment.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Configure 2Checkout (Credit Cards) Payment Method</h6>
+                    <form class="checkout-settings" method="POST">
+
+                        <div class="float-left">
+                            <label for="checkout_payment" class="main-label">2Checkout Payment Method</label>
+                            <br><small class="admin-info">Enable 2Checkout to receive payments by credit cards.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="checkout_payment" value="no" />
+                            <input type="checkbox" name="checkout_payment" id="chck-checkout_payment" value="yes" <?php echo ($config['checkout_payment'] == 'yes') ? 'checked': '';?>>
+                            <label for="chck-checkout_payment" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <label for="checkout_mode" class="main-label">2Checkout Mode</label>
+                        <br><small class="admin-info">Choose the mode your application is using, for testing use the SandBox mode.</small>
+                        <div class="form-group">
+                            <select class="form-control show-tick" name="checkout_mode">
+                                <option value="sandbox" <?php if($config['checkout_mode'] == 'sandbox'){ echo("selected");}?>>SandBox</option>
+                                <option value="live" <?php if($config['checkout_mode'] == 'live'){ echo("selected");}?>>Live Mode</option>
+                            </select>
+                        </div>
+                        <div class="clearfix"></div>
+                        <label for="checkout_currency" class="main-label">2Checkout Currency</label>
+                        <br><small class="admin-info">Set your 2checkout currency, this will be used only on 2checkout.</small>
+                        <div class="form-group">
+                            <select class="form-control show-tick" name="checkout_currency">
+                                <option value="USD" <?php echo ($config['checkout_currency'] == 'USD')  ? ' selected': '';?>>USD</option>
+                                <option value="EUR" <?php echo ($config['checkout_currency'] == 'EUR')  ? ' selected': '';?>>EUR</option>
+                                <option value="AED" <?php echo ($config['checkout_currency'] == 'AED')  ? ' selected': '';?>>AED</option>
+                                <option value="AFN" <?php echo ($config['checkout_currency'] == 'AFN')  ? ' selected': '';?>>AFN</option>
+                                <option value="ALL" <?php echo ($config['checkout_currency'] == 'ALL')  ? ' selected': '';?>>ALL</option>
+                                <option value="ARS" <?php echo ($config['checkout_currency'] == 'ARS')  ? ' selected': '';?>>ARS</option>
+                                <option value="AUD" <?php echo ($config['checkout_currency'] == 'AUD')  ? ' selected': '';?>>AUD</option>
+                                <option value="AZN" <?php echo ($config['checkout_currency'] == 'AZN')  ? ' selected': '';?>>AZN</option>
+                                <option value="BBD" <?php echo ($config['checkout_currency'] == 'BBD')  ? ' selected': '';?>>BBD</option>
+                                <option value="BDT" <?php echo ($config['checkout_currency'] == 'BDT')  ? ' selected': '';?>>BDT</option>
+                                <option value="BGN" <?php echo ($config['checkout_currency'] == 'BGN')  ? ' selected': '';?>>BGN</option>
+                                <option value="BMD" <?php echo ($config['checkout_currency'] == 'BMD')  ? ' selected': '';?>>BMD</option>
+                                <option value="BND" <?php echo ($config['checkout_currency'] == 'BND')  ? ' selected': '';?>>BND</option>
+                                <option value="BOB" <?php echo ($config['checkout_currency'] == 'BOB')  ? ' selected': '';?>>BOB</option>
+                                <option value="BRL" <?php echo ($config['checkout_currency'] == 'BRL')  ? ' selected': '';?>>BRL</option>
+                                <option value="BSD" <?php echo ($config['checkout_currency'] == 'BSD')  ? ' selected': '';?>>BSD</option>
+                                <option value="BWP" <?php echo ($config['checkout_currency'] == 'BWP')  ? ' selected': '';?>>BWP</option>
+                                <option value="BYN" <?php echo ($config['checkout_currency'] == 'BYN')  ? ' selected': '';?>>BYN</option>
+                                <option value="BZD" <?php echo ($config['checkout_currency'] == 'BZD')  ? ' selected': '';?>>BZD</option>
+                                <option value="CAD" <?php echo ($config['checkout_currency'] == 'CAD')  ? ' selected': '';?>>CAD</option>
+                                <option value="CHF" <?php echo ($config['checkout_currency'] == 'CHF')  ? ' selected': '';?>>CHF</option>
+                                <option value="CLP" <?php echo ($config['checkout_currency'] == 'CLP')  ? ' selected': '';?>>CLP</option>
+                                <option value="CNY" <?php echo ($config['checkout_currency'] == 'CNY')  ? ' selected': '';?>>CNY</option>
+                                <option value="COP" <?php echo ($config['checkout_currency'] == 'COP')  ? ' selected': '';?>>COP</option>
+                                <option value="CRC" <?php echo ($config['checkout_currency'] == 'CRC')  ? ' selected': '';?>>CRC</option>
+                                <option value="CZK" <?php echo ($config['checkout_currency'] == 'CZK')  ? ' selected': '';?>>CZK</option>
+                                <option value="DKK" <?php echo ($config['checkout_currency'] == 'DKK')  ? ' selected': '';?>>DKK</option>
+                                <option value="DOP" <?php echo ($config['checkout_currency'] == 'DOP')  ? ' selected': '';?>>DOP</option>
+                                <option value="DZD" <?php echo ($config['checkout_currency'] == 'DZD')  ? ' selected': '';?>>DZD</option>
+                                <option value="EGP" <?php echo ($config['checkout_currency'] == 'EGP')  ? ' selected': '';?>>EGP</option>
+                                <option value="FJD" <?php echo ($config['checkout_currency'] == 'FJD')  ? ' selected': '';?>>FJD</option>
+                                <option value="GBP" <?php echo ($config['checkout_currency'] == 'GBP')  ? ' selected': '';?>>GBP</option>
+                                <option value="GTQ" <?php echo ($config['checkout_currency'] == 'GTQ')  ? ' selected': '';?>>GTQ</option>
+                                <option value="HKD" <?php echo ($config['checkout_currency'] == 'HKD')  ? ' selected': '';?>>HKD</option>
+                                <option value="HNL" <?php echo ($config['checkout_currency'] == 'HNL')  ? ' selected': '';?>>HNL</option>
+                                <option value="HRK" <?php echo ($config['checkout_currency'] == 'HRK')  ? ' selected': '';?>>HRK</option>
+                                <option value="HUF" <?php echo ($config['checkout_currency'] == 'HUF')  ? ' selected': '';?>>HUF</option>
+                                <option value="IDR" <?php echo ($config['checkout_currency'] == 'IDR')  ? ' selected': '';?>>IDR</option>
+                                <option value="ILS" <?php echo ($config['checkout_currency'] == 'ILS')  ? ' selected': '';?>>ILS</option>
+                                <option value="INR" <?php echo ($config['checkout_currency'] == 'INR')  ? ' selected': '';?>>INR</option>
+                                <option value="JMD" <?php echo ($config['checkout_currency'] == 'JMD')  ? ' selected': '';?>>JMD</option>
+                                <option value="JOD" <?php echo ($config['checkout_currency'] == 'JOD')  ? ' selected': '';?>>JOD</option>
+                                <option value="JPY" <?php echo ($config['checkout_currency'] == 'JPY')  ? ' selected': '';?>>JPY</option>
+                                <option value="KES" <?php echo ($config['checkout_currency'] == 'KES')  ? ' selected': '';?>>KES</option>
+                                <option value="KRW" <?php echo ($config['checkout_currency'] == 'KRW')  ? ' selected': '';?>>KRW</option>
+                                <option value="KWD" <?php echo ($config['checkout_currency'] == 'KWD')  ? ' selected': '';?>>KWD</option>
+                                <option value="KZT" <?php echo ($config['checkout_currency'] == 'KZT')  ? ' selected': '';?>>KZT</option>
+                                <option value="LAK" <?php echo ($config['checkout_currency'] == 'LAK')  ? ' selected': '';?>>LAK</option>
+                                <option value="LBP" <?php echo ($config['checkout_currency'] == 'LBP')  ? ' selected': '';?>>LBP</option>
+                                <option value="LKR" <?php echo ($config['checkout_currency'] == 'LKR')  ? ' selected': '';?>>LKR</option>
+                                <option value="LRD" <?php echo ($config['checkout_currency'] == 'LRD')  ? ' selected': '';?>>LRD</option>
+                                <option value="MAD" <?php echo ($config['checkout_currency'] == 'MAD')  ? ' selected': '';?>>MAD</option>
+                                <option value="MDL" <?php echo ($config['checkout_currency'] == 'MDL')  ? ' selected': '';?>>MDL</option>
+                                <option value="MMK" <?php echo ($config['checkout_currency'] == 'MMK')  ? ' selected': '';?>>MMK</option>
+                                <option value="MOP" <?php echo ($config['checkout_currency'] == 'MOP')  ? ' selected': '';?>>MOP</option>
+                                <option value="MRO" <?php echo ($config['checkout_currency'] == 'MRO')  ? ' selected': '';?>>MRO</option>
+                                <option value="MUR" <?php echo ($config['checkout_currency'] == 'MUR')  ? ' selected': '';?>>MUR</option>
+                                <option value="MVR" <?php echo ($config['checkout_currency'] == 'MVR')  ? ' selected': '';?>>MVR</option>
+                                <option value="MXN" <?php echo ($config['checkout_currency'] == 'MXN')  ? ' selected': '';?>>MXN</option>
+                                <option value="MYR" <?php echo ($config['checkout_currency'] == 'MYR')  ? ' selected': '';?>>MYR</option>
+                                <option value="NAD" <?php echo ($config['checkout_currency'] == 'NAD')  ? ' selected': '';?>>NAD</option>
+                                <option value="NGN" <?php echo ($config['checkout_currency'] == 'NGN')  ? ' selected': '';?>>NGN</option>
+                                <option value="NIO" <?php echo ($config['checkout_currency'] == 'NIO')  ? ' selected': '';?>>NIO</option>
+                                <option value="NOK" <?php echo ($config['checkout_currency'] == 'NOK')  ? ' selected': '';?>>NOK</option>
+                                <option value="NPR" <?php echo ($config['checkout_currency'] == 'NPR')  ? ' selected': '';?>>NPR</option>
+                                <option value="NZD" <?php echo ($config['checkout_currency'] == 'NZD')  ? ' selected': '';?>>NZD</option>
+                                <option value="OMR" <?php echo ($config['checkout_currency'] == 'OMR')  ? ' selected': '';?>>OMR</option>
+                                <option value="PEN" <?php echo ($config['checkout_currency'] == 'PEN')  ? ' selected': '';?>>PEN</option>
+                                <option value="PGK" <?php echo ($config['checkout_currency'] == 'PGK')  ? ' selected': '';?>>PGK</option>
+                                <option value="PHP" <?php echo ($config['checkout_currency'] == 'PHP')  ? ' selected': '';?>>PHP</option>
+                                <option value="PKR" <?php echo ($config['checkout_currency'] == 'PKR')  ? ' selected': '';?>>PKR</option>
+                                <option value="PLN" <?php echo ($config['checkout_currency'] == 'PLN')  ? ' selected': '';?>>PLN</option>
+                                <option value="PYG" <?php echo ($config['checkout_currency'] == 'PYG')  ? ' selected': '';?>>PYG</option>
+                                <option value="QAR" <?php echo ($config['checkout_currency'] == 'QAR')  ? ' selected': '';?>>QAR</option>
+                                <option value="RON" <?php echo ($config['checkout_currency'] == 'RON')  ? ' selected': '';?>>RON</option>
+                                <option value="RSD" <?php echo ($config['checkout_currency'] == 'RSD')  ? ' selected': '';?>>RSD</option>
+                                <option value="RUB" <?php echo ($config['checkout_currency'] == 'RUB')  ? ' selected': '';?>>RUB</option>
+                                <option value="SAR" <?php echo ($config['checkout_currency'] == 'SAR')  ? ' selected': '';?>>SAR</option>
+                                <option value="SBD" <?php echo ($config['checkout_currency'] == 'SBD')  ? ' selected': '';?>>SBD</option>
+                                <option value="SCR" <?php echo ($config['checkout_currency'] == 'SCR')  ? ' selected': '';?>>SCR</option>
+                                <option value="SEK" <?php echo ($config['checkout_currency'] == 'SEK')  ? ' selected': '';?>>SEK</option>
+                                <option value="SGD" <?php echo ($config['checkout_currency'] == 'SGD')  ? ' selected': '';?>>SGD</option>
+                                <option value="SYP" <?php echo ($config['checkout_currency'] == 'SYP')  ? ' selected': '';?>>SYP</option>
+                                <option value="THB" <?php echo ($config['checkout_currency'] == 'THB')  ? ' selected': '';?>>THB</option>
+                                <option value="TND" <?php echo ($config['checkout_currency'] == 'TND')  ? ' selected': '';?>>TND</option>
+                                <option value="TOP" <?php echo ($config['checkout_currency'] == 'TOP')  ? ' selected': '';?>>TOP</option>
+                                <option value="TRY" <?php echo ($config['checkout_currency'] == 'TRY')  ? ' selected': '';?>>TRY</option>
+                                <option value="TTD" <?php echo ($config['checkout_currency'] == 'TTD')  ? ' selected': '';?>>TTD</option>
+                                <option value="TWD" <?php echo ($config['checkout_currency'] == 'TWD')  ? ' selected': '';?>>TWD</option>
+                                <option value="UAH" <?php echo ($config['checkout_currency'] == 'UAH')  ? ' selected': '';?>>UAH</option>
+                                <option value="UYU" <?php echo ($config['checkout_currency'] == 'UYU')  ? ' selected': '';?>>UYU</option>
+                                <option value="VND" <?php echo ($config['checkout_currency'] == 'VND')  ? ' selected': '';?>>VND</option>
+                                <option value="VUV" <?php echo ($config['checkout_currency'] == 'VUV')  ? ' selected': '';?>>VUV</option>
+                                <option value="WST" <?php echo ($config['checkout_currency'] == 'WST')  ? ' selected': '';?>>WST</option>
+                                <option value="XCD" <?php echo ($config['checkout_currency'] == 'XCD')  ? ' selected': '';?>>XCD</option>
+                                <option value="XOF" <?php echo ($config['checkout_currency'] == 'XOF')  ? ' selected': '';?>>XOF</option>
+                                <option value="YER" <?php echo ($config['checkout_currency'] == 'YER')  ? ' selected': '';?>>YER</option>
+                                <option value="ZAR" <?php echo ($config['checkout_currency'] == 'ZAR')  ? ' selected': '';?>>ZAR</option>
+                            </select>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Seller ID</label>
+                                <input type="text" name="checkout_seller_id" class="form-control" value="<?php echo $config['checkout_seller_id']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Publishable Key</label>
+                                <input type="text" name="checkout_publishable_key" class="form-control" value="<?php echo $config['checkout_publishable_key']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Private Key</label>
+                                <input type="text" name="checkout_private_key" class="form-control" value="<?php echo $config['checkout_private_key']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Iyzipay payment</h6>
+                    <form class="iyzipay-settings" method="POST">
+                        <div class="float-left">
+                            <label for="iyzipay_payment" class="main-label">Iyzipay Payment Method</label>
+                            <br><small class="admin-info">Enable Iyzipay to receive payments by credit cards.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="iyzipay_payment" value="no" />
+                            <input type="checkbox" name="iyzipay_payment" id="chck-iyzipay_payment" value="yes" <?php echo ($config['iyzipay_payment'] == 'yes') ? 'checked': '';?>>
+                            <label for="chck-iyzipay_payment" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <label for="iyzipay_mode" class="main-label">Iyzipay Mode</label>
+                        <br><small class="admin-info">Choose the mode your application is using, for testing use the SandBox mode.</small>
+                        <div class="form-group">
+                            <select class="form-control show-tick" name="iyzipay_mode">
+                                <option value="1" <?php if($config['iyzipay_mode'] == 1){ echo("selected");}?>>SandBox</option>
+                                <option value="0" <?php if($config['iyzipay_mode'] == 0){ echo("selected");}?>>Live Mode</option>
+                            </select>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Iyzipay Key</label>
+                                <input type="text" name="iyzipay_key" class="form-control" value="<?php echo $config['iyzipay_key']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Iyzipay Secret Key</label>
+                                <input type="text" name="iyzipay_secret_key" class="form-control" value="<?php echo $config['iyzipay_secret_key']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Iyzipay Buyer Id</label>
+                                <input type="text" name="iyzipay_buyer_id" class="form-control" value="<?php echo $config['iyzipay_buyer_id']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Iyzipay Buyer Name</label>
+                                <input type="text" name="iyzipay_buyer_name" class="form-control" value="<?php echo $config['iyzipay_buyer_name']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Iyzipay Buyer Surname</label>
+                                <input type="text" name="iyzipay_buyer_surname" class="form-control" value="<?php echo $config['iyzipay_buyer_surname']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Iyzipay Buyer Gsm Number (+905350000000)</label>
+                                <input type="text" name="iyzipay_buyer_gsm_number" class="form-control" value="<?php echo $config['iyzipay_buyer_gsm_number']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Iyzipay Buyer Email</label>
+                                <input type="text" name="iyzipay_buyer_email" class="form-control" value="<?php echo $config['iyzipay_buyer_email']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Iyzipay Buyer Identity Number</label>
+                                <input type="text" name="iyzipay_identity_number" class="form-control" value="<?php echo $config['iyzipay_identity_number']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Iyzipay Buyer Address</label>
+                                <input type="text" name="iyzipay_address" class="form-control" value="<?php echo $config['iyzipay_address']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Iyzipay Buyer City</label>
+                                <input type="text" name="iyzipay_city" class="form-control" value="<?php echo $config['iyzipay_city']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Iyzipay Buyer Country</label>
+                                <input type="text" name="iyzipay_country" class="form-control" value="<?php echo $config['iyzipay_country']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Iyzipay Buyer Zip</label>
+                                <input type="text" name="iyzipay_zip" class="form-control" value="<?php echo $config['iyzipay_zip']?>">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <label for="iyzipay_currency">Iyzipay Currency</label>
+                        <select class="form-control show-tick" id="iyzipay_currency" name="iyzipay_currency">
+                            <?php foreach ($config['iyzipay_currency_array'] as $key => $value) { ?>
+                                <option value="<?php echo($value); ?>" <?php echo ($config['iyzipay_currency'] == $value)  ? ' selected': '';?>><?php echo($value); ?></option>
+                            <?php } ?>
+                        </select>
+                        <small class="admin-info">Set your Iyzipay currency, this will be used only on Iyzipay.</small>
+                        <div class="alert alert-info">
+                            <a href="https://dev.iyzipay.com/tr/odeme-formu/odeme-formu-baslatma">By default, TL is available. You can see available currencies.</a>.
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Securionpay payment</h6>
+                    <div class="securionpay-settings-alert"></div>
+                    <form class="securionpay-settings" method="POST">
+                        <div>
+                            <div class="float-left">
+                                <label for="securionpay_payment" class="main-label">Securionpay Payment Method</label>
+                                <br><small class="admin-info">Enable Securionpay to receive payments by credit cards.</small>
+                            </div>
+                            <div class="form-group float-right switcher">
+                                <input type="hidden" name="securionpay_payment" value="off">
+                                <input type="checkbox" name="securionpay_payment" id="securionpay_payment-enabled" value="on" <?php echo ($config['securionpay_payment'] == 'on') ? 'checked': '';?>>
+                                <label for="securionpay_payment-enabled" class="check-trail"><span class="check-handler"></span></label>
+                            </div>
+                            <div class="clearfix"></div>
+                            <hr>
+                        </div>
+
+                        <label for="securionpay_public_key">Securionpay Public key</label>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="securionpay_public_key" name="securionpay_public_key" class="form-control" value="<?php echo $config['securionpay_public_key'];?>">
+                                
+                            </div>
+                        </div>
+                        <label class="form-check-label" for="securionpay_secret_key">Securionpay Secret key</label>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="securionpay_secret_key" name="securionpay_secret_key" class="form-control" value="<?php echo $config['securionpay_secret_key'];?>">
+                                
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                  <h6 class="card-title">Configure Bitcoin Payment Method <div class="pull-right mobile-hidden"><a href="https://www.coinpayments.net/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1200px-Bitcoin.svg.png" style="width: 40px; margin-top: -10px"></a></div></h6>
+                    <form class="coinpayments-settings" method="POST">
+                        <div class="float-left">
+                            <label for="coinpayments" class="main-label">Bitcoin Payment Method</label>
+                            <br><small class="admin-info">Get paid by bitcoin, simple and easy.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="coinpayments" value="off" />
+                            <input type="checkbox" name="coinpayments" id="chck-coinpayments" value="on" <?php echo ($config['coinpayments'] == 'on') ? 'checked': '';?>>
+                            <label for="chck-coinpayments" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                              <label class="form-label">Public Key </label>
+                                <input type="text" id="coinpayments_id" name="coinpayments_id" class="form-control" value="<?php echo $config['coinpayments_id'];?>">
+                                <small class="admin-info">Your CoinPayments Merchant ID.</small>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                              <label class="form-label">Merchant ID <small></small></label>
+                                <input type="text" id="coinpayments_secret" name="coinpayments_secret" class="form-control" value="<?php echo $config['coinpayments_secret'];?>">
+                                <small class="admin-info">Your CoinPayments secret key.</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Flutter Wave payment</h6>
+                    <div class="fluttewave-settings-alert"></div>
+                    <form class="fluttewave-settings" method="POST">
+                        <div>
+                            <div class="float-left">
+                                <label for="fluttewave_payment" class="main-label">Flutter Wave Payment Method</label>
+                                <br><small class="admin-info">Enable Flutter Wave to receive payments.</small>
+                            </div>
+                            <div class="form-group float-right switcher">
+                                <input type="hidden" name="fluttewave_payment" value="off">
+                                <input type="checkbox" name="fluttewave_payment" id="fluttewave_payment-enabled" value="on" <?php echo ($config['fluttewave_payment'] == 'on') ? 'checked': '';?>>
+                                <label for="fluttewave_payment-enabled" class="check-trail"><span class="check-handler"></span></label>
+                            </div>
+                            <div class="clearfix"></div>
+                            <hr>
+                        </div>
+
+                        <label for="fluttewave_secret_key">Flutter Wave API Secret Key</label>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="fluttewave_secret_key" name="fluttewave_secret_key" class="form-control" value="<?php echo $config['fluttewave_secret_key'];?>">
+                                <small class="admin-info">Your Flutter Wave API Secret Key.</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function CustomName(self) {
+    if ($(self).is(':checked')) {
+        $('.custom_name_class').removeClass('hidden');
+    }
+    else{
+        $('.custom_name_class').addClass('hidden');
+    }
+}
+$(function() {
+    $('.switcher input[type=checkbox]').click(function () {
+        var configName = $(this).attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        if ($(this).is(":checked") === true) {
+            objData[configName] = $(this).val();
+        }
+        else{
+            if ($('input[name='+configName+']')[0]) {
+                objData[configName] = $($('input[name='+configName+']')[0]).val();
+            }
+        }
+        objData['hash_id'] = hash_id;
+        $.post(acpajax_url('general-settings'), objData);
+    });
+
+    var setTimeOutColor = setTimeout(function (){});
+    $('select').on('change', function() {
+         clearTimeout(setTimeOutColor);
+        var thisElement = $(this);
+        var configName = thisElement.attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        objData[configName] = thisElement.val();
+        objData['hash_id'] = hash_id;
+        thisElement.addClass('warning');
+        $.post(acpajax_url('general-settings'), objData, function (data) {
+            if (data.status == 200) {
+                thisElement.removeClass('warning');
+                thisElement.addClass('success');
+            } else {
+                thisElement.addClass('error');
+            }
+            var setTimeOutColor = setTimeout(function () {
+                thisElement.removeClass('success');
+                thisElement.removeClass('warning');
+                thisElement.removeClass('error');
+            }, 2000);
+        });
+    });
+    $('input[type=text], input[type=number] , textarea').on('input', delay(function() {
+            clearTimeout(setTimeOutColor);
+            var thisElement = $(this);
+            var configName = thisElement.attr('name');
+            var hash_id = $('input[name=hash_id]').val();
+            var objData = {};
+            objData[configName] = this.value;
+            objData['hash_id'] = hash_id;
+            thisElement.addClass('warning');
+            $.post(acpajax_url('general-settings'), objData, function (data) {
+                if (data.status == 200) {
+                    thisElement.removeClass('warning');
+                    thisElement.addClass('success');
+                } else {
+                    thisElement.addClass('error');
+                }
+                var setTimeOutColor = setTimeout(function () {
+                    thisElement.removeClass('success');
+                    thisElement.removeClass('warning');
+                    thisElement.removeClass('error');
+                }, 2000);
+                //thisElement.focus();
+            });
+    }, 500));
+});
+</script>

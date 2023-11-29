@@ -1,0 +1,21 @@
+<li data-post-comment="<?php echo($comment['id']) ?>" title="<?php echo(time2str($comment['time'])) ?>">
+	<div class="user-avatar">
+		<img src="<?php echo(media($comment['avatar'])) ?>" class="img-circle" />
+	</div>
+	<div class="pp_com_body">
+		<span>
+			<strong><a href="<?php echo(un2url($comment['username'])) ?>" data-ajax="ajax_loading.php?app=profile&apph=profile&uname=<?php echo($comment['username']) ?>"><?php echo($comment['username']) ?></a></strong> 
+		</span>
+		<span>
+			<?php echo($comment['text']) ?>
+		</span>
+	</div>
+	<?php if ($comment['is_owner']) { ?>
+		<span class="delcomment" title="{{LANG delete_comment}}" onclick="delete_blog_commnet(<?php echo($comment['id']) ?>);">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm0-9.414l2.828-2.829 1.415 1.415L13.414 12l2.829 2.828-1.415 1.415L12 13.414l-2.828 2.829-1.415-1.415L10.586 12 7.757 9.172l1.415-1.415L12 10.586z"/></svg>
+		</span>
+	<?php } ?>
+</li>
+<script type="text/javascript">
+	add_comment_emoji(<?php echo($comment['id']) ?>);
+</script>

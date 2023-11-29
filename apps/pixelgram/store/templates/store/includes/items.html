@@ -1,0 +1,69 @@
+<div class="explore-page-container">
+    <div class="">
+        <?php
+         if ($context['images']) {
+			echo '<div class="explore-posts-container pg_store_posts">';
+			foreach ($context['images'] as $key => $post_data) {
+                $post_data['post_id'] = $post_data['id'];
+                $post_data['type'] = 'image';
+                $post_data['thumb'] = $post_data['small_file'];
+                $post_data['boosted'] = 0;
+                $post_data['avatar'] = $context['me']['avatar'];
+                $post_data['username'] = $context['me']['username'];
+                //var_dump($post_data);
+                include 'list-item.html';
+            }
+			echo '</div>';
+         } else{
+            include $context['dirname_theme'].'/explore/templates/explore/includes/no-posts-found.html';
+         }
+         ?>
+    </div>
+</div>
+
+<?php
+    include $context['dirname_theme'].'/main/templates/includes/lazy-load.html';
+?>
+
+<script>
+    var myLazyLoad = new LazyLoad({
+        elements_selector: ".lazy_"
+    });
+
+    jQuery(document).ready(function($) {
+        var scrolled = 0;
+        var last_id  = 0;
+
+        $(window).scroll(function() {
+            if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+                if (scrolled == 0 && $('.explore-postset').length > 0) {
+                    scrolled = 1;
+                    var list_ids = $("div.explore-postset[id]").map(function() {
+                        return $(this).attr('id');
+                    }).get();
+
+                    if (!list_ids) {
+                        return false;
+                    }
+
+                    var last_id  = Math.min.apply(Math,list_ids);
+
+                    $.ajax({
+                        url: link('store/explore-user-store'),
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {offset:last_id},
+                    }).done(function(data) {
+                        if (data.status == 200) {
+                            $(".explore-posts-container").append(data.html);
+                            scrolled = 0;
+                        }
+                        else{
+                            $(window).unbind('scroll');
+                        }
+                    });
+                }
+            }
+        });
+    });
+</script>

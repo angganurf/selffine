@@ -1,0 +1,15 @@
+<div>
+	<h2 class="user_sttng_panel_hd">{{LANG manage_sessions}}</h2>
+	<div class="s-users--ls pg_mang_sess">
+		<?php if ($context['sessions']) {
+			foreach ($context['sessions'] as $key => $sdata) {
+				include 'session.html';
+			}
+		} ?>
+	</div>
+</div>
+
+<?php 
+include $context['dirname_theme'].'/main/templates/includes/lazy-load.html';
+include $context['dirname_theme'].'/settings/templates/settings/js/script.html';
+ ?>

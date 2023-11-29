@@ -1,0 +1,27 @@
+<tr class="setting-postlist" id="list-<?php echo $cd['article']['id'];?>" data_selected="<?php  echo $cd['article']['id'];?>">
+    <td><input type="checkbox" id="check-data-<?php  echo $cd['article']['id'];?>" class="delete-checkbox filled-in"><label for="check-data-<?php  echo $cd['article']['id'];?>"></label></td>
+    <td width="5%"><?php echo $cd['article']['id'];?></td>
+    <td width="10%"><?php $_from = $admin->getUserDataById($cd['article']['user_id']);?>
+
+    <a href="<?php echo $_from->url; ?>">
+        <img src="<?php echo $_from->avatar?>" class="setting-avatar" alt="<?php echo $_from->name; ?> Profile Picture">
+        <?php echo $_from->name; ?>
+    </a>
+
+    </td>
+    <td width="10%"><img src="<?php echo(media($cd['article']['thumbnail'])); ?>" width="100" height="75"></td>
+    <td width="10%"><?php echo blog_categories()[$cd['article']['category']];?></td>
+    <td width="10%"><?php echo $cd['article']['title'];?></td>
+    <td width="15%"><?php echo substr($cd['article']['description'], 0, 150);?></td>
+    <td width="10%"><?php echo $cd['article']['view'];?></td>
+    <td width="10%"><?php echo(time2str($cd['article']['created_at'])); ?></td>
+    <td width="20%">
+        <a class="btn bg-success admn_table_btn" href="<?php echo pxp_acp_link('edit-article?id=' . $cd['article']['id']); ?>">EDIT</a>
+        <button class="btn bg-danger admn_table_btn" onclick="DeleteArticle(<?php echo $cd['article']['id']?>,'<?php echo $cd["article"]["thumbnail"]?>','hide');">DELETE</button>
+        <?php if($cd['article']['posted'] == 1){?>
+            <button id="art_pub" class="btn bg-info admn_table_btn" onclick="UnpublishArticle(<?php echo $cd['article']['id']?>,this);">UNPUBLISH</button>
+        <?php }else{ ?>
+            <button id="art_pub" class="btn bg-info admn_table_btn" onclick="PublishArticle(<?php echo $cd['article']['id']?>,this);">PUBLISH</button>
+        <?php } ?>
+    </td>
+</tr>

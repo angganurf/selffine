@@ -1,0 +1,20 @@
+<div class="page-margin">
+    <div class="row">
+		<?php if ($config['ad1']) { ?>
+            <div class="col-md-12">
+                <?php echo $config['ad1'] ; ?>
+            </div><br>
+		<?php } ?>
+		<div class="col-md-12">
+			<?php
+				if ($context['article']) {
+					foreach ($context['article'] as $key => $post_data) {
+						include 'includes/list.html';
+					}
+				} else{
+					include 'includes/no-articles-found.html';
+				}
+			?>
+		</div>
+    </div>
+</div>

@@ -1,0 +1,264 @@
+<div class="user-profile-page-content pro_user_new_profile">
+	<div class="user-heading pg_pro_profile_side">
+		<div class="user-info">
+			<div class="img-circle avatar">
+				<img src="<?php echo $context['user_data']['avatar']; ?>" alt="<?php echo($context['user_data']['username']) ?>" class="img-circle">
+			</div>
+			<div class="info">	
+				<div class="uname">
+					<h2><?php echo $context['user_data']['username']; ?> <?php if ($context['user_data']['verified'] > 0) { ?><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" class="verified-color"><path fill="currentColor" d="M23,12L20.56,9.22L20.9,5.54L17.29,4.72L15.4,1.54L12,3L8.6,1.54L6.71,4.72L3.1,5.53L3.44,9.21L1,12L3.44,14.78L3.1,18.47L6.71,19.29L8.6,22.47L12,21L15.4,22.46L17.29,19.28L20.9,18.46L20.56,14.78L23,12M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z"></path></svg><?php } ?>
+					<?php if (IS_LOGGED) {  ?>
+						<div class="dropdown">
+							<span class="dropdown-toggle" data-toggle="dropdown">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M5 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm14 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-7 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+							</span>
+							<ul class="dropdown-menu pull-right">
+								<?php if ($context['is_owner']) { ?>
+									<li><a href="{{CONFIG site_url}}/settings/privacy/{{ME username}}" data-ajax="ajax_loading.php?app=settings&apph=settings&user=<?php echo($context['user_data']['username']) ?>&page=privacy">{{LANG profile_privacy}}</a></li>
+									<?php if ($config['business_account'] == 'on' && $context['user_data']['business_account']) { ?>
+										<li><a href="{{CONFIG site_url}}/account_analytics" data-ajax="ajax_loading.php?app=account_analytics&apph=account_analytics">{{LANG account_analytics}}</a></li>
+									<?php } ?>
+									<?php if ($config['raise_money'] == 'on') { ?>
+									<?php if ($config['raise_money_type'] == 0 || ($config['raise_money_type'] == 1 && $context['user_data']['verified'])) { ?>
+										<li><a href="{{CONFIG site_url}}/funding" data-ajax="ajax_loading.php?app=funding&apph=funding">{{LANG manage_funding}}</a></li>
+										<li><a href="{{CONFIG site_url}}/funding_acquisition" data-ajax="ajax_loading.php?app=funding_acquisition&apph=funding_acquisition">{{LANG funding_acquisition}}</a></li>
+									<?php } } ?>
+								<?php } ?>
+								<?php if (!$context['is_owner']) { ?>
+									<?php if ($context['is_reported']) { ?>
+										<li class="report-profile" onclick="report_profile('<?php echo($context['user_data']['user_id']) ?>',-1);"><a href="javascript:void(0);">{{LANG cancel_report}}</a></li>
+									<?php } else{ ?>
+										<li class="report-profile" data-modal-menu="report-profile"><a href="javascript:void(0);">{{LANG report_user}}</a></li>
+									<?php } ?>
+									<?php if ($context['is_blocked']) { ?>
+										<li onclick="block_user('<?php echo($context['user_data']['user_id']) ?>',-1);"><a href="javascript:void(0);">{{LANG unblock}}</a></li>
+									<?php } else{ ?>
+										<li onclick="block_user('<?php echo($context['user_data']['user_id']) ?>',1);"><a href="javascript:void(0);">{{LANG block_user}}</a></li>
+									<?php } ?>
+								<?php } ?>
+								<?php if ($config['raise_money'] == 'on' && !empty($context['fund'])) { ?>
+								<?php if ($config['raise_money_type'] == 0 || ($config['raise_money_type'] == 1 && $context['user_data']['verified'])) { ?>
+									<li><a href="{{CONFIG site_url}}/user_funding/<?php echo($context['user_data']['username']) ?>" data-ajax="ajax_loading.php?app=user_funding&apph=user_funding&user=<?php echo($context['user_data']['username']) ?>">{{LANG user_funding}}</a></li>
+								<?php } } ?>
+							</ul>
+						</div>
+					<?php } ?>
+					</h2>
+				</div>
+				<div class="clear"></div>
+				<b class="name"><?php echo $context['user_data']['name']; ?></b>
+				<ul class="list-unstyled pg_usr_stats">
+					<li class="<?php if($context['page'] == 'followers'){ ?>active<?php } ?>">
+						<a <?php if($context['navbar'] && $context['user_followers']){ ?>href="<?php echo($context['user_data']['url']) ?>/followers" data-ajax="ajax_loading.php?app=profile&apph=profile&uname=<?php echo($context['user_data']['username']) ?>&page=followers"<?php } ?>>
+							<?php echo $context['user_followers']; ?><span>{{LANG followers}}</span>
+						</a>
+					</li>
+					<li class="<?php if($context['page'] == 'following'){ ?>active<?php } ?>">
+						<a <?php if($context['navbar'] && $context['user_following']){ ?>href="<?php echo($context['user_data']['url']) ?>/following" data-ajax="ajax_loading.php?app=profile&apph=profile&uname=<?php echo($context['user_data']['username']) ?>&page=following"<?php } ?>>
+							<?php echo $context['user_following']; ?><span>{{LANG following}}</span>
+						</a>
+					</li>
+				</ul>
+				<p class="status"><?php echo($context['user_data']['about']) ?></p>
+				<div class="pg_prf_btns">
+					<?php if (!$context['is_owner'] && !$context['is_blocked']) { if ($context['is_following'] === 2) { ?>
+						<button class="btn btn-follow btn-requested btn-mat" onclick="follow(<?php echo $context['user_data']['user_id']; ?> ,this);" data-profile-type="<?php echo($context['user_data']['p_privacy']) ?>"><span>{{LANG requested}}</span></button>
+					<?php } elseif($context['is_following'] > 0) { ?>
+						<button class="btn btn-follow btn-main btn-following btn-mat" onclick="follow(<?php echo $context['user_data']['user_id']; ?> ,this);" data-profile-type="<?php echo($context['user_data']['p_privacy']) ?>"><span>{{LANG following}}</span></button>
+					<?php } else{ ?>
+						<button class="btn btn-follow btn-main btn-mat" onclick="follow(<?php echo $context['user_data']['user_id']; ?>,this);" data-profile-type="<?php echo($context['user_data']['p_privacy']) ?>"><span>{{LANG follow}}</span></button>
+					<?php } ?>
+					<?php if (($config['private_photos'] == 'on' || $config['private_photos'] == 'on') && $context['user_data']['subscribe_price'] > 0) { ?>
+						<?php if ($context['user_data']['am_i_subscribed'] > 0) { ?>
+							<button class="btn btn-follow btn-main btn-following btn-mat" onclick="RemoveSubscribeToUser(<?php echo $context['user_data']['user_id']; ?>,'hide');">
+								<span>{{LANG subscribed}}</span>
+							</button>
+						<?php }else{ ?>
+							<button class="btn btn-follow btn-main btn-mat" onclick="SubscribeToUser(<?php echo $context['user_data']['user_id']; ?>,<?php echo $context['user_data']['subscribe_price']; ?>,'hide');">
+								<span>{{LANG subscribe}} <?php echo $context['currency_symbol'].$context['user_data']['subscribe_price']; ?></span>
+							</button>
+						<?php } ?>
+					<?php } ?>
+					<?php if ($context['chat_privacy'] == 1) { ?>
+						<a class="btn btn-follow btn-message btn-mat" href="{{CONFIG site_url}}/messages/<?php echo($context['user_data']['username']) ?>">{{LANG message}}</a>
+						<?php if ($config['video_chat'] == 1 && ($config['agora_chat_video'] == 'on' || $config['twilio_video_chat'] == 'on')) { ?>
+							<a href="javascript:void(0);" onclick="Wo_GenerateVideoCall(<?php echo($me['user_id']) ?>)" class="btn btn-follow btn-message btn-mat">{{LANG video_call}}</a>
+							<input type="hidden" id="vxd" name="vx" value="<?php echo($context['user_data']['user_id']) ?>">
+						<?php } ?>
+						<?php if ($config['audio_chat'] == 1 && ($config['agora_chat_video'] == 'on' || $config['twilio_video_chat'] == 'on')) { ?>
+							<a href="javascript:void(0);" onclick="Wo_GenerateAudioCall(<?php echo($me['user_id']) ?>)" class="btn btn-follow btn-message btn-mat">{{LANG audio_call}}</a>
+							<input type="hidden" id="axd" name="ax" value="<?php echo($context['user_data']['user_id']) ?>">
+						<?php } ?>
+					<?php } ?>
+					<?php } ?>
+					<?php if($context['is_blocked']){ ?>
+						<button class="btn btn-main btn-mat btn-unblock" onclick="block_user('<?php echo($context['user_data']['user_id']) ?>',-1);">{{LANG unblock}}</button>
+					<?php } ?>
+					<?php if($context['is_owner'] || IS_ADMIN){ ?>
+						<a class="btn btn-main btn-mat" href="{{CONFIG site_url}}/settings/general/<?php echo($context['user_data']['username']) ?>" data-ajax="ajax_loading.php?app=settings&apph=settings&user=<?php echo($context['user_data']['username']) ?>&page=general">{{LANG profile_settings}}</a>
+					<?php } ?>
+					<?php if ($context['user_data']['business_account'] == 1 && $config['business_account'] == 'on') { ?>
+					<?php if (!empty($context['user_data']['b_phone']) || !empty($context['user_data']['b_site']) || !empty($context['user_data']['b_email'])) { ?>
+						<div class="dropdown">
+							<div class="btn dropdown-toggle btn-mat" data-toggle="dropdown"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z" /></svg> Contact</div>
+							<ul class="dropdown-menu pull-right">
+							<?php if (!empty($context['user_data']['b_phone'])) { ?>
+								<li><a href="javascript:void(0);" onclick="window.location.href = 'tel:<?php echo($context['user_data']['b_phone']) ?>'">{{LANG call_now}}</a></li>
+							<?php } ?>
+							<?php if (!empty($context['user_data']['b_email'])) { ?>
+								<li><a href="javascript:void(0);" onclick="window.location.href = 'mailto:<?php echo($context['user_data']['b_phone']) ?>'">{{LANG send_email}}</a></li>
+							<?php } ?>
+							<?php if (!empty($context['user_data']['b_site'])) { ?>
+								<li><a href="javascript:void(0);" onclick="window.location.href = '<?php echo($context['user_data']['b_site']) ?>'"><?php echo lang($context['call_action'][$context['user_data']['b_site_action']]); ?></a></li>
+							<?php } ?>
+							</ul>
+						</div>
+					<?php } ?>
+					<?php } ?>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="pg_pro_profile_main">
+		<div class="navbar-bottom">
+			<div class="pg_prf_pst_nav">
+				<div class="valign">
+					<ul class="list-unstyled valign social-links"><?php if($context['user_data']['website']){ ?>
+							<li class="btn-website">
+								<a href="<?php echo($context['user_data']['website']) ?>" rel="nofollow" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M17.657 14.828l-1.414-1.414L17.657 12A4 4 0 1 0 12 6.343l-1.414 1.414-1.414-1.414 1.414-1.414a6 6 0 0 1 8.485 8.485l-1.414 1.414zm-2.829 2.829l-1.414 1.414a6 6 0 1 1-8.485-8.485l1.414-1.414 1.414 1.414L6.343 12A4 4 0 1 0 12 17.657l1.414-1.414 1.414 1.414zm0-9.9l1.415 1.415-7.071 7.07-1.415-1.414 7.071-7.07z"/></svg> <?php echo $context['user_data']['website']; ?></a>
+							</li>
+						<?php } ?><?php if($context['user_data']['facebook']){ ?>
+							<li class="btn-social">
+								<a href="<?php echo($context['user_data']['facebook']) ?>" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"><path fill="#4267b3" d="M12.001,2.002c-5.522,0-9.999,4.477-9.999,9.999c0,4.99,3.656,9.126,8.437,9.879v-6.988h-2.54v-2.891h2.54V9.798	c0-2.508,1.493-3.891,3.776-3.891c1.094,0,2.24,0.195,2.24,0.195v2.459h-1.264c-1.24,0-1.628,0.772-1.628,1.563v1.875h2.771	l-0.443,2.891h-2.328v6.988C18.344,21.129,22,16.992,22,12.001C22,6.479,17.523,2.002,12.001,2.002z"></path></svg></a>
+							</li>
+						<?php } ?><?php if($context['user_data']['twitter']){ ?>
+							<li class="btn-social">
+								<a href="<?php echo($context['user_data']['twitter']) ?>" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"><path fill="#1da1f2" d="M19.633,7.997c0.013,0.175,0.013,0.349,0.013,0.523c0,5.325-4.053,11.461-11.46,11.461c-2.282,0-4.402-0.661-6.186-1.809	c0.324,0.037,0.636,0.05,0.973,0.05c1.883,0,3.616-0.636,5.001-1.721c-1.771-0.037-3.255-1.197-3.767-2.793	c0.249,0.037,0.499,0.062,0.761,0.062c0.361,0,0.724-0.05,1.061-0.137c-1.847-0.374-3.23-1.995-3.23-3.953v-0.05	c0.537,0.299,1.16,0.486,1.82,0.511C3.534,9.419,2.823,8.184,2.823,6.787c0-0.748,0.199-1.434,0.548-2.032	c1.983,2.443,4.964,4.04,8.306,4.215c-0.062-0.3-0.1-0.611-0.1-0.923c0-2.22,1.796-4.028,4.028-4.028	c1.16,0,2.207,0.486,2.943,1.272c0.91-0.175,1.782-0.512,2.556-0.973c-0.299,0.935-0.936,1.721-1.771,2.22	c0.811-0.088,1.597-0.312,2.319-0.624C21.104,6.712,20.419,7.423,19.633,7.997z"></path></svg></a>
+							</li>
+						<?php } ?></ul>
+					<ul class="list-unstyled valign pg_prf_nav">
+						<li class="nav-item <?php if($context['page'] == 'posts'){ ?>active<?php } ?>">
+							<a <?php if($context['navbar'] && $context['total_posts'] > 0 ){ ?>href="<?php echo($context['user_data']['url']) ?>/posts" data-ajax="ajax_loading.php?app=profile&apph=profile&uname=<?php echo($context['user_data']['username']) ?>&page=posts"<?php } ?> ><?php echo $context['total_posts']; ?> {{LANG posts}}</a>
+						</li>
+						<?php if($config['upload_reels'] == 'on') {?>
+							<li class="nav-item <?php if($context['page'] == 'reels'){ ?>active<?php } ?>">
+								<a <?php if($context['navbar'] && $context['user_reels']  > 0){ ?>href="<?php echo($context['user_data']['url']) ?>/reels" data-ajax="ajax_loading.php?app=profile&apph=profile&uname=<?php echo($context['user_data']['username']) ?>&page=reels"<?php } ?>><?php echo $context['user_reels']; ?> {{LANG reels}}</a>
+							</li>
+						<?php } ?>
+						<?php if (($config['private_photos'] == 'on' || $config['private_photos'] == 'on') && ($context['user_data']['show_subscribers'] == 1 || ($context['user_data']['show_subscribers'] != 1 && $context['is_owner']))) { ?>
+							<li class="nav-item <?php if($context['page'] == 'subscriptions'){ ?>active<?php } ?>">
+								<a <?php if(!empty($context['subscriptions_count'])){ ?>href="<?php echo($context['user_data']['url']) ?>/subscriptions" data-ajax="ajax_loading.php?app=profile&apph=profile&uname=<?php echo($context['user_data']['username']) ?>&page=subscriptions"<?php } ?>>
+									<?php echo $context['subscriptions_count']; ?> {{LANG subscriptions}}
+								</a>
+							</li>
+						<?php } ?>
+						<?php if($context['is_owner']){ ?>
+							<li class="nav-item <?php if($context['page'] == 'favourites'){ ?>active<?php } ?>">
+								<a <?php if($context['favourites']){ ?>href="<?php echo($context['user_data']['url']) ?>/favourites" data-ajax="ajax_loading.php?app=profile&apph=profile&uname=<?php echo($context['user_data']['username']) ?>&page=favourites"<?php } ?>><?php echo $context['favourites']; ?> {{LANG favourites}}</a>
+							</li>
+							<?php if($context['user_data']['is_pro']){ ?>
+								<li class="nav-item <?php if($context['page'] == 'boosted_posts'){ ?>active<?php } ?>">
+									<a <?php if($context['boosted_posts_count']){ ?>href="<?php echo($context['user_data']['url']) ?>/boosted_posts" data-ajax="ajax_loading.php?app=profile&apph=profile&uname=<?php echo($context['user_data']['username']) ?>&page=boosted_posts"<?php } ?>><?php echo $context['boosted_posts_count']; ?> {{LANG boosted_posts}}</a>
+								</li>
+							<?php } ?>
+						<?php } ?>
+					</ul>
+					<ul class="list-unstyled valign pro_user_new_profile_filter">
+						<li onclick="$('body').removeClass('feed_two');" class="active"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M14 10v4h-4v-4h4zm2 0h5v4h-5v-4zm-2 11h-4v-5h4v5zm2 0v-5h5v4a1 1 0 0 1-1 1h-4zM14 3v5h-4V3h4zm2 0h4a1 1 0 0 1 1 1v4h-5V3zm-8 7v4H3v-4h5zm0 11H4a1 1 0 0 1-1-1v-4h5v5zM8 3v5H3V4a1 1 0 0 1 1-1h4z"/></svg></li>
+						<li onclick="$('body').addClass('feed_two');"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M3,11H11V3H3M3,21H11V13H3M13,21H21V13H13M13,3V11H21V3"/></svg></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<?php if($context['is_blocked']) { ?>
+			<div class="container-fluid">
+				<div class="empty_state">
+					<span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M15,14C17.67,14 23,15.33 23,18V20H7V18C7,15.33 12.33,14 15,14M15,12A4,4 0 0,1 11,8A4,4 0 0,1 15,4A4,4 0 0,1 19,8A4,4 0 0,1 15,12M5,9.59L7.12,7.46L8.54,8.88L6.41,11L8.54,13.12L7.12,14.54L5,12.41L2.88,14.54L1.46,13.12L3.59,11L1.46,8.88L2.88,7.46L5,9.59Z"/></svg></span>
+					<p>{{LANG u_blocked_zis_usr}}</p>
+					<p>{{LANG unblock2see_profile}}</p>
+					<button class="btn btn-main btn-mat btn-mat-raised error_unblock" onclick="block_user('<?php echo($context['user_data']['user_id']) ?>',-1);">{{LANG unblock}}</button>
+				</div>
+			</div>
+		<?php } else{ if ($context['user_data']['p_privacy'] == 0 && !$context['is_owner']) { ?>
+			<div class="container-fluid">
+				<div class="empty_state">
+					<span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"/></svg></span>
+					<p>{{LANG profile_is_private}}</p>
+				</div>
+			</div>
+		<?php } elseif ($context['user_data']['p_privacy'] == 1 && !$context['is_owner'] && (!$context['is_following'] || $context['is_following'] === 2)) { ?>
+			<div class="container-fluid">
+				<div class="empty_state">
+					<span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12,1A5,5 0 0,0 7,6V8H6A2,2 0 0,0 4,10V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V10A2,2 0 0,0 18,8H17V6A5,5 0 0,0 12,1M12,2.9C13.71,2.9 15.1,4.29 15.1,6V8H8.9V6C8.9,4.29 10.29,2.9 12,2.9M11,11H13V15H11V11M11,17H13V19H11V17Z"/></svg></span>
+					<p>{{LANG profile_is_private}}</p>
+					<p>{{LANG follow2see_profile}}</p>
+				</div>
+			</div>
+		<?php } else{ ?>
+			<div class="fluid include pg_pro_profile_posts">
+				<?php include $context['content_page']; ?>
+			</div>
+		<?php } ?>
+		<?php } ?>
+	</div>
+</div>
+
+<style>
+footer {margin-left: 400px;}
+@media (max-width: 1330px) {
+	footer {margin-left: 350px;}
+}
+@media (max-width: 1190px) {
+	footer {margin-left: 320px;}
+}
+@media (max-width: 992px) {
+	footer {margin: 0px;}
+}
+</style>
+<script>
+$('.pro_user_new_profile_filter li').click( function() {
+  $('.pro_user_new_profile_filter li').removeClass('active');
+  $(this).addClass('active');
+});
+</script>
+
+<?php
+	include $context['dirname_theme'].'/main/templates/modals/delete-post.html';
+	include $context['dirname_theme'].'/main/templates/modals/embed_post.html';
+	include $context['dirname_theme'].'/main/templates/modals/delete-comment.html';
+?>
+
+<?php if (!$context['is_owner']) { ?>
+	<div class="modal--menu" id="report-profile">
+		<div class="modal-outer">
+			<div class="modal-inner">
+				<h5 class="title">{{LANG report_user}}
+				<span class="pull-right" title="{{LANG cancel}}" data-modal--menu-dismiss><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg></span>
+				</h5>
+				<ul class="list-group">
+					<li class="list-group-item" onclick="report_profile('<?php echo($context['user_data']['user_id']) ?>',1);"><a href="javascript:void(0);">{{LANG report_t1}}</a></li>
+					<li class="list-group-item" onclick="report_profile('<?php echo($context['user_data']['user_id']) ?>',2);"><a href="javascript:void(0);">{{LANG report_t2}}</a></li>
+					<li class="list-group-item" onclick="report_profile('<?php echo($context['user_data']['user_id']) ?>',3);"><a href="javascript:void(0);">{{LANG report_t3}}</a></li>
+					<li class="list-group-item" onclick="report_profile('<?php echo($context['user_data']['user_id']) ?>',4);"><a href="javascript:void(0);">{{LANG report_t4}}</a></li>
+					<li class="list-group-item" onclick="report_profile('<?php echo($context['user_data']['user_id']) ?>',5);"><a href="javascript:void(0);">{{LANG report_t5}}</a></li>
+					<li class="list-group-item" onclick="report_profile('<?php echo($context['user_data']['user_id']) ?>',6);"><a href="javascript:void(0);">{{LANG report_t6}}</a></li>
+					<li class="list-group-item" onclick="report_profile('<?php echo($context['user_data']['user_id']) ?>',7);"><a href="javascript:void(0);">{{LANG report_t7}}</a></li>
+					<li class="list-group-item" onclick="report_profile('<?php echo($context['user_data']['user_id']) ?>',8);"><a href="javascript:void(0);">{{LANG report_t8}}</a></li>
+				</ul>
+			</div>
+			<div class="overlay hidden">
+				<div id="pp_loader"><div class="speeding_wheel"></div></div>
+			</div>
+		</div>
+	</div>
+	<?php 
+		include $context['dirname_theme'].'/main/templates/modals/block-user.html';
+		include $context['dirname_theme'].'/main/templates/modals/unblock-user.html';
+	?>
+<?php } ?>
+
+<?php
+	include 'js/script.html';
+	include $context['dirname_theme'].'/main/templates/includes/lazy-load.html';
+?>

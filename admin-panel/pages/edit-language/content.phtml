@@ -1,0 +1,256 @@
+<?php 
+
+$langs = $admin::getLangs();
+
+if (empty($_GET['id']) || !in_array($_GET['id'], array_keys( $langs))) {
+    header("Location: " . pxp_acp_link('manage-langs'));
+    exit();
+}
+$lang_name = $admin::secure($_GET['id']);
+$page = isset($_GET['page-id']) ? $_GET['page-id'] : 1;
+$filter_keyword = (!empty($_GET['query'])) ? $admin::secure($_GET['query']) : '';
+$admin::$db->pageLimit = 50;
+$link = '';
+if (!empty($filter_keyword)) {
+    $link = '&query='.$filter_keyword;
+    $sql   = " (lang_key LIKE '%$filter_keyword%' OR ".$lang_name." LIKE '%$filter_keyword%') ";
+    $admin::$db->where($sql);
+} 
+$langs    = $admin::$db->objectbuilder()->paginate(T_LANGS, $page,array('lang_key',$admin::secure($_GET['id']),'id'));
+if ($admin::$db->totalPages != 0) {
+    if (($page > $admin::$db->totalPages) && !empty($_GET['page-id'])) {
+        header("Location: " . pxp_acp_link('manage-langs'));
+        exit();
+    }
+}
+
+?>
+<div class="container-fluid">
+    <div>
+        <h3>Manage Languages</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Languages</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Manage Languages</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Manage & Edit Languages</h6>
+                    <div class="row">
+                       <div class="col-md-6" style="margin-bottom:0;">
+                            <form method="get" action="<?php echo pxp_acp_link("edit-language"); ?>">
+                              <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <label class="form-label search-form">Search for Keyword</label>
+                                            <input type="text" name="query" id="query" class="form-control" value="<?php echo(!empty($filter_keyword) ? $filter_keyword : '') ?>">
+                                            <input type="hidden" name="id" value="<?php echo($lang_name) ?>">
+                                            <input type="hidden" name="page-id" value="1">
+                                            
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-1">
+                                    <label>&nbsp;</label>
+                                <div></div>
+                                     <button class="btn btn-info">Search</button>
+                                  </div>
+                              </div>
+
+                              <div class="clearfix"></div>
+                           </form>
+                       </div>
+                   </div>
+                   <div class="table-responsive1">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Key Name</th>
+                                    <th>Value</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                //$langs = Wo_LangsFromDB($_GET['id']);
+                                if (count($langs) > 0) {
+                                    foreach ($langs as $row) {
+                                        $context['lkey'] = $row->lang_key;
+                                        $context['lval'] = $row->{"$lang_name"};
+                                        $context['lid']  = $row->id;
+                                        echo $admin->loadPage('edit-language/list');
+                                    }
+                                }
+                                else{
+                                    echo $admin::createHtmlEl('tr',null,$admin::createHtmlEl('td',array(
+                                        'colspan' => 4,
+                                        'class' => 'empty-table',
+                                    ),"No data found to display"));
+                                } 
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pull-left">
+                        <?php echo "Showing $page out of " . $admin::$db->totalPages; ?>
+                    </div>
+                    <div class="pull-right">
+                        <nav>
+                            <ul class="pagination">
+                                <li>
+                                    <a href="<?php echo pxp_acp_link("edit-language?id=".$lang_name."&page-id=1").$link; ?>" data-ajax="?path=edit-language&id=<?php echo($lang_name); ?>&page-id=1<?php echo($link); ?>" class="waves-effect" title='First Page'>
+                                        <i class="material-icons">first_page</i>
+                                    </a>
+                                </li>
+                                <?php if ($page > 1) {  ?>
+                                <li>
+                                    <a href="<?php echo pxp_acp_link("edit-language?id=".$lang_name."&page-id=" . ($page - 1)).$link; ?>" data-ajax="?path=edit-language&id=<?php echo($lang_name); ?>&page-id=<?php echo($page - 1) ?><?php echo($link); ?>" class="waves-effect" title='Previous Page'>
+                                        <i class="material-icons">chevron_left</i>
+                                    </a>
+                                </li>
+                                <?php  } ?>
+                                <?php 
+                                $nums = 0;
+                                $nums_pages = ($page > 4) ? ($page - 4) : $page;
+                                for ($i=$nums_pages; $i <= $admin::$db->totalPages; $i++) { 
+                                    if ($nums < 20) {
+                                    ?>
+                                    <li class="<?php echo ($page == $i) ? 'active' : ''; ?>"><a href="<?php echo pxp_acp_link("edit-language?id=".$lang_name."&page-id=" . ($i)).$link; ?>" data-ajax="?path=edit-language&id=<?php echo($lang_name); ?>&page-id=<?php echo($i) ?><?php echo($link); ?>" class="waves-effect"><?php echo $i ?></a></li>
+                                    <?php
+                                    }
+                                    $nums++;
+                                }
+                                ?>
+                                <?php if ($admin::$db->totalPages > $page) { ?>
+                                <li>
+                                    <a href="<?php echo pxp_acp_link("edit-language?id=".$lang_name."&page-id=" . ($page + 1)).$link; ?>" data-ajax="?path=edit-language&id=<?php echo($lang_name); ?>&page-id=<?php echo($page + 1) ?><?php echo($link); ?>" class="waves-effect" title="Next Page">
+                                        <i class="material-icons">chevron_right</i>
+                                    </a>
+                                </li>
+                                <?php } ?>
+                                <li>
+                                    <a href="<?php echo pxp_acp_link("edit-language?id=".$lang_name."&page-id=" . ($admin::$db->totalPages)).$link; ?>" data-ajax="?path=edit-language&id=<?php echo($lang_name); ?>&page-id=<?php echo($admin::$db->totalPages) ?><?php echo($link); ?>" class="waves-effect" title='Last Page'>
+                                        <i class="material-icons">last_page</i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+
+
+
+
+
+<div class="modal fade" id="edit-lang-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content ">
+            <form id="edit-key-settings" method="POST">
+                <div class="modal-body">
+                    <div class="form-alert"></div>
+                    <div class="data text-center">
+                        <div class="form-group" style="margin-bottom: 0px;">
+                            <label class="form-label pull-left">
+                                Edit language key: <span class="key"></span>
+                            </label>
+                            <div>
+                                <textarea class="form-control val" rows="4" name="val"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="id" value="" class="lang-id">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary waves-effect" data-dismiss="modal">CLOSE</button>
+                    <button type="submit" class="btn-save btn btn-secondary waves-effect">SAVE CHANGES</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+
+$('.btn-edit-lang-key').click(function(event) {
+    var key = $(this).data('key');
+    var lid = $(this).data('id');
+
+    if(key && $.isNumeric(lid)){
+        var val = $("#edit-lang-"+lid).find('span').text();
+        var mod = $('#edit-lang-modal');
+
+        mod.find('.key').text(key);
+        mod.find('.lang-id').val(lid);
+        mod.find('.val').val($.trim(val));
+        mod.modal('show'); 
+    }
+});
+    jQuery(document).ready(function($) {
+        $("form#edit-key-settings").submit(function(event) {
+            event.preventDefault();
+            var lid = $(this).find('.lang-id').val();
+            var val = $(this).find('.val').val();
+            var zis = $(this);
+            var mod = $('#edit-lang-modal');
+
+            zis.find('button[type="submit"]').attr('disabled', 'true');
+
+            $.ajax({
+                url: acpajax_url('edit-lang-key'),
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    lang: '<?php echo($lang_name); ?>',
+                    id:lid,
+                    val:val
+                },
+            })
+            .done(function(data) {
+                if (data.status == 200) {
+                    zis.find('.form-alert').html($("<div>",{
+                        class:"alert alert-success",
+                        text:data.message
+                    }));
+                }
+                else{
+                    zis.find('.form-alert').html($("<div>",{
+                        class:"alert alert-warning",
+                        text:data.message
+                    }));  
+                }
+
+                $("#edit-lang-"+lid).find('span').text(val);
+
+                setTimeout(function(){
+                    mod.find('.form-alert').empty();
+                    mod.find('.key').text('');
+                    mod.find('.lang-id').val('');
+                    mod.find('.val').val('');
+                    mod.modal('hide');
+                    zis.find('button[type="submit"]').removeAttr('disabled');
+                },1500);
+            });
+        });
+    });
+</script>
+
+
+
+
+

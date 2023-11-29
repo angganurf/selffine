@@ -1,0 +1,24 @@
+<div class="item wrapper lazy_" data-post-id="<?php echo($post_data['post_id']) ?>">
+	<div class="explore-postset" id="<?php echo($post_data['post_id']) ?>" data-post-id="<?php echo($post_data['post_id']) ?>" data-post-views="<?php echo($post_data['views']) ?>" data-post-sells="<?php echo($post_data['sells']) ?>" data-post-download="<?php echo($post_data['downloads']) ?>" data-post-date="<?php echo($post_data['created_date']) ?>">
+		<div class="image" onclick="storelightbox('<?php echo($post_data['post_id']) ?>','<?php echo($context['app_name']) ?>');" title="<?php echo($post_data['title']) ?>">
+			<img src="<?php echo(media($post_data['thumb'])) ?>" />
+			<span class="category">
+				<?php echo($context['currency_symbol'].getStoreItemPrice($post_data['license_options'])) ?>
+				<!--<p><?php echo($post_data['category_name']) ?></p>-->
+			</span>
+			<div class="valign caption">
+				<?php if( !$context['owner'] ){?>
+					<div class="valign">
+						<img src="<?php echo(media($post_data['avatar'])) ?>" class="img-circle">
+						<p><?php echo($post_data['username']) ?></p>
+					</div>
+				<?php } ?>
+				<p>
+					<span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M1.181 12C2.121 6.88 6.608 3 12 3c5.392 0 9.878 3.88 10.819 9-.94 5.12-5.427 9-10.819 9-5.392 0-9.878-3.88-10.819-9zM12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-2a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg> <?php echo($post_data['views']) ?></span>
+					<span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M17,13L12,18L7,13H10V9H14V13M19.35,10.03C18.67,6.59 15.64,4 12,4C9.11,4 6.6,5.64 5.35,8.03C2.34,8.36 0,10.9 0,14A6,6 0 0,0 6,20H19A5,5 0 0,0 24,15C24,12.36 21.95,10.22 19.35,10.03Z"/></svg> <?php echo($post_data['downloads']) ?></span>
+					<!--<span class="time-ago" title="<?php echo(ToDate($post_data['created_date'])) ?>"><?php echo(time2str($post_data['created_date'])); ?></span>-->
+				</p>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,87 @@
+<div class="story-container" data-uid="<?php echo($context['us_data']['user_id']) ?>">
+	<div class="header">
+		<a href="{{CONFIG site_url}}/<?php echo $context['us_data']['username'];?>" id="avtr" data-ajax="ajax_loading.php?app=profile&apph=profile&uname=<?php echo $context['us_data']['username'];?>">
+		<div class="user-info">
+			<div class="avatar">
+				<img src="<?php echo($context['us_data']['avatar']) ?>" class="img-circle">
+			</div>
+			<h5><?php echo($context['us_data']['username']) ?>
+				<time><b class="story-added"></b></time>
+			</h5>
+		</div>
+		</a>
+		<div class="close-modal" title="{{LANG close}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg></div>
+		<?php if ($context['us_data']['user_id'] == $context['user']['user_id']) { ?>
+			<div class="delete-story" title="{{LANG delete}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></div>
+		<?php } ?>
+	</div>
+
+	<ul class="int-indicator">
+		<?php foreach ($context['stories'] as $k => $v) { ?>
+			<li style="flex:<?php echo $context['w']; ?>%;" <?php if(isset($v['sf'])){ ?>class="active"<?php } ?>><span class="int-indicator-bar"></span></li>
+		<?php } ?>
+	</ul>
+	
+	<div class="container">
+		<div id="view-story-cr" class="carousel slide carousel-fade" data-ride="carousel" data-interval="false">
+			<div class="carousel-inner">
+				<?php foreach ($context['stories'] as $k => $story) {
+					if ($story['type'] == 1) { ?>
+						<div class="item img <?php if(isset($story['sf'])){ ?> active <?php } ?>" data-src="<?php echo($story['src']) ?>" data-id="<?php echo($story['id']) ?>" data-time="<?php echo(time2str($story['time'])) ?>" <?php if(isset($story['is_seen']) && $story['is_seen'] == 0){ ?> data-s="<?php echo($story['id']) ?>" <?php } ?> onclick="stop_story()">
+							<div class="bg" style="background-image: url(<?php echo($story['src']) ?>)"></div>
+							<img src="<?php echo($story['src']) ?>" />
+							<div class="caption"><?php if ($story['owner']) { ?>
+									<div class="views">
+										<span class="fluid"><?php echo($story['views']) ?> {{LANG views}}</span>
+									</div>
+								<?php } ?><?php if ($story['caption']) { ?>
+									<p><?php echo $story['caption']; ?></p>
+								<?php } ?></div>	
+						</div>
+				<?php } else{ ?>
+					<div class="item video <?php if(isset($story['sf'])){ ?> active <?php } ?>" data-src="<?php echo($context['images']) ?>/story-bg.jpg" data-id="<?php echo($story['id']) ?>" data-time="<?php echo(time2str($story['time'])) ?>" <?php if(isset($story['is_seen']) && $story['is_seen'] == 0){ ?> data-s="<?php echo($story['id']) ?>" <?php } ?> onclick="stop_story()">
+						<div class="bg" style="background-image: url(<?php echo($context['images']) ?>/story-bg.jpg)"></div>
+						<video>
+							<source src="<?php echo($story['src']) ?>" type="video/mp4">
+							<source src="<?php echo($story['src']) ?>" type="video/mov">
+							<source src="<?php echo($story['src']) ?>" type="video/webm">
+							<source src="<?php echo($story['src']) ?>" type="video/3gp">
+							<source src="<?php echo($story['src']) ?>" type="video/ogg">
+						</video>						
+						<div class="caption"><?php if ($story['owner']) { ?>
+									<div class="views">
+										<span class="fluid"><?php echo($story['views']) ?> {{LANG views}}</span>
+									</div>
+								<?php } ?><?php if ($story['caption']) { ?>
+									<p><?php echo $story['caption']; ?></p>
+								<?php } ?></div>
+					</div>
+				<?php } ?>
+				<?php } ?>
+			</div>
+			<?php if (count($context['stories']) > 1) { ?>
+				<a class="carousel-control-prev cr-controls pointer" onclick="slide_left_story();" data-slide="prev" style="display: none;">
+					<span class="carousel-control-prev-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path opacity=".87" fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M16.62 2.99c-.49-.49-1.28-.49-1.77 0L6.54 11.3c-.39.39-.39 1.02 0 1.41l8.31 8.31c.49.49 1.28.49 1.77 0s.49-1.28 0-1.77L9.38 12l7.25-7.25c.48-.48.48-1.28-.01-1.76z"/></svg>
+					</span>
+				</a>
+				<a class="carousel-control-next cr-controls pointer" onclick="slide_right_story();" data-slide="next" style="display: none;">
+					<span class="carousel-control-next-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path opacity=".87" fill="none" d="M24 24H0V0h24v24z"/><path fill="currentColor" d="M7.38 21.01c.49.49 1.28.49 1.77 0l8.31-8.31c.39-.39.39-1.02 0-1.41L9.15 2.98c-.49-.49-1.28-.49-1.77 0s-.49 1.28 0 1.77L14.62 12l-7.25 7.25c-.48.48-.48 1.28.01 1.76z"/></svg>
+					</span>
+				</a>
+			<?php } ?>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<?php if ($context['user']['user_id'] == $context['us_data']['user_id']) {
+		include $context['dirname_theme'].'/main/templates/modals/delete-story.html';
+	} ?>
+</div>
+<?php include $context['dirname_theme'].'/home/templates/home/js/script.view.story.html'; ?>
+
+<script>
+    $('#avtr').click(function(){
+        $('.close-modal').trigger('click');
+    });
+</script>

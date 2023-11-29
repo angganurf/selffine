@@ -1,0 +1,32 @@
+<form id="contact_us_form" class="form row pp_sett_form">
+	<div class="col-md-3">&nbsp;</div>
+	<div class="col-md-6">
+		<div class="pp_mat_input">
+			<input class="form-control" name="first_name" required="true" type="text"> 
+			<label>{{LANG first_name}}*</label>
+		</div>
+		<div class="pp_mat_input">
+			<input class="form-control" name="last_name" required="true" type="text"> 
+			<label>{{LANG last_name}}*</label>
+		</div>
+		<div class="pp_mat_input" style="margin-bottom: 1.7em;" data-mce-style="margin-bottom: 1.7em;">
+			<input class="form-control" name="email" required="true" type="email"> 
+			<label>{{LANG email}}*</label>
+		</div>
+		<div class="pp_mat_input">
+			<textarea class="form-control" name="message" rows="3"></textarea> 
+			<label>{{LANG message}}</label>
+		</div>
+		<div class="pp_terms">
+			<input id="terms" name="terms" type="checkbox" onchange="activate_Button(this)"> 
+			<label for="terms"> {{LANG i_agree}} <a href="<?php echo(pxp_link('terms-of-use')) ?>" data-ajax="ajax_loading.php?app=terms&apph=terms&page=terms-of-use">{{LANG terms_of_use}}</a>
+			</label>
+		</div>
+		<div class="col-md-3"></div>
+		<div class="pp_load_loader">
+			<button id="contact_submit" class="btn btn-info pp_flat_btn" disabled="disabled" type="submit">{{LANG send}}</button>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="col-md-3"></div>
+</form>

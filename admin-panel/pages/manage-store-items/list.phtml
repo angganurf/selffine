@@ -1,0 +1,23 @@
+<tr id="list-<?php  echo $cd['item']['id'];?>" data_selected="<?php  echo $cd['item']['id'];?>">
+    <td><input type="checkbox" id="check-data-<?php  echo $cd['item']['id'];?>" class="delete-checkbox filled-in"><label for="check-data-<?php  echo $cd['item']['id'];?>"></label></td>
+    <td><?php  echo $cd['item']['id'];?></td>
+    <td>
+        <a href="<?php echo $cd['item']['user']['url'];?>" target="_blank">
+            <img src="<?php echo $cd['item']['user']['avatar'];?>" class="setting-avatar" alt="<?php echo $cd['item']['user']['username'];?> Profile Picture">
+            <?php echo $cd['item']['user']['name']; ?>
+        </a>
+
+    </td>
+    <td id="edit_<?php echo $cd['item']['id'];?>">
+        <a href="<?php echo $config['site_url'] . '/store/' . $cd['item']['id']; ?>" target="_blank">
+            <?php echo $cd['item']['title'];?>
+        </a>
+    </td>
+    <td><?php  echo $cd['item']['tags'];?></td>
+    <td><?php  echo $cd['item']['views'];?></td>
+    <td><?php  echo $cd['item']['downloads'];?></td>
+    <td><?php  echo $cd['item']['sells'];?></td>
+    <td>
+        <button onclick="DeleteStoreItem('<?php echo $cd['item']['id'];?>','hide');" type="button" class="btn bg-danger admn_table_btn">DELETE</button>
+    </td>
+</tr>

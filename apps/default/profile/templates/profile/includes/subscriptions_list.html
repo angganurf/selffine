@@ -1,0 +1,24 @@
+<div class="col-sm-12 col-md-6 user_load_proff" id="<?php echo($udata['sub_id']) ?>">
+	<div class="following--ls__item prof_users_list">
+		<div class="avatar text-center">
+			<img src="<?php echo(media($udata['avatar'])) ?>" alt="Picture" class="img-circle img-res">
+		</div>
+		<div class="user__info">
+			<div>
+				<h5><a href="<?php echo(un2url($udata['username'])) ?> " data-ajax="ajax_loading.php?app=profile&apph=profile&uname=<?php echo($udata['username']) ?>"><?php echo($udata['username']) ?></a></h5>
+				<p>{{LANG last_seen}}: <?php echo(time2str($udata['last_seen'])) ?></p>
+			</div>
+			<?php if (IS_LOGGED && $me['user_id'] != $udata['user_id']) { ?>
+			<?php if ($udata['am_i_subscribed'] > 0) { ?>
+				<button class="btn btn-follow btn-following animated fadeInUpBig" onclick="RemoveSubscribeToUser(<?php echo $udata['user_id']; ?>,'hide');">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-check"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg> <span>{{LANG subscribed}}</span>
+			</button>
+			<?php }else{ ?>
+			<button class="btn btn-follow animated fadeInUpBig" onclick="SubscribeToUser(<?php echo $udata['user_id']; ?>,<?php echo $udata['subscribe_price']; ?>,'hide');">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg> <span>{{LANG subscribe}} <?php echo $context['currency_symbol'].$udata['subscribe_price']; ?></span>
+			</button>
+			<?php } ?>
+			<?php } ?>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,19 @@
+<div class="dialog-modal" id="edit-post-modal" style="display: none;">
+	<div class="modal--inner">
+		<div class="modal--header">
+			<h5>{{LANG edit_post}}</h5>
+		</div>
+		<form class="form">
+			<div class="modal--body">
+				<div class="form-group">
+					<textarea name="caption" id="caption" rows="4" class="form-control" placeholder="{{LANG add_post_caption}}"></textarea>
+				</div>
+			</div>
+			<div class="modal--footer">
+				<button class="btn btn-default" type="button">{{LANG cancel}}</button>
+				<button class="btn btn-success" type="submit">{{LANG save_changes}}</button>
+			</div>
+			<input type="hidden" name="post_id" value="<?php echo($context['post_data']['post_id'] ) ?>" id="post_id">
+		</form>
+	</div>
+</div>

@@ -1,0 +1,19 @@
+<div class="following--ls__item user_load_proff pg_folw_sugg_carousel" id="<?php echo($udata['sub_id']) ?>">
+	<div class="item">
+		<div class="avatar">
+			<img src="<?php echo(media($udata['avatar'])) ?>" alt="Picture">
+			<div class="valign uname">
+				<a href="<?php echo(un2url($udata['username'])) ?>" data-ajax="ajax_loading.php?app=profile&apph=profile&uname=<?php echo($udata['username']) ?>"><h4><?php echo($udata['username']) ?></h4></a>
+			</div>
+		</div>
+		<div class="button">
+			<?php if (IS_LOGGED && $me['user_id'] != $udata['user_id']) { ?>
+			<?php if ($udata['am_i_subscribed'] > 0) { ?>
+				<button class="btn btn-mat btn-following" onclick="RemoveSubscribeToUser(<?php echo $udata['user_id']; ?>,'hide');"><span>{{LANG subscribed}}</span></button>
+			<?php }else{ ?>
+				<button class="btn btn-mat" onclick="SubscribeToUser(<?php echo $udata['user_id']; ?>,<?php echo $udata['subscribe_price']; ?>,'hide');"><span>{{LANG subscribe}} <?php echo $context['currency_symbol'].$udata['subscribe_price']; ?></span></button>
+			<?php } ?>
+			<?php } ?>
+		</div>
+	</div>
+</div>

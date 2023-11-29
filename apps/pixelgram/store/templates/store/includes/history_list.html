@@ -1,0 +1,12 @@
+<tr class="pp_store_transct_list" data-transaction-id="<?php echo $context['transaction']['id']; ?>">
+    <td class="store_img">
+		<a href="<?php echo $context['transaction']['item_data']['url']; ?>" data-ajax="<?php echo $context['transaction']['item_data']['ajax_url']; ?>"><img src="<?php echo media($context['transaction']['item_data']['small_file']); ?>"></a>
+	</td>
+    <td class="store_buy" width="25%">
+		<a href="{{CONFIG site_url}}/<?php echo $context['transaction']['user_data']['username']; ?>" data-ajax="ajax_loading.php?app=profile&apph=profile&uname=<?php echo $context['transaction']['user_data']['username']; ?>"><?php echo $context['transaction']['user_data']['username']; ?></a>
+	</td>
+    <td width="15%"><?php echo $context['currency_symbol'] . $context['transaction']['amount']; ?></td>
+	<td><?php echo $context['currency_symbol'] . $context['transaction']['admin_com']; ?></td>
+	<td><?php echo $context['currency_symbol'] . ($context['transaction']['amount'] - $context['transaction']['admin_com']); ?></td>
+    <td><?php echo $context['transaction']['text_time']; ?></td>
+</tr>

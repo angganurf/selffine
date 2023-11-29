@@ -1,0 +1,62 @@
+<div class="pg_auth_page">
+	<div class="login_aside">
+		<div class="to_auth_circle-1"></div>
+		<div class="to_auth_circle-2"></div>
+		<div class="login_aside_innr">
+			<p>{{LANG welcome_to}} {{CONFIG site_name}}</p>
+			<a class="btn" href="{{CONFIG site_url}}/welcome"><span>{{LANG sign_in}}</span></a>
+		</div>
+	</div>
+	<div class="login_page">
+		<div class="login-pagez">
+			<a href="{{CONFIG site_url}}" class="logo"><img src="{{CONFIG site_url}}/media/img/<?php if ($_COOKIE['mode'] == 'night') { ?>light-logo<?php } else { ?>logo<?php } ?>.{{CONFIG logo_extension}}" alt="logo"></a>
+			<h3>{{LANG two_factor}}</h3>
+			<form action="" class="form" id="two_factor_form">
+				<div class="signin-alert"></div>
+				
+				<div class="pg_mat_input">
+					<input type="text" name="code" id="code" placeholder="{{LANG confirmation_code}}" required />
+					<label for="code">{{LANG confirmation_code}}</label>
+				</div>
+
+				<input type="hidden" name="hash" value="<?php echo($context['csrf_token']) ?>">
+				<button class="btn btn-large btn-main btn-mat" type="submit">{{LANG login}}</button>
+			</form>
+		</div>
+		<svg width="742px" height="135px" viewBox="0 0 742 135" version="1.1" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,18.1943359 C0,18.1943359 33.731258,1.47290595 88.7734375,0.0931329845 C219.81339,-3.19171847 250.381265,81.3678781 463.388672,103.315789 C574.953531,114.811237 741.039062,66.8974609 741.039062,66.8974609 L741.039062,134 L0,133.714227 L0,18.1943359 Z" id="Rectangle-2" fill="#ffe2f6" opacity="0.53177472" style="mix-blend-mode: multiply;"></path><path d="M0,98.1572266 C0,98.1572266 104.257812,78.1484375 186.296875,78.1484375 C268.335938,78.1484375 310.78125,115.222656 369,104.40625 C534.365804,73.6830944 552.410156,15.5898438 625.519531,7.62890625 C698.628906,-0.33203125 741.039062,42.75 741.039062,42.75 L741.039062,134 L0,134.166016 L0,98.1572266 Z" id="Rectangle-4" fill="#ffe2f6" opacity="0.37004431" style="mix-blend-mode: multiply;"></path> <path d="M0,45 C0,45 62.1359299,107.911868 208.148437,109.703125 C354.160945,111.494382 436.994353,57.1871807 491.703125,51.9257812 C644.628906,37.21875 741.039062,109.703125 741.039062,109.703125 L741.039062,134 L0,134 L0,45 Z" id="Rectangle-5" fill="#ffe2f6" opacity="0.231809701" style="mix-blend-mode: multiply;"></path> <path d="M0.288085938,112.378906 C0.288085938,112.378906 81.0614612,76.8789372 194.78125,75.40625 C308.501039,73.9335628 337.203138,98.34218 458.777344,106.441406 C580.35155,114.540633 741,116.601562 741,116.601562 L741.039062,134 L0,132.889648 L0.288085938,112.378906 Z" id="Rectangle-6" fill="#ffe2f6" opacity="0.209188433" style="mix-blend-mode: multiply;"></path></svg>
+	</div>
+</div>
+
+<script>
+	jQuery(document).ready(function($) {
+		$("form#two_factor_form").ajaxForm({
+			url: '<?php echo($context['xhr_url']) ?>/two_factor_login',
+			type: 'POST',
+			dataType: 'json',
+			beforeSend: function(){
+				$('form').find('.pp_load_loader').addClass('loadingg');
+				$('form').find('button[type="submit"]').attr('disabled','true');
+			},
+			success: function(data){
+				if (data.status == 200) {
+					$(".signin-alert").html($('<div>',{
+						class: 'alert alert-success',
+						text: data.message
+					}));
+					setTimeout(() => {
+						window.location.href = "<?php echo($site_url) ?>";
+					},2000);
+				}
+
+				else{
+					$(".signin-alert").html($('<div>',{
+						class: 'alert alert-danger',
+						text: data.message
+					}));
+				}
+				$('form').find('.pp_load_loader').removeClass('loadingg');
+				$('form').find('button[type="submit"]').removeAttr('disabled');
+			}
+		})
+	});
+</script>

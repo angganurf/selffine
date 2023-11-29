@@ -1,0 +1,117 @@
+<div id="create-newpost"></div>
+<script>
+$(function(){
+    $(".create-new-post").click(function(event) {
+    	var post_type = $(this).attr('data-type');
+    	if (post_type) {
+    		$("#modal-progress").removeClass('hidden');
+			<?php if ($config['upload_360_videos'] == 'on') { ?>
+            if (typeof($(this).attr('video_type')) != 'undefined' && parseInt($(this).attr('video_type')) == 360) {
+                post_type += '?video_type=360';
+            }
+            <?php } ?>
+    		$.ajax({
+    			url: link('posts/new-' + post_type),
+    			type: 'GET',
+    			dataType: 'json',
+    		})
+    		.done(function(data) {
+    			if (data.status == 200) {
+    				$('body').addClass('active');
+    				$("#create-newpost").html(data.html).fadeIn(100);
+    			}
+                else{
+                    if (data.message) {
+                        $.toast(data.message,{
+                          duration: 5000, 
+                          type: '',
+                          align: 'top-right',
+                          singleton: false
+                        });
+                    }
+                }
+    			$("#modal-progress").addClass('hidden');
+    		});
+    	}
+    });
+    $(document).on('click','#close-anim-modal',function(event) {
+        $("#create-newpost").fadeOut(100,function(){
+            $(this).empty();
+            $("body").removeClass('active');
+        });
+		if (typeof window.localstream != 'undefined') {
+            window.localstream.getVideoTracks()[0].stop();
+            window.localstream.getAudioTracks()[0].stop();
+        }
+    });
+    $(document).on('click','#close-anim-image-modal',function(event) {
+		$("#create-newpost").fadeOut(100,function(){
+			$(this).empty();
+			$("body").removeClass('active');
+		});
+        if (typeof(JEEFACEFILTERAPI) != 'undefined') {
+          var tracks = JEEFACEFILTERAPI.getVideoInfo().getTracks();
+          if (typeof(tracks) != 'undefined'){
+              for (var i = 0; i < tracks.length; i++) {
+                  tracks[i].stop();
+              }
+          }
+        }
+        delete window.rvideo;
+        delete window.cframe;
+        delete window.rvideo_thumb;
+        clearInterval(video_timer_);
+        totalSeconds = 0;
+        secondsLabel.innerHTML = '00';
+        minutesLabel.innerHTML = '00';
+        if (typeof (mediaRecorder) != 'undefined') {
+            if (mediaRecorder.state == 'recording') {
+                mediaRecorder.stop();
+            }
+        }
+        
+
+
+        $('.fireworks').remove();
+        $('.faceDeform').remove();
+        $('.dog_face').remove();
+        $('.football').remove();
+        $('.matrix').remove();
+        $('.luffys_hat_1').remove();
+        $('.luffys_hat_2').remove();
+        $('.cloud').remove();
+	});
+	$(document).keyup(function(e) {
+		if (e.keyCode == 27) {
+			$("#create-newpost").fadeOut(100,function(){
+			$(this).empty();
+			$("body").removeClass('active');
+		});
+		}
+	});
+  });
+</script>
+
+<template class="template" id="post-editing-template">
+    <div class="content post-editing-form">
+		<div class="valign user-heading">
+			<img src="{{ME avatar}}" class="img-circle">
+			<div>
+				<span>{{ME username}}</span>
+				<span class="pp_area">{{LANG edit_post}}</span>
+			</div>
+		</div>
+        <form class="form" id="edit-post-caption" action="{{CONFIG site_url}}/aj/posts/update" autocomplete="true">
+            <div class="form-group">
+                <textarea class="form-control" name="caption" rows="4" id="caption" placeholder="{{LANG add_post_caption}}"></textarea>
+            </div>
+            <div class="form-group publish">
+				<div class="loading_cont hidden"></div>
+				<button type="reset" class="btn btn-default btn-mat" id="close-anim-modal">{{LANG close}}</button>
+				<button type="submit" class="btn btn-main btn-mat">{{LANG save_changes}}</button>
+            </div>
+            <input type="hidden" id="post_id" name="post_id">
+            <input type="hidden" name="hash" value="<?php echo($context['csrf_token']) ?>">
+        </form>
+    </div>
+</template>

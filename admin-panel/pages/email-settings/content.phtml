@@ -1,0 +1,521 @@
+<div class="container-fluid">
+    <div>
+        <h3>E-mail Setup</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Settings</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">E-mail Setup</li>
+            </ol>
+        </nav>
+    </div>
+
+
+
+
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">E-mail Configuration</h6>
+                    <form class="form email-settings-form" method="POST">
+                        <label for="smtp_or_mail" class="main-label">Server Type</label>
+                        <br><small class="admin-info">Select which E-mail server you want to use, Server Mail function is not recommended.</small>
+                        <div class="form-group">
+                            <select class="form-control show-tick" name="smtp_or_mail">
+                                <option value="smtp" <?php if($config['smtp_or_mail'] == 'smtp'){ echo("selected");}?>>SMTP Server</option>
+                                <option value="mail" <?php if($config['smtp_or_mail'] == 'mail'){ echo("selected");}?>>Server Mail (Default)</option>
+                            </select>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">Website Default E-mail</label>
+                                <input type="text" name="site_email" class="form-control" value="<?php echo $config['site_email']?>"><small class="admin-info">This is your default website E-mail, this will be used to send E-mails to users.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">SMTP Host</label>
+                                <input type="text" name="smtp_host" class="form-control" value="<?php echo $config['smtp_host']?>"><small class="admin-info">Your SMTP account host name, can be IP, domain or subdomain.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">SMTP Username</label>
+                                <input type="text" name="smtp_username" class="form-control" value="<?php echo $config['smtp_username']?>"><small class="admin-info">Your SMTP account username.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">SMTP Password</label>
+                                <input type="text" name="smtp_password" class="form-control" value="<?php echo openssl_decrypt($config['smtp_password'], "AES-128-ECB", 'mysecretkey1234');?>"><small class="admin-info">Your SMTP account password.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label class="form-label" class="main-label">SMTP Port</label>
+                                <input type="text" name="smtp_port" class="form-control" value="<?php echo $config['smtp_port']?>"><small class="admin-info">Which port does your SMTP server use? most used 587 for TLS, and 465 for SSL encryption.</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <label for="smtp_encryption" class="main-label">SMTP Encryption</label>
+                        <br><small class="admin-info">Which encryption method does your SMTP server use?</small>
+                        <div class="form-group">
+                            <select class="form-control show-tick" name="smtp_encryption">
+                                <option value="tls" <?php if($config['smtp_encryption'] == 'tls'){ echo("selected");}?>>TLS</option>
+                                <option value="ssl" <?php if($config['smtp_encryption'] == 'ssl'){ echo("selected");}?>>SSL</option>
+                            </select>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="email-settings-alert"></div>
+                        <button type="button" class="btn btn-success m-t-15 waves-effect" onclick="TestMessage();">Test E-mail Server</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Debug Email Deliverability</h6>
+                    <div class="alert alert-info">This feature will test the Email Deliverability and make sure the system is working fine.</div>
+                    <form class="debug-settings" method="POST">
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Debug Log</label>
+                                <textarea name="debug_email" id="debug_email" class="form-control" cols="30" rows="5" style="height: 700px !important;" disabled>Click on Debug Email Deliverability to show test results.</textarea>
+                            </div>
+                        </div>
+                        <div class="debug-settings-alert"></div>
+                        <button type="submit" class="btn btn-success m-t-15 waves-effect">Debug Email Deliverability</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12">
+            <h3>SMS Settings <hr></h3>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">SMS Twilio Settings</h6>
+                    <div class="sms-settings-alert"></div>
+                    <form class="sms-settings" method="POST">
+                        <div class="alert alert-info">To start sending SMS, you have to create an account and buy credits in <a href="http://www.twilio.com">Twilio</a>.</div>
+                        
+                        <div>
+                            <div class="float-left">
+                                <label for="twilio_provider" class="main-label">Twilio SMS provider</label>
+                                <br><small class="admin-info">Enable Twilio SMS provider, used for SMS.</small>
+                            </div>
+                            <div class="form-group float-right switcher">
+                                <input type="hidden" name="twilio_provider" value="0">
+                                <input type="checkbox" name="twilio_provider" id="twilio_provider-enabled" value="1" <?php echo ($config['twilio_provider'] == '1') ? 'checked': '';?>>
+                                <label for="twilio_provider-enabled" class="check-trail"><span class="check-handler"></span></label>
+                            </div>
+                            <div class="clearfix"></div>
+                            <hr>
+                        </div>
+                        
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Twilio account_sid</label>
+                                <input type="text" id="sms_twilio_username" name="sms_twilio_username" class="form-control" value="<?php echo $config['sms_twilio_username'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Twilio auth_token</label>
+                                <input type="text" id="sms_twilio_password" name="sms_twilio_password" class="form-control" value="<?php echo $config['sms_twilio_password'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Twilio Phone number</label>
+                                <input type="text" id="sms_twilio_phone" name="sms_twilio_phone" class="form-control" value="<?php echo $config['sms_twilio_phone'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Your Phone number <small>e.g (+9053..)</small></label>
+                                <input type="text" id="twilio_test_phone" name="twilio_test_phone" class="form-control" value="<?php echo $config['twilio_test_phone'];?>">
+                            </div>
+                        </div>
+                      
+                        <div class="alert alert-info">After clicking "Test SMS Server", a test message will be sent to your phone</div>
+                        <button type="button" class="btn btn-warning m-t-15 waves-effect" onclick="TestTwilioMessage();">Test SMS Server</button>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Msg91 Settings</h6>
+                    <div class="msg91-settings-alert"></div>
+                    <form class="msg91-settings" method="POST">
+                        <div class="alert alert-info">To start sending SMS, you have to create an account and buy credits in <a href="https://msg91.com/">Msg91</a>.</div>
+                        
+                        <div>
+                            <div class="float-left">
+                                <label for="msg91_provider" class="main-label">Msg91 provider</label>
+                                <br><small class="admin-info">Enable Msg91 SMS provider, used for SMS.</small>
+                            </div>
+                            <div class="form-group float-right switcher">
+                                <input type="hidden" name="msg91_provider" value="0">
+                                <input type="checkbox" name="msg91_provider" id="msg91_provider-enabled" value="1" <?php echo ($config['msg91_provider'] == '1') ? 'checked': '';?>>
+                                <label for="msg91_provider-enabled" class="check-trail"><span class="check-handler"></span></label>
+                            </div>
+                            <div class="clearfix"></div>
+                            <hr>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Msg91 AuthKey</label>
+                                <input type="text" id="msg91_authKey" name="msg91_authKey" class="form-control" value="<?php echo $config['msg91_authKey'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Msg91 DLT ID</label>
+                                <input type="text" id="msg91_dlt_id" name="msg91_dlt_id" class="form-control" value="<?php echo $config['msg91_dlt_id'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Msg91 Phone number</label>
+                                <input type="text" id="msg91_test_phone" name="msg91_test_phone" class="form-control" value="<?php echo $config['msg91_test_phone'];?>">
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info">After clicking "Test SMS Server", a test message will be sent to your phone</div>
+                        <button type="button" class="btn btn-warning m-t-15 waves-effect" onclick="TestMsg91Message();">Test SMS Server</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">BulkSMS Settings</h6>
+                    <div class="bulksms-settings-alert"></div>
+                    <form class="bulksms-settings" method="POST">
+                        <div class="alert alert-info">To start sending SMS, you have to create an account and buy credits in <a href="https://www.bulksms.com/">BulkSMS</a>.</div>
+                        
+                        <div>
+                            <div class="float-left">
+                                <label for="bulksms_provider" class="main-label">BulkSMS provider</label>
+                                <br><small class="admin-info">Enable BulkSMS SMS provider, used for SMS.</small>
+                            </div>
+                            <div class="form-group float-right switcher">
+                                <input type="hidden" name="bulksms_provider" value="0">
+                                <input type="checkbox" name="bulksms_provider" id="bulksms_provider-enabled" value="1" <?php echo ($config['bulksms_provider'] == '1') ? 'checked': '';?>>
+                                <label for="bulksms_provider-enabled" class="check-trail"><span class="check-handler"></span></label>
+                            </div>
+                            <div class="clearfix"></div>
+                            <hr>
+                        </div>
+
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">BulkSMS username</label>
+                                <input type="text" id="bulksms_username" name="bulksms_username" class="form-control" value="<?php echo $config['bulksms_username'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">BulkSMS Password</label>
+                                <input type="text" id="bulksms_password" name="bulksms_password" class="form-control" value="<?php echo $config['bulksms_password'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">BulkSMS Phone number</label>
+                                <input type="text" id="bulksms_test_phone" name="bulksms_test_phone" class="form-control" value="<?php echo $config['bulksms_test_phone'];?>">
+                            </div>
+                        </div>
+                        <div class="alert alert-info">After clicking "Test SMS Server", a test message will be sent to your phone</div>
+                        <button type="button" class="btn btn-warning m-t-15 waves-effect" onclick="TestBulkSMSMessage();">Test SMS Server</button>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">MessageBird Settings</h6>
+                    <div class="messagebird-settings-alert"></div>
+                    <form class="messagebird-settings" method="POST">
+                        <div class="alert alert-info">To start sending SMS, you have to create an account and buy credits in <a href="https://www.messagebird.com/">MessageBird</a>.</div>
+                        <div>
+                            <div class="float-left">
+                                <label for="messagebird_provider" class="main-label">MessageBird provider</label>
+                                <br><small class="admin-info">Enable MessageBird SMS provider, used for SMS.</small>
+                            </div>
+                            <div class="form-group float-right switcher">
+                                <input type="hidden" name="messagebird_provider" value="0">
+                                <input type="checkbox" name="messagebird_provider" id="messagebird_provider-enabled" value="1" <?php echo ($config['messagebird_provider'] == '1') ? 'checked': '';?>>
+                                <label for="messagebird_provider-enabled" class="check-trail"><span class="check-handler"></span></label>
+                            </div>
+                            <div class="clearfix"></div>
+                            <hr>
+                        </div>
+
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">MessageBird API Key</label>
+                                <input type="text" id="messagebird_key" name="messagebird_key" class="form-control" value="<?php echo $config['messagebird_key'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">MessageBird Phone Number</label>
+                                <input type="text" id="messagebird_test_phone" name="messagebird_test_phone" class="form-control" value="<?php echo $config['messagebird_test_phone'];?>">
+                            </div>
+                        </div>
+                        <div class="alert alert-info">After clicking "Test SMS Server", a test message will be sent to your phone</div>
+                        <button type="button" class="btn btn-warning m-t-15 waves-effect" onclick="TestMessageBirdMessage();">Test SMS Server</button>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Infobip Settings</h6>
+                    <div class="infobip-settings-alert"></div>
+                    <form class="infobip-settings" method="POST">
+                        <div class="alert alert-info">To start sending SMS, you have to create an account and buy credits in <a href="https://www.infobip.com/">Infobip</a>.</div>
+                        
+                        <div>
+                            <div class="float-left">
+                                <label for="infobip_provider" class="main-label">Infobip provider</label>
+                                <br><small class="admin-info">Enable MessageBird SMS provider, used for SMS.</small>
+                            </div>
+                            <div class="form-group float-right switcher">
+                                <input type="hidden" name="infobip_provider" value="0">
+                                <input type="checkbox" name="infobip_provider" id="infobip_provider-enabled" value="1" <?php echo ($config['infobip_provider'] == '1') ? 'checked': '';?>>
+                                <label for="infobip_provider-enabled" class="check-trail"><span class="check-handler"></span></label>
+                            </div>
+                            <div class="clearfix"></div>
+                            <hr>
+                        </div>
+
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Infobip API Key</label>
+                                <input type="text" id="infobip_api_key" name="infobip_api_key" class="form-control" value="<?php echo $config['infobip_api_key'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Infobip Base URL</label>
+                                <input type="text" id="infobip_base_url" name="infobip_base_url" class="form-control" value="<?php echo $config['infobip_base_url'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Infobip Phone Number</label>
+                                <input type="text" id="infobip_test_phone" name="infobip_test_phone" class="form-control" value="<?php echo $config['infobip_test_phone'];?>">
+                            </div>
+                        </div>
+                      
+                        <div class="alert alert-info">After clicking "Test SMS Server", a test message will be sent to your phone</div>
+                        <button type="button" class="btn btn-warning m-t-15 waves-effect" onclick="TestInfobipMessage();">Test SMS Server</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+function TestInfobipMessage() {
+    $('form.infobip-settings').find('.btn-warning').text('Please wait..');
+    $.get(acpajax_url('test_infobip_message'), function (data) {
+        if (data.status == 200) {
+            $('.infobip-settings-alert').html('<div class="alert alert-success"><i class="fa fa-check"></i> Message sent!</div>');
+            setTimeout(function () {
+                $('.infobip-settings-alert').empty();
+            }, 2000);
+        } else {
+            $('.infobip-settings-alert').html('<div class="alert alert-danger">Message failed to sent, error: '+data.message+'</div>');
+            setTimeout(function () {
+                $('.infobip-settings-alert').empty();
+            }, 2000);
+        }
+        $('form.infobip-settings').find('.btn-warning').text('Test SMS Server');
+    });
+}
+function TestMsg91Message() {
+    $('form.msg91-settings').find('.btn-warning').text('Please wait..');
+    $.get(acpajax_url('test_msg91_message'), function (data) {
+        if (data.status == 200) {
+            $('.msg91-settings-alert').html('<div class="alert alert-success"><i class="fa fa-check"></i> Message sent!</div>');
+            setTimeout(function () {
+                $('.msg91-settings-alert').empty();
+            }, 2000);
+        } else {
+            $('.msg91-settings-alert').html('<div class="alert alert-danger">Message failed to sent, error: '+data.message+'</div>');
+            setTimeout(function () {
+                $('.msg91-settings-alert').empty();
+            }, 2000);
+        }
+        $('form.msg91-settings').find('.btn-warning').text('Test SMS Server');
+    });
+}
+function TestMessageBirdMessage() {
+    $('form.messagebird-settings').find('.btn-warning').text('Please wait..');
+    $.get(acpajax_url('test_messagebird_message'), function (data) {
+        if (data.status == 200) {
+            $('.messagebird-settings-alert').html('<div class="alert alert-success"><i class="fa fa-check"></i> Message sent!</div>');
+            setTimeout(function () {
+                $('.messagebird-settings-alert').empty();
+            }, 2000);
+        } else {
+            $('.messagebird-settings-alert').html('<div class="alert alert-danger">Message failed to sent, error: '+data.message+'</div>');
+            setTimeout(function () {
+                $('.messagebird-settings-alert').empty();
+            }, 2000);
+        }
+        $('form.messagebird-settings').find('.btn-warning').text('Test SMS Server');
+    });
+}
+function TestBulkSMSMessage() {
+    $('form.bulksms-settings').find('.btn-warning').text('Please wait..');
+    $.get(acpajax_url('test_bulksms_message'), function (data) {
+        if (data.status == 200) {
+            $('.bulksms-settings-alert').html('<div class="alert alert-success"><i class="fa fa-check"></i> Message sent!</div>');
+            setTimeout(function () {
+                $('.bulksms-settings-alert').empty();
+            }, 2000);
+        } else {
+            $('.bulksms-settings-alert').html('<div class="alert alert-danger">Message failed to sent, error: '+data.message+'</div>');
+            setTimeout(function () {
+                $('.bulksms-settings-alert').empty();
+            }, 2000);
+        }
+        $('form.bulksms-settings').find('.btn-warning').text('Test SMS Server');
+    });
+}
+function TestTwilioMessage() {
+    $('form.sms-settings').find('.btn-warning').text('Please wait..');
+    $.get(acpajax_url('test_twilio_message'), function (data) {
+        if (data.status == 200) {
+            $('.sms-settings-alert').html('<div class="alert alert-success"><i class="fa fa-check"></i> Message sent!</div>');
+            setTimeout(function () {
+                $('.sms-settings-alert').empty();
+            }, 2000);
+        } else {
+            $('.sms-settings-alert').html('<div class="alert alert-danger">Message failed to sent, error: '+data.message+'</div>');
+            setTimeout(function () {
+                $('.sms-settings-alert').empty();
+            }, 2000);
+        }
+        $('form.sms-settings').find('.btn-warning').text('Test SMS Server');
+    });
+}
+function TestMessage() {
+    $('form.email-settings-form').find('.btn-success').text('Please wait..');
+    $.get(acpajax_url('test_message'), function (data) {
+        if (data.status == 200) {
+            $('.email-settings-alert').html('<div class="alert alert-success"><i class="fa fa-check"></i> Message sent!</div>');
+            setTimeout(function () {
+                $('.email-settings-alert').empty();
+            }, 2000);
+        } else {
+            $('.email-settings-alert').html('<div class="alert alert-danger">Message failed to sent, error: ' + data.error+'</div>');
+            setTimeout(function () {
+                $('.email-settings-alert').empty();
+            }, 2000);
+        }
+        $('form.email-settings-form').find('.btn-success').text('Test E-mail Server');
+    });
+}
+$(function() {
+    var debug_settings = $('form.debug-settings');
+    debug_settings.ajaxForm({
+        url: acpajax_url('email_debug'),
+        beforeSend: function() {
+            debug_settings.find('.waves-effect').text("Please wait..");
+        },
+        success: function(data) {
+            debug_settings.find('.waves-effect').text('Debug');
+            $('#debug_email').val(data);
+        },
+        error: function(data) {
+            debug_settings.find('.waves-effect').text('Debug');
+            $('#debug_email').val(data.responseText);
+        }
+    });
+
+    $('.switcher input[type=checkbox]').click(function () {
+        var configName = $(this).attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        if ($(this).is(":checked") === true) {
+            objData[configName] = $(this).val();
+        }
+        else{
+            if ($('input[name='+configName+']')[0]) {
+                objData[configName] = $($('input[name='+configName+']')[0]).val();
+            }
+        }
+        objData['hash_id'] = hash_id;
+        $.post(acpajax_url('email-settings'), objData);
+    });
+
+    var setTimeOutColor = setTimeout(function (){});
+    $('select').on('change', function() {
+         clearTimeout(setTimeOutColor);
+        var thisElement = $(this);
+        var configName = thisElement.attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        objData[configName] = thisElement.val();
+        objData['hash_id'] = hash_id;
+        thisElement.addClass('warning');
+        $.post(acpajax_url('email-settings'), objData, function (data) {
+            if (data.status == 200) {
+                thisElement.removeClass('warning');
+                thisElement.addClass('success');
+            } else {
+                thisElement.addClass('error');
+            }
+            var setTimeOutColor = setTimeout(function () {
+                thisElement.removeClass('success');
+                thisElement.removeClass('warning');
+                thisElement.removeClass('error');
+            }, 2000);
+        });
+    });
+    $('input[type=text], input[type=number] , textarea').on('input', delay(function() {
+            clearTimeout(setTimeOutColor);
+            var thisElement = $(this);
+            var configName = thisElement.attr('name');
+            var hash_id = $('input[name=hash_id]').val();
+            var objData = {};
+            objData[configName] = this.value;
+            objData['hash_id'] = hash_id;
+            thisElement.addClass('warning');
+            $.post(acpajax_url('email-settings'), objData, function (data) {
+                if (data.status == 200) {
+                    thisElement.removeClass('warning');
+                    thisElement.addClass('success');
+                } else {
+                    thisElement.addClass('error');
+                }
+                var setTimeOutColor = setTimeout(function () {
+                    thisElement.removeClass('success');
+                    thisElement.removeClass('warning');
+                    thisElement.removeClass('error');
+                }, 2000);
+                //thisElement.focus();
+            });
+    }, 500));
+});
+</script>

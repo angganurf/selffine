@@ -1,0 +1,29 @@
+<div class="timeline-posts content-shadow pp_blog_posts pg_blog_posts" data-article-id="<?php echo $post_data['id'];?>">
+	<div class="valign pg_blog_cats_sub">
+		<div>
+			<span><?php echo $post_data['category_name'];?></span>
+		</div>
+		<div>
+			<span class="time-ago" title="<?php echo(ToDate($post_data['created_at'])) ?>"><?php echo(time2str($post_data['created_at'])); ?></span>
+			<?php if(IS_LOGGED === true){ if ((int)$me["user_id"] === (int)$post_data["user_id"]) { ?>
+				<div class="dropdown pull-right">
+					<span class="dropdown-toggle" data-toggle="dropdown">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 13.172l4.95-4.95 1.414 1.414L12 16 5.636 9.636 7.05 8.222z"></path></svg>
+					</span>
+					<ul class="dropdown-menu zoom">
+						<li><a href="javascript:void(0);" onclick="delete_article(<?php echo $post_data['id'];?>,'<?php echo $post_data['thumbnail'];?>');">{{LANG delete_post}}</a></li>
+						<li><a href="<?php echo un2url('blog/update/'.$post_data['id']);?>" target="_blank">{{LANG edit_post}}</a></li>
+					</ul>
+				</div>
+			<?php } } ?>
+		</div>
+	</div>
+    <div class="post-images fluid">
+        <a href="<?php echo un2url('blog/article/'.$post_data['id']);?>" class="image-lightbox">
+            <img src="<?php echo $post_data['full_thumbnail'];?>" class="img-res">
+        </a>
+    </div>
+	<div class="header">
+        <h2><a href="<?php echo un2url('blog/article/'.$post_data['id']);?>" data-ajax="ajax_loading.php?app=article&amp;apph=article&amp;id=<?php echo $post_data['id'];?>"><?php echo $post_data['title'];?></a></h2>
+    </div>
+</div>

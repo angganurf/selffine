@@ -1,0 +1,61 @@
+<div class="terms-page__container">
+	<div class="ma_tabs">
+		<ul class="list-unstyled mb-0">
+			<?php if ($context['about_page'] == 1) { ?>
+			<li class="<?php if($context['tpage'] == 'about-us'){ ?>active<?php } ?>">
+				<a href="<?php echo(pxp_link('about-us')) ?>" data-ajax="ajax_loading.php?app=terms&apph=terms&page=about-us">{{LANG about_us}}</a>
+			</li>
+			<?php } ?>
+			<?php if ($context['terms_of_use_page'] == 1) { ?>
+			<li class="<?php if($context['tpage'] == 'terms-of-use'){ ?>active<?php } ?>">
+				<a href="<?php echo(pxp_link('terms-of-use')) ?>" data-ajax="ajax_loading.php?app=terms&apph=terms&page=terms-of-use">{{LANG terms_of_use}}</a>
+			</li>
+			<?php } ?>
+			<?php if ($context['privacy_policy_page'] == 1) { ?>
+			<li class="<?php if($context['tpage'] == 'privacy-and-policy'){ ?>active<?php } ?>">
+				<a href="<?php echo(pxp_link('privacy-and-policy')) ?>" data-ajax="ajax_loading.php?app=terms&apph=terms&page=privacy-and-policy">{{LANG privacy_and_policy}}</a>
+			</li>
+			<?php } ?>
+			<li class="<?php if($context['tpage'] == 'contact_us'){ ?>active<?php } ?>">
+				<a href="<?php echo(pxp_link('contact_us')) ?>" data-ajax="ajax_loading.php?app=terms&apph=terms&page=contact_us">{{LANG contact_us}}</a>
+			</li>
+		</ul>
+	</div>
+	<div class="terms-page__inner">
+		<div class="pg_page padd content">
+			<?php if($context['tpage'] == 'contact_us'){ ?>
+				<h2 class="user_sttng_panel_hd">{{LANG contact_us}}</h2>
+				<form id="contact_us_form" class="form row">
+					<div class="col-md-3"></div>
+					<div class="col-md-6">
+						<div class="pg_mat_input">
+							<input placeholder="{{LANG fname}}" name="first_name" required="true" type="text">
+							<label>{{LANG fname}}</label>
+						</div>
+						<div class="pg_mat_input">
+							<input placeholder="{{LANG lname}}" name="last_name" required="true" type="text">
+							<label>{{LANG lname}}</label>
+						</div>
+						<div class="pg_mat_input">
+							<input placeholder="{{LANG email}}" name="email" required="true" type="email">
+							<label>{{LANG email}}</label>
+						</div>
+						<div class="pg_mat_input">
+							<textarea placeholder="{{LANG message}}" name="message" rows="3"></textarea>
+							<label>{{LANG message}}</label>
+						</div>
+						<div class="pg_sett_save">
+							<button class="btn btn-main btn-mat btn-mat-raised pp_flat_btn" type="submit" id="contact_submit">{{LANG send}}</button>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="col-md-3"></div>
+				</form>
+			<?php } else { ?>
+				<?php echo ($context['pagecont']); ?>
+			<?php } ?>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+<?php include 'js/script.html'; ?>

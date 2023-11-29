@@ -1,0 +1,15 @@
+<div class="ads_header">
+	<div class="ma_tabs">
+		<ul class="list-unstyled mb-0">
+			<li class="<?php if(empty($_GET['page'])){ ?>active<?php } ?>">
+				<a href="{{CONFIG site_url}}/ads" data-ajax="ajax_loading.php?app=ads&apph=ads"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,8H4A2,2 0 0,0 2,10V14A2,2 0 0,0 4,16H5V20A1,1 0 0,0 6,21H8A1,1 0 0,0 9,20V16H12L17,20V4L12,8M21.5,12C21.5,13.71 20.54,15.26 19,16V8C20.53,8.75 21.5,10.3 21.5,12Z" /></svg> {{LANG advertising}}</a>
+			</li>
+			<!--<li class="<?php if(!empty($_GET['page']) &&  $_GET['page'] == 'wallet'){ ?>active<?php } ?>">
+				<a href="{{CONFIG site_url}}/ads/wallet" data-ajax="ajax_loading.php?app=ads&apph=ads&page=wallet"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M22 6h-7a6 6 0 1 0 0 12h7v2a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h18a1 1 0 0 1 1 1v2zm-7 2h8v8h-8a4 4 0 1 1 0-8zm0 3v2h3v-2h-3z" /></svg> {{LANG wallet}}</a>
+			</li>-->
+			<li class="<?php if(!empty($_GET['page']) &&  $_GET['page'] == 'create'){ ?>active<?php } ?>">
+				<a href="{{CONFIG site_url}}/ads/create" data-ajax="ajax_loading.php?app=ads&apph=ads&page=create"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg> {{LANG create}}</a>
+			</li>
+		</ul>
+	</div>
+</div>

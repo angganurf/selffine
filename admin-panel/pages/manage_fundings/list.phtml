@@ -1,0 +1,40 @@
+<tr id="list-<?php echo($context['fund']->id); ?>" data_selected="<?php echo($context['fund']->id); ?>">
+	<td><input type="checkbox" id="check-data-<?php echo($context['fund']->id); ?>" class="delete-checkbox filled-in"><label for="check-data-<?php echo($context['fund']->id); ?>"></label></td>
+	<td>
+		<span>
+			<?php echo($context['fund']->id); ?>
+		</span>
+	</td>
+	<td>
+		<a href="<?php echo($context['user']->url); ?>">
+			<img src="<?php echo(media($context['user']->avatar)); ?>" class="setting-avatar rounded-circle" alt="user avatar">
+			<?php echo($context['user']->username); ?>
+		</a>
+	</td>
+	<td>
+		<span>
+			<?php echo($context['fund']->title); ?>
+		</span>
+	</td>
+	<td>
+		<span>
+			<?php echo($context['fund']->description); ?>
+		</span>
+	</td>
+	<td>
+		<span>
+			<?php echo($context['currency_symbol'].$context['fund']->amount); ?>
+		</span>
+	</td>
+	<td>
+		<span>
+			<?php echo($context['currency_symbol'].$context['fund']->raised); ?>
+		</span>
+	</td>
+	<td>
+	  	<a href="<?php echo($config['site_url']).'/edit_funding/'.$context['fund']->id ?>"  target="_blank" class="btn bg-success admn_table_btn">
+				EDIT
+		</a>
+        <button onclick="Wo_DeleteFund(<?php echo($context['fund']->id); ?>,'hide')" type="button" class="btn bg-danger admn_table_btn">Ignore</button>
+	</td>
+</tr>

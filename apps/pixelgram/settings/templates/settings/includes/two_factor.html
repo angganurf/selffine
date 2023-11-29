@@ -1,0 +1,126 @@
+<div class="pass-active">
+	<h2 class="user_sttng_panel_hd">{{LANG two_factor}}?</h2>
+	<form class="form pp_sett_form" id="two-factor-settings">
+		<?php if ($config['two_factor_type'] == 'both' || $config['two_factor_type'] == 'phone') { ?>
+			<div class="pg_mat_input">
+				<input required="true" type="phone_number" name="phone_number" placeholder="{{LANG phone_number}}" value="<?php echo($context['me']['phone_number']) ?>">
+				<label>{{LANG phone_number}}</label>
+			</div>
+		<?php } ?>
+		
+		<div class="pg_mat_input">
+			<select name="two_factor" class="pg_select_has_label" required="true">
+				<option value="enable" <?php echo ($context['me']['two_factor'] == '1')   ? 'selected' : '';?> >{{LANG enable}}</option>
+				<option value="disable" <?php echo ($context['me']['two_factor'] == '0')   ? 'selected' : '';?> >{{LANG disable}}</option>
+			</select>
+			<label class="pp_mat_label">{{LANG two_factor}}*</label>
+		</div>
+		<div class="pg_sett_save"><button class="btn btn-main btn-mat btn-mat-raised pp_flat_btn" type="submit">{{LANG save_changes}}</button></div>
+		<input type="hidden" name="user_id" value="<?php echo($context['me']['user_id']) ?>">
+		<input type="hidden" name="hash" value="<?php echo($context['csrf_token']) ?>">
+	</form>
+</div>
+<script data-page="two_factor">
+	function verifyTwoCode(self) {
+		$(self).attr('disabled','true');
+		$(self).text("{{LANG please_wait}}");
+		$.post('<?php echo($context['xhr_url']) ?>/two_factor_verify',{code: $('#two_factor_code').val()}, function(data, textStatus, xhr) {
+			$(self).removeAttr('disabled');
+			$(self).text("{{LANG verify}}");
+			if (data.status == 200) {
+				$('#confirmation_code_form_alert').html('<div class="alert alert-success">' + data.message + '</div>');
+				setTimeout(() => {
+					$('#verify_code').modal('hide');
+				},2000);
+			}
+			else{
+				$('#confirmation_code_form_alert').html('<div class="alert alert-danger">' + data.message + '</div>');
+			}
+		});
+	}
+	jQuery(document).ready(function($) {
+		$("form#two-factor-settings").ajaxForm({
+			url: '<?php echo($context['xhr_url']) ?>/two_factor',
+			type: 'POST',
+			dataType: 'json',
+			beforeSubmit: function(arr,form){
+				$(form).find('.pp_load_loader').addClass('loadingg');
+				$(form).find('button[type="submit"]').attr('disabled','true');
+			},
+			success: function(data,stat,xhr,form){
+				scroll2top();
+				if (data.status == 200) {
+					if (typeof data.modal !== 'undefined' && data.modal == 'show') {
+						$('#verify_code').modal('show');
+					}
+					$.toast(data.message,{
+	                	duration: 5000, 
+	                	type: 'success',
+	                	align: 'bottom',
+	                	singleton: true
+	                });
+				}
+				else{
+					$.toast(data.message,{
+	                	duration: 5000, 
+	                	type: 'danger',
+	                	align: 'bottom',
+	                	singleton: true
+	                });
+				}
+				$(form).find('.pp_load_loader').removeClass('loadingg');
+                $(form).find('button[type="submit"]').removeAttr('disabled');
+			}
+		});
+	});
+</script>
+
+<div class="modal fade" id="verify_code" role="dialog">
+	<div class="modal-dialog modal-md wow_mat_mdl">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></button>
+				<h4 class="modal-title" id="two_factor_title">
+					<?php 
+						if ($config['two_factor_type'] == 'both') {
+							echo lang('confirmation_message_email_sent');
+						}
+						elseif ($config['two_factor_type'] == 'email') {
+							echo lang('confirmation_email_sent');
+						}
+						elseif ($config['two_factor_type'] == 'phone') {
+							echo lang('confirmation_message_sent');
+						}
+					?>
+				</h4>
+			</div>
+			<form id="confirmation_code_form" class="confirmation_code_form" method="POST">
+				<div class="modal-body">
+					<div id="confirmation_code_form_alert"></div>
+					<span class="verfy_sett_email_phone_ico hidden"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M21,13.34C20.37,13.12 19.7,13 19,13A6,6 0 0,0 13,19C13,19.34 13.03,19.67 13.08,20H3A2,2 0 0,1 1,18V6C1,4.89 1.89,4 3,4H19A2,2 0 0,1 21,6V13.34M23.5,17L18.5,22L15,18.5L16.5,17L18.5,19L22,15.5L23.5,17M3,6V8L11,13L19,8V6L11,11L3,6Z" /></svg></span>
+					<p id="two_factor_desc">
+						<?php 
+							if ($config['two_factor_type'] == 'both') {
+								echo lang('confirmation_email_message_text');
+							}
+							elseif ($config['two_factor_type'] == 'email') {
+								echo lang('confirmation_email_text');
+							}
+							elseif ($config['two_factor_type'] == 'phone') {
+								echo lang('confirmation_message_text');
+							}
+						?>
+					</p>
+					<div class="wow_form_fields verfy_sett_email_phone">
+						<label for="code">{{LANG confirmation_code}}</label>  
+						<input id="two_factor_code" name="code" type="text" autocomplete="off">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="ball-pulse"><div></div><div></div><div></div></div>
+					<button id="confirmation_code_form_btn" type="button" class="btn btn-info pp_flat_btn" onclick="verifyTwoCode(this)">{{LANG verify}}</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

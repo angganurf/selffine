@@ -1,0 +1,267 @@
+<?php 
+$page = (!empty($_GET['page-id'])) ? $_GET['page-id'] : 1;
+$admin::$db->pageLimit = 30;
+$t_users   = T_USERS;
+$t_reports = T_FUND_REPORTS;
+$link = '';
+$admin::$db->join("`$t_users` u",'u.`user_id` = r.`user_id`','INNER');
+
+$reports = $admin::$db->orderBy('r.`id`', 'DESC')->paginate("`$t_reports` r",$page,array(
+    'r.`id`',
+    'r.`time`',
+    'r.`fund_id`',
+    'r.`text`',
+    'u.`username`',
+    'u.`avatar`',
+));
+
+if (($page > $admin::$db->totalPages) && !empty($_GET['page-id'])) {
+	header("Location: " . pxp_acp_link('fund-reports'));
+	exit();
+}
+?>
+<div class="container-fluid">
+    <div>
+        <h3>Manage reports</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Reports</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Manage reports</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Manage fund requests reports</h6>
+                    <div class="table-responsive1">
+                        <table class="table table-bordered table-striped table-hover table-users">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="check-all" class="filled-in check-all" ><label for="check-all"></label></th>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Reported</th>
+                                    <th>Fund url</th>
+                                    <th>Message</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                global $site_url;
+                                    if (!empty($reports)) {
+                                        foreach ($reports as $key => $context['report']) {
+                                            $context['report'] = o2array($context['report']);
+                                            $hash = $admin::$db->where('id',$context['report']['fund_id'])->getValue(T_FUNDING,'hashed_id');
+                                            $context['fund_url'] = $site_url . '/funding/' . $hash;
+                                            echo $admin->loadPage('fund-reports/list');
+                                        }
+                                    }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="wo-admincp-feturepager">
+                      <div class="pull-left">
+                        <span>
+                          <?php echo "Showing $page out of " . $admin::$db->totalPages; ?>
+                        </span>
+                      </div>
+                      <div class="pull-right">
+                        <nav>
+                          <ul class="pagination">
+                            <li>
+                              <a href="<?php echo pxp_acp_link('fund-reports?page-id=1').$link; ?>" data-ajax="?path=fund-reports&page-id=1<?php echo($link); ?>" class="waves-effect" title='First Page'>
+                                  <i class="material-icons">first_page</i>
+                              </a>
+                            </li>
+                            <?php if ($page > 1) {  ?>
+                              <li>
+                                  <a href="<?php echo pxp_acp_link('fund-reports?page-id=' . ($page - 1)).$link; ?>" data-ajax="?path=fund-reports&page-id=<?php echo($page - 1) ?><?php echo($link); ?>" class="waves-effect" title='Previous Page'>
+                                      <i class="material-icons">chevron_left</i>
+                                  </a>
+                              </li>
+                            <?php  } ?>
+
+                            <?php 
+                              $nums       = 0;
+                              $nums_pages = ($page > 4) ? ($page - 4) : $page;
+
+                              for ($i=$nums_pages; $i <= $admin::$db->totalPages; $i++) { 
+                                if ($nums < 20) {
+                            ?>
+                              <li class="<?php echo ($page == $i) ? 'active' : ''; ?>">
+                                <a href="<?php echo pxp_acp_link('fund-reports?page-id=' . ($i)).$link; ?>" data-ajax="?path=fund-reports&page-id=<?php echo($i) ?><?php echo($link); ?>" class="waves-effect">
+                                  <?php echo $i ?>   
+                                </a>
+                              </li>
+
+                            <?php } $nums++; }?>
+
+                            <?php if ($admin::$db->totalPages > $page) { ?>
+                              <li>
+                                  <a href="<?php echo pxp_acp_link('fund-reports?page-id=' . ($page + 1)).$link; ?>" data-ajax="?path=fund-reports&page-id=<?php echo($page + 1) ?><?php echo($link); ?>" class="waves-effect" title="Next Page">
+                                      <i class="material-icons">chevron_right</i>
+                                  </a>
+                              </li>
+                            <?php } ?>
+                            <li>
+                              <a href="<?php echo pxp_acp_link('fund-reports?page-id=' . ($admin::$db->totalPages)).$link; ?>" data-ajax="?path=fund-reports&page-id=<?php echo($admin::$db->totalPages) ?><?php echo($link); ?>" class="waves-effect" title='Last Page'>
+                                  <i class="material-icons">last_page</i>
+                              </a>
+                            </li>
+                          </ul>
+                        </nav>
+                      </div>
+                      <div class="clearfix"></div>
+                      <div class="row">
+                          <div class="col-lg-2 col-md-2">
+                              <span>Action</span>
+                              <select class="form-control show-tick" id="action_type">
+                                  <option value="mark_safe">Mark Safe</option>
+                                  <option value="delete">Delete</option>
+                              </select>
+                          </div>
+                          <div class="col-lg-3 col-md-3">
+                              <span>&nbsp;</span>
+                              <button type="button" class="btn btn-info waves-effect delete-selected d-block" disabled>Submit<span></span></button>
+                          </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<!-- #END# Vertical Layout -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModal1Label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal1Label">Mark Safe?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to mark this fund safe?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Mark Safe</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="DeleteModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModal1Label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal1Label">Delete post?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this post?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="SelectedDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModal1Label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal1Label">Delete report?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure that you want to remove the selected report(s)?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="DeleteSelected()" data-dismiss="modal">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.check-all').on('click', function(event) {
+        $('input:checkbox').not(this).prop('checked', this.checked);
+    });
+    $('.delete-checkbox, .check-all').change(function(event) {
+        $('.delete-selected').attr('disabled', false);
+        $('.delete-selected').find('span').text(' (' + $('.delete-checkbox:checked').length + ')');
+    });
+    $('.delete-selected').on('click', function(event) {
+        event.preventDefault();
+        action_type = $('#action_type').val();
+        if (action_type == 'mark_safe') {
+            $('#SelectedDeleteModal').find('.modal-body').html('Are you sure that you want to mark safe the selected report(s)?');
+            $('#SelectedDeleteModal').find('#exampleModal1Label').html('mark safe report(s)');
+        }
+        else{
+            $('#SelectedDeleteModal').find('.modal-body').html('Are you sure that you want to '+action_type+' the selected post(s)?');
+            $('#SelectedDeleteModal').find('#exampleModal1Label').html(action_type+' post(s)');
+        }
+        $('#SelectedDeleteModal').modal('show');
+    });
+    function DeleteSelected() {
+        action_type = $('#action_type').val();
+        data = new Array();
+        $('td input:checked').parents('tr').each(function () {
+            data.push($(this).attr('data_selected'));
+        });
+        $('.delete-selected').attr('disabled', true);
+        $('.delete-selected').text('Please wait..');
+        $.post(acpajax_url('delete_multi_fund_report'), {ids: data,type: action_type}, function () {
+            if (action_type == 'delete') {
+                $.each( data, function( index, value ){
+                    $('#list-' + value).remove();
+                });
+            }
+            else{
+                location.reload();
+            }
+            $('.delete-selected').text('Submit');
+        });
+    }
+    function MarkSafe(id,type = 'show'){
+        if (type == 'hide') {
+            $('#DeleteModal').find('.btn-secondary').attr('onclick', "MarkSafe('"+id+"')");
+            $('#DeleteModal').modal('show');
+            return false;
+        }
+        $('#list-' + id).fadeOut(300, function() {
+            $(this).remove();
+        });
+        $.post(acpajax_url('delete-fund-report'), {id:id,t:2});
+    }
+    function DeletePost(id,type = 'show'){
+        if (type == 'hide') {
+            id = $('#list-' + id).attr('data-post');
+            $('#DeleteModal2').find('.btn-primary').attr('onclick', "DeletePost('"+id+"')");
+            $('#DeleteModal2').modal('show');
+            return false;
+        }
+        $('[data-post="'+id+'"]').fadeOut(300, function() {
+            $(this).remove();
+        });
+        $.post(acpajax_url('delete-fund'), {id:id});
+    }
+</script>

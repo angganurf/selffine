@@ -1,0 +1,36 @@
+<div class="item wrapper lazy_" data-post-id="<?php echo($post_data['pid']) ?>">
+	<div class="explore-postset" id="<?php echo($post_data['boosted'] == 1 ? 0 : $post_data['pid']) ?>">
+		<?php if ($post_data['type'] == 'video') { 
+			if ($post_data['is_should_hide']) { ?>
+			<div class="valign is_should_hide1 text_m_reprted-<?php echo($post_data['pid']) ?>">
+				<p class="is_should_hide3">{{LANG post_m_report}}</p>
+				<div class="is_should_hide4">
+					<a class="btn btn-mat is_should_hide5" href="javascript:void(0);" onclick="show_m_reprted(<?php echo($post_data['pid']) ?>)">{{LANG click_to_see}}</a>
+				</div>
+			</div>
+		<?php } } ?>
+		<div class="image" onclick="lightbox('<?php echo($post_data['pid']) ?>','<?php echo($context['app_name']) ?>');">
+			<img src="<?php echo(media($post_data['thumb'])) ?>" />
+			<?php if ($post_data['type'] != 'image' && $post_data['type'] != 'gif' && $post_data['type'] != 'fetched') { ?>
+				<span class="category">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M17 9.2l5.213-3.65a.5.5 0 0 1 .787.41v12.08a.5.5 0 0 1-.787.41L17 14.8V19a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v4.2zM5 8v2h2V8H5z"/></svg>
+				</span>
+			<?php } ?>
+			<div class="valign caption">
+				<?php if ($post_data['boosted'] == 1 && $context['is_boosted'] == false) { ?>
+					<b class="promoted_postt"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7,2V13H10V22L17,10H13L17,2H7Z"></path></svg> {{LANG promoted_post}}</b>
+				<?php $context['is_boosted'] = true; } ?>
+				<?php if ($post_data['boosted'] == 0 && $post_data['is_bought'] == 0 && !empty($post_data['blured_file']) && !$post_data['is_owner']) { ?>
+					<b class="locked_postt"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"></path></svg> {{LANG locked_post}}</b>
+				<?php } ?>
+
+				<img src="<?php echo(media($post_data['avatar'])) ?>" class="img-circle">
+				<h3><?php echo($post_data['username']) ?></h3>
+				<p>
+					<span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M21.179 12.794l.013.014L12 22l-9.192-9.192.013-.014A6.5 6.5 0 0 1 12 3.64a6.5 6.5 0 0 1 9.179 9.154z"/></svg> <?php echo($post_data['likes']) ?></span>
+					<span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M14.45 19L12 22.5 9.55 19H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h18a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-6.55z"/></svg> <?php echo($post_data['comments']) ?></span>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>

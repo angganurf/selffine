@@ -1,0 +1,24 @@
+<div class="item wrapper lazy_"  data-post-id="<?php echo($post_data['post_id']) ?>">
+	<div class="explore-postset" id="<?php echo($post_data['post_id']) ?>" data-post-id="<?php echo($post_data['post_id']) ?>" data-post-views="<?php echo($post_data['views']) ?>" data-post-sells="<?php echo($post_data['sells']) ?>" data-post-download="<?php echo($post_data['downloads']) ?>" data-post-date="<?php echo($post_data['created_date']) ?>"  style="position: relative;">
+		<div class="image" onclick="storelightbox('<?php echo($post_data['post_id']) ?>','<?php echo($context['app_name']) ?>');" style="background-image: url('<?php echo(media($post_data['thumb'])) ?>');">
+			<div class="pp_store_item">
+				<span class="category">
+					<div class="pp_store_item_lilinfo">
+						<p><?php echo($post_data['category_name']) ?></p>
+						<b><?php echo($context['currency_symbol'].getStoreItemPrice($post_data['license_options'])) ?></b>
+						<div class="caption">
+							<div class="user__">
+								<?php if( !$context['owner'] ){?>
+									<img src="<?php echo(media($post_data['avatar'])) ?>" class="img-circle">
+									<a href="<?php echo(un2url($post_data['username'])) ?>" class="publisher-name"><?php echo($post_data['username']) ?></a>
+								<?php } ?>
+								<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" /></svg> <?php echo($post_data['views']) ?></span>
+								<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" /></svg> <?php echo($post_data['downloads']) ?></span>
+							</div>
+						</div>
+					</div>
+				</span>
+			</div>
+		</div>
+	</div>
+</div>

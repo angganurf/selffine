@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<?php if ($context['app_name'] == 'funding' && !empty($context['fund']) && !empty($context['fund']->image)) { ?>
+		<meta name="title" content="{{TITLE}}">
+		<meta name="description" content="<?php echo($context['fund']->description) ?>">
+		<meta property="og:image" content="<?php echo($context['fund']->image) ?>" />
+	<?php }else{ ?>
+
+        <?php if ($context['app_name'] == 'posts'){ ?>
+            <meta name="title" content="{{TITLE}}">
+            <meta name="description" content="<?php echo(strip_tags(htmlentities( $context['post_data']['description'] )) ) ?>">
+            <?php if( isset( $context['post_data']['media_set'] ) ){ ?>
+                <?php if( isset( $context['post_data']['media_set'][0] ) ){ ?>
+                    <meta property="og:image" content="<?php echo( Media( $context['post_data']['media_set'][0]['file'] ) ) ?>" />
+                <?php } ?>
+            <?php } ?>
+		<?php }else if ($context['app_name'] == 'store'){ ?>
+			<meta name="title" content="{{TITLE}} - {{CONFIG site_name}}">
+			<meta name="description" content="{{CONFIG site_desc}}">
+
+        <?php }else{ ?>
+		    <meta name="title" content="{{CONFIG site_name}}">
+		    <meta name="description" content="{{CONFIG site_desc}}">
+        <?php } ?>
+			<meta name="twitter:card" content="summary_large_image">
+			<meta name="twitter:title" content="{{CONFIG site_name}} - {{TITLE}}" />
+			<meta name="twitter:description" content="{{CONFIG site_desc}}" />
+			<meta name="twitter:image" content="<?php echo isset($context['post_data']['media_set'][0]['file']) ? Media( $context['post_data']['media_set'][0]['file'] ) : '';?>" />
+			<meta name="twitter:creator" content="@{{CONFIG site_name}}">
+	<?php } ?>
+
+
+
+	<meta name="keywords" content="{{CONFIG meta_keywords}}">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<?php if($context['app_name'] == 'profile' && !$context['user_data']['search_engines']){ ?>
+	<meta name="robots" content="noindex">
+    <meta name="googlebot" content="noindex">
+    <?php } ?>
+	<title>{{TITLE}}</title>
+
+	<?php if($context['app_name'] == 'profile' && $context['user_data']['search_engines']){ ?>
+		<link href="<?php echo $context["user_data"]["url"];?>" rel="canonical">
+		<meta name="robots" content="index, follow">
+		<meta property="og:title" content="{{TITLE}}" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="<?php echo $context['user_data']['avatar']; ?>" />
+		<meta property="og:description" content="{{CONFIG site_desc}}" />
+
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="https://demo.wowonder.com/upload/photos/d-avatar.jpg?cache=0" />
+		<meta property="og:image:secure_url" content="<?php echo $context['user_data']['avatar']; ?>" />
+		<meta property="og:description" content="{{CONFIG site_desc}}" />
+		<meta property="og:title" content="{{TITLE}}" />
+
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="{{TITLE}}" />
+		<meta name="twitter:description" content="{{CONFIG site_desc}}" />
+		<meta name="twitter:image" content="<?php echo $context['user_data']['avatar']; ?>" />
+		<meta name="twitter:creator" content="@{{CONFIG site_name}}">
+
+
+	<?php }?>
+	<?php if ($context['app_name'] == 'blog') {?>
+		<meta property="og:title" content="{{TITLE}}" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="{{CONFIG site_url}}/media/img/icon.{{CONFIG favicon_extension}}" />
+		<meta property="og:description" content="{{CONFIG site_desc}}" />
+	<?php } ?>
+	<?php if ($context['app_name'] == 'article') {?>
+		<meta property="og:title" content="{{TITLE}}" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="{{CONFIG site_url}}/media/img/icon.{{CONFIG favicon_extension}}" />
+		<meta property="og:description" content="{{CONFIG site_desc}}" />
+	<?php } ?>
+
+	<?php if ($context['app_name'] == 'home') { ?>
+		<meta property="og:title" content="{{TITLE}}" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="{{CONFIG site_url}}/media/img/icon.{{CONFIG favicon_extension}}" />
+		<meta property="og:description" content="{{CONFIG site_desc}}" />
+	<?php } ?>
+
+	<?php if ($context['app_name'] == 'posts') {?>
+		<meta property="og:title" content="{{TITLE}}" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="<?php echo $context['post_data']['avatar'];?>" />
+		<meta property="og:description" content="{{TITLE}}" />
+	<?php } ?>
+
+	<?php if ($context['app_name'] == 'store') {?>
+		<meta property="og:title" content="<?php echo (isset($context['post_data']['title']) ? $context['post_data']['title'] : 'store' );?>" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="<?php echo (isset($context['post_data']['avatar']) ? $context['post_data']['avatar'] : '{{CONFIG site_url}}/media/img/icon.{{CONFIG favicon_extension}}' );?>" />
+		<meta property="og:description" content="<?php echo (isset($context['post_data']['tags']) ? $context['post_data']['tags'] : '{{CONFIG site_desc}}' );?>" />
+	<?php } ?>
+
+	<link rel="shortcut icon" type="image/png" href="{{CONFIG site_url}}/media/img/icon.{{CONFIG favicon_extension}}"/>
+	<!-- <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.9.6/dist/ffmpeg.min.js"></script> -->
+	<script src="{{THEME_URL}}/main/static/js/libs/jquery-3.2.1.js"></script>
+	<script src="{{THEME_URL}}/main/static/js/libs/jquery-ui.min.js"></script>
+	<script src="{{THEME_URL}}/main/static/js/libs/tag-it.min.js"></script>
+	<link rel="stylesheet" href="{{THEME_URL}}/main/static/css/libs/jquery-ui.min.css">
+	<link rel="stylesheet" href="{{THEME_URL}}/main/static/css/libs/jquery.tagit.css">
+	<script src="{{THEME_URL}}/main/static/css/libs/bs3/js/bootstrap.js"></script>
+	<link rel="stylesheet" href="{{THEME_URL}}/main/static/css/libs/bs3/css/bootstrap.css">
+	<script src="{{THEME_URL}}/main/static/js/libs/highcharts/highcharts.js"></script>
+	<script src="{{THEME_URL}}/main/static/js/libs/highcharts/exporting.js"></script>
+	<script src="{{THEME_URL}}/main/static/js/libs/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<?php if ($context['app_name'] == 'welcome' || $context['app_name'] == 'signup' || $context['app_name'] == 'sms_validate' || $context['app_name'] == 'two_factor') { ?>
+	<link rel="stylesheet" href="{{THEME_URL}}/main/static/css/styles.welcome.css">
+    <?php } else{ ?>
+	<link rel="stylesheet" href="{{THEME_URL}}/main/static/css/styles.master.css">
+    <?php } ?>
+	<?php if ($_COOKIE['mode'] == 'night') { ?>
+	<link rel="stylesheet" id="night_mode_css" href="{{THEME_URL}}/main/static/css/styles.master_night.css">
+    <?php } ?>
+    <?php if ($context['app_name'] == 'welcome' && $config['recaptcha'] == 'on') { ?>
+	<script type="text/javascript" src='https://www.google.com/recaptcha/api.js'></script>
+    <?php } ?>
+
+
+    <?php if (!empty($context['app_name']) && ($context['app_name'] == 'explore' || $context['app_name'] == 'tags' || $context['app_name'] == 'profile' || $context['app_name'] == 'home') ) { ?>
+    <?php } ?>
+    <script src="{{THEME_URL}}/main/static/js/libs/gridAlicious/jquery.grid-a-licious.js"></script>
+
+
+	<script src="{{THEME_URL}}/main/static/js/libs/jquery-form.v3.51.0.js"></script>
+	<script src="{{THEME_URL}}/main/static/js/script.master.js"></script>
+	<link href="{{THEME_URL}}/main/static/css/libs/Roboto.css" rel="stylesheet">
+	<script src="{{THEME_URL}}/main/static/js/libs/afterglow.min.js" class="home_script"></script>
+	<script src="{{THEME_URL}}/main/static/js/libs/jquery.pause.js" class="home_script"></script>
+
+	<?php if ($context['app_name'] == 'profile') { ?>
+	<script src="{{THEME_URL}}/main/static/js/libs/jquery.equalheights.js" class="profile_script"></script>
+	<?php } ?>
+
+	<?php if ($config['upload_360_videos'] == 'on') { ?>
+		<link rel="stylesheet" href="{{THEME_URL}}/main/static/css/libs/videojs-vr.css">
+		<script src="{{THEME_URL}}/main/static/js/libs/video.js" integrity="sha256-vrHnet1gn0rfMfcNSTaMvp7bW1MU+hBXCuyPjfdxXhc=" crossorigin="anonymous"></script>
+		<script src="{{THEME_URL}}/main/static/js/libs/videojs-vr.js" integrity="sha256-aVLbKVeaTsLwmKYjya1a4xZGhAaG7j3Z4Ll7SkzSa6A=" crossorigin="anonymous"></script>
+	<?php } ?>
+	<script>
+		function xhr_url(){
+			return '{{CONFIG site_url}}/aj/';
+		}
+
+		function site_url(path){
+			return '{{CONFIG site_url}}/' + path;
+		}
+		function ajax_load_url(){
+			return '{{CONFIG site_url}}/load/';
+		}
+		function get_theme(){
+			return '{{THEME_URL}}';
+		}
+        window.logo = '{{CONFIG site_url}}/media/img/logo.{{CONFIG logo_extension}}';
+		window.light_logo = '{{CONFIG site_url}}/media/img/light-logo.{{CONFIG logo_extension}}';
+	</script>
+
+	<script src="{{THEME_URL}}/main/static/js/libs/emoji/jquery-textcomplete/dist/jquery.textcomplete.min.js"></script>
+	<script src="{{THEME_URL}}/main/static/js/libs/emoji/emojionearea/dist/emojionearea.js"></script>
+	<link rel="stylesheet" type="text/css" href="{{THEME_URL}}/main/static/js/libs/emoji/emojionearea/dist/emojionearea.min.css"/>
+	<script src="{{THEME_URL}}/main/static/js/libs/lazyload.min.js"></script>
+	<script src="{{THEME_URL}}/main/static/js/bootstrap-select.min.js"></script>
+	<link rel="stylesheet" href="{{THEME_URL}}/main/static/css/bootstrap-select.min.css">
+	<?php if ($config['razorpay'] == "on" && !empty($config['razorpay_key']) && !empty($config['razorpay_secret'])) { ?>
+		<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+	<?php } ?>
+
+	<?php if ($config['checkout_payment'] == 'yes') { ?>
+        <script type="text/javascript" src="https://www.2checkout.com/checkout/api/2co.min.js"></script>
+	<?php } ?>
+
+	<?php
+	if(
+		IS_LOGGED === true &&
+		$config['twilio_video_chat'] == 'on'
+	){?>
+		<script src="{{THEME_URL}}/main/static/js/libs/twilio-video.min.js"></script>
+		<!-- <script type="text/javascript" src="https://media.twiliocdn.com/sdk/js/client/releases/1.4.14/twilio.js"></script>
+		<script type="text/javascript" src="https://media.twiliocdn.com/sdk/js/video/releases/1.0.0/twilio-video.js"></script> -->
+		<!-- <script src="//media.twiliocdn.com/sdk/js/video/releases/2.0.0/twilio-video.min.js"></script> -->
+    <?php
+	}
+	?>
+
+	<?php if ($config['agora_live_video'] == 1 || $config['agora_chat_video'] == 'on') { ?>
+		<link rel="stylesheet" href="{{THEME_URL}}/main/static/player/mediaelementplayer.css" type="text/css"/>
+		<script src="{{THEME_URL}}/main/static/player/mediaelement-and-player.js"></script>
+		<script src="{{THEME_URL}}/main/static/js/agora.js"></script>
+	<?php } ?>
+</head>
+<script type="text/javascript">
+	$(document).on('click', 'a[data-ajax]', function(event) {
+		$('body').addClass('app-loading');
+		$('#page_content').addClass('opacity_start');
+		event.preventDefault();
+
+		if ($('#live_post_id').length > 0) {
+			DeleteLive();
+			window.location = $(this).attr('href');
+			return false;
+    	}
+
+		var url = $(this).attr('data-ajax');
+		clearInterval(window.chat_interval);
+		$(".lightbox__container").empty();
+		if ($('video').length > 0) {
+			$('video')[0].pause();
+		}
+		$.post(site_url(url), {param1: 'value1'}, function(htmlData, textStatus, xhr) {
+			window.scrollTo(0,0);
+			data = JSON.parse($(htmlData).filter('#json-data').val());
+			$('#page_content').html(htmlData);
+			if (typeof(data.url)  == 'undefined') {
+				//window.location.href = site_url('');
+			}
+			else{
+				if (!data.footer) {
+					$('footer').hide();
+				}else{
+					$('footer').show();
+				}
+				if (!data.header) {
+					$('#header_nav').hide();
+				}else{
+					$('#header_nav').show();
+				}
+				window.history.pushState({state:'new'},'', site_url(data.url));
+				$('title').html(data.page_title);
+				if (data.app_name == 'settings' || data.app_name == 'profile') {
+					$('#avatar_active').addClass('active');
+				}
+				else{
+					$('#avatar_active').removeClass('active');
+				}
+				if (data.app_name == 'explore') {
+					$('#explore_nav').addClass('active');
+					$('#home_nav').removeClass('active');
+					$('#reels_nav').removeClass('active');
+					$('.home_script').remove();
+					$('.profile_script').remove();
+					$('.posts_script').remove();
+				}
+				if (data.app_name == 'home') {
+					$('#home_nav').find('a').html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#66757f" class="feather feather-home"><defs xmlns="http://www.w3.org/2000/svg"><linearGradient x1="19.28%" y1="86.72%" x2="88.05%" y2="12.24%" id="home"><stop stop-color="#5cb933" offset="0%"/><stop stop-color="#459522" offset="49.5%"/><stop stop-color="#41991a" offset="100%"/></linearGradient></defs><path d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z" fill="url(#home)"/></svg>  <span>{{LANG home}}</span>');
+					$('#explore_nav').find('a').html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#66757f" class="feather feather-compass"><path d="M7,17L10.2,10.2L17,7L13.8,13.8L7,17M12,11.1A0.9,0.9 0 0,0 11.1,12A0.9,0.9 0 0,0 12,12.9A0.9,0.9 0 0,0 12.9,12A0.9,0.9 0 0,0 12,11.1M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z" /></svg> <span>{{LANG explore}}</span>');
+					$('#reels_nav').find('a').html('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" style="enable-background:new 0 0 64 64;" xml:space="preserve" class="feather"> <style type="text/css"> .greel-st0{fill:#727372;} .greel-st1{fill:url(#SVGID_1_);} .greel-st2{fill:url(#SVGID_2_);} .greel-st3{fill:url(#SVGID_3_);} .greel-st4{fill:url(#SVGID_4_);} .greel-st5{fill:url(#SVGID_5_);} .greel-st6{fill:url(#SVGID_6_);} .greel-st7{fill:url(#SVGID_7_);} .greel-st8{fill:url(#SVGID_8_);} .greel-st9{fill:url(#SVGID_9_);} </style> <g> <g> <g> <path class="greel-st0" d="M33.4,8l0.7,0.7L34.8,8H33.4z"/> <path class="greel-st0" d="M56.8,16.8c-0.6-2.5-2-4.7-3.9-6.3c-1.1-0.9-2.3-1.5-3.7-2C48.1,8.2,47,8,45.8,8h-11l-0.7,0.7L33.4,8H18.2 c-1.6,0-3.1,0.3-4.5,0.9c-3.3,1.4-5.7,4.4-6.5,7.9C7,17.6,7,18.4,7,19.3v27.6c0,6.2,5,11.3,11.3,11.3h27.6C52,58.1,57,53,57,46.8 V19.3C57,18.4,56.9,17.6,56.8,16.8z M53,46.8c0,4-3.3,7.3-7.3,7.3H18.2c-4,0-7.3-3.3-7.3-7.3V19.3c0-0.8,0.1-1.7,0.4-2.4 c0.8-2.4,2.9-4.3,5.5-4.7c0.4-0.1,0.9-0.1,1.3-0.1h27.6c1.6,0,3,0.5,4.2,1.4c1.2,0.8,2.1,2.1,2.6,3.5c0.3,0.8,0.4,1.6,0.4,2.4 V46.8z"/> </g> <g> <path class="greel-st0" d="M53,19.3v1.6H11v-1.6c0-0.8,0.1-1.7,0.4-2.4h41.2C52.9,17.6,53,18.4,53,19.3z"/> </g> <g> <g> <polygon class="greel-st0" points="42.2,16.8 36.5,16.8 34.1,14.4 31.7,12 37.4,12 41.5,16.2 				"/> <polygon class="greel-st0" points="42.5,20.8 41.5,21.8 37.4,26 31.7,26 36.9,20.8 				"/> </g> <g> <path class="greel-st0" d="M27.3,16.8h-5.7l-4.7-4.7c0.4-0.1,0.9-0.1,1.3-0.1h4.2l4.2,4.2L27.3,16.8z"/> <polygon class="greel-st0" points="27.6,20.8 22.4,26 16.8,26 21.9,20.8 				"/> </g> </g> <g> <rect x="11" y="26" class="greel-st0" width="42.1" height="4"/> </g> </g> <polygon class="greel-st0" points="39,41.2 26.1,33.7 26.1,48.7 	"/> </g> </svg> <span>{{LANG reels}}</span>');
+					$('.profile_script').remove();
+					$('.posts_script').remove();
+					$('#home_nav').addClass('active');
+					$('#explore_nav').removeClass('active');
+					$('#reels_nav').removeClass('active');
+					if ($('.home_script').length == 0) {
+						// $('head').append($('<script>',{
+						// 	src: "{{THEME_URL}}/main/static/js/libs/afterglow.min.js",
+						// 	class: "home_script"
+						// }),$('<script>',{
+						// 	src: "{{THEME_URL}}/main/static/js/libs/jquery.pause.js",
+						// 	class: "home_script"
+						// }));
+					}
+				}
+				if (data.app_name == 'profile') {
+					$('.home_script').remove();
+					$('.posts_script').remove();
+					$('#home_nav').removeClass('active');
+					$('#explore_nav').removeClass('active');
+					$('#reels_nav').removeClass('active');
+					if ($('.profile_script').length == 0) {
+						$('head').append($('<script>',{
+							src: "{{THEME_URL}}/main/static/js/libs/jquery.equalheights.js",
+							class: "profile_script"
+						}));
+					}
+				}
+				if (data.app_name == 'explore') {
+					$('#home_nav').find('a').html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#66757f" class="feather feather-home"><path d="M9,19V13H11L13,13H15V19H18V10.91L12,4.91L6,10.91V19H9M12,2.09L21.91,12H20V21H13V15H11V21H4V12H2.09L12,2.09Z" /></svg> <span>{{LANG home}}</span>');
+					$('#explore_nav').find('a').html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#66757f" class="feather feather-compass"><defs xmlns="http://www.w3.org/2000/svg"><linearGradient x1="19.28%" y1="86.72%" x2="88.05%" y2="12.24%" id="explore"><stop stop-color="#F47B8F" offset="0%"/><stop stop-color="#EE5D6D" offset="100%"/></linearGradient></defs><path d="M12 10.9c-.61 0-1.1.49-1.1 1.1s.49 1.1 1.1 1.1c.61 0 1.1-.49 1.1-1.1s-.49-1.1-1.1-1.1zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19z" fill="url(#explore)"/></svg> <span>{{LANG explore}}</span>');
+					$('#reels_nav').find('a').html('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" style="enable-background:new 0 0 64 64;" xml:space="preserve" class="feather"> <style type="text/css"> .greel-st0{fill:#727372;} .greel-st1{fill:url(#SVGID_1_);} .greel-st2{fill:url(#SVGID_2_);} .greel-st3{fill:url(#SVGID_3_);} .greel-st4{fill:url(#SVGID_4_);} .greel-st5{fill:url(#SVGID_5_);} .greel-st6{fill:url(#SVGID_6_);} .greel-st7{fill:url(#SVGID_7_);} .greel-st8{fill:url(#SVGID_8_);} .greel-st9{fill:url(#SVGID_9_);} </style> <g> <g> <g> <path class="greel-st0" d="M33.4,8l0.7,0.7L34.8,8H33.4z"/> <path class="greel-st0" d="M56.8,16.8c-0.6-2.5-2-4.7-3.9-6.3c-1.1-0.9-2.3-1.5-3.7-2C48.1,8.2,47,8,45.8,8h-11l-0.7,0.7L33.4,8H18.2 c-1.6,0-3.1,0.3-4.5,0.9c-3.3,1.4-5.7,4.4-6.5,7.9C7,17.6,7,18.4,7,19.3v27.6c0,6.2,5,11.3,11.3,11.3h27.6C52,58.1,57,53,57,46.8 V19.3C57,18.4,56.9,17.6,56.8,16.8z M53,46.8c0,4-3.3,7.3-7.3,7.3H18.2c-4,0-7.3-3.3-7.3-7.3V19.3c0-0.8,0.1-1.7,0.4-2.4 c0.8-2.4,2.9-4.3,5.5-4.7c0.4-0.1,0.9-0.1,1.3-0.1h27.6c1.6,0,3,0.5,4.2,1.4c1.2,0.8,2.1,2.1,2.6,3.5c0.3,0.8,0.4,1.6,0.4,2.4 V46.8z"/> </g> <g> <path class="greel-st0" d="M53,19.3v1.6H11v-1.6c0-0.8,0.1-1.7,0.4-2.4h41.2C52.9,17.6,53,18.4,53,19.3z"/> </g> <g> <g> <polygon class="greel-st0" points="42.2,16.8 36.5,16.8 34.1,14.4 31.7,12 37.4,12 41.5,16.2 				"/> <polygon class="greel-st0" points="42.5,20.8 41.5,21.8 37.4,26 31.7,26 36.9,20.8 				"/> </g> <g> <path class="greel-st0" d="M27.3,16.8h-5.7l-4.7-4.7c0.4-0.1,0.9-0.1,1.3-0.1h4.2l4.2,4.2L27.3,16.8z"/> <polygon class="greel-st0" points="27.6,20.8 22.4,26 16.8,26 21.9,20.8 				"/> </g> </g> <g> <rect x="11" y="26" class="greel-st0" width="42.1" height="4"/> </g> </g> <polygon class="greel-st0" points="39,41.2 26.1,33.7 26.1,48.7 	"/> </g> </svg> <span>{{LANG reels}}</span>');
+				}
+				if (data.app_name == 'reels') {
+					$('#home_nav').find('a').html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#66757f" class="feather feather-home"><path d="M9,19V13H11L13,13H15V19H18V10.91L12,4.91L6,10.91V19H9M12,2.09L21.91,12H20V21H13V15H11V21H4V12H2.09L12,2.09Z" /></svg> <span>{{LANG home}}</span>');
+					$('#explore_nav').find('a').html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#66757f" class="feather feather-compass"><path d="M7,17L10.2,10.2L17,7L13.8,13.8L7,17M12,11.1A0.9,0.9 0 0,0 11.1,12A0.9,0.9 0 0,0 12,12.9A0.9,0.9 0 0,0 12.9,12A0.9,0.9 0 0,0 12,11.1M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z" /></svg> <span>{{LANG explore}}</span>');
+					$('#reels_nav').find('a').html('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" style="enable-background:new 0 0 64 64;" xml:space="preserve" class="feather"> <style type="text/css"> .reel-st0{fill:#727372;} .reel-st1{fill:url(#SVGID_1_);} .reel-st2{fill:url(#SVGID_2_);} .reel-st3{fill:url(#SVGID_3_);} .reel-st4{fill:url(#SVGID_4_);} .st5{fill:url(#SVGID_5_);} .reel-st6{fill:url(#SVGID_6_);} .reel-st7{fill:url(#SVGID_7_);} .reel-st8{fill:url(#SVGID_8_);} .reel-st9{fill:url(#SVGID_9_);} </style> <g> <g> <g> <linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="0.763" y1="9.9174" x2="56.443" y2="7.2774"> <stop  offset="0" style="stop-color:#1A6DFF"/> <stop  offset="1" style="stop-color:#C822FF"/> </linearGradient> <path class="reel-st1" d="M33.4,8l0.7,0.7L34.8,8H33.4z"/> <linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="1.9269" y1="34.4659" x2="57.6069" y2="31.8259"> <stop  offset="0" style="stop-color:#1A6DFF"/> <stop  offset="1" style="stop-color:#C822FF"/> </linearGradient> <path class="reel-st2" d="M56.8,16.8c-0.6-2.5-2-4.7-3.9-6.3c-1.1-0.9-2.3-1.5-3.7-2C48.1,8.2,47,8,45.8,8h-11l-0.7,0.7L33.4,8H18.2 c-1.6,0-3.1,0.3-4.5,0.9c-3.3,1.4-5.7,4.4-6.5,7.9C7,17.6,7,18.4,7,19.3v27.6c0,6.2,5,11.3,11.3,11.3h27.6C52,58.1,57,53,57,46.8 V19.3C57,18.4,56.9,17.6,56.8,16.8z M53,46.8c0,4-3.3,7.3-7.3,7.3H18.2c-4,0-7.3-3.3-7.3-7.3V19.3c0-0.8,0.1-1.7,0.4-2.4 c0.8-2.4,2.9-4.3,5.5-4.7c0.4-0.1,0.9-0.1,1.3-0.1h27.6c1.6,0,3,0.5,4.2,1.4c1.2,0.8,2.1,2.1,2.6,3.5c0.3,0.8,0.4,1.6,0.4,2.4 V46.8z"/> </g> <g> <linearGradient id="SVGID_3_" gradientUnits="userSpaceOnUse" x1="1.2556" y1="20.3077" x2="56.9356" y2="17.6677"> <stop  offset="0" style="stop-color:#1A6DFF"/> <stop  offset="1" style="stop-color:#C822FF"/> </linearGradient> <path class="reel-st3" d="M53,19.3v1.6H11v-1.6c0-0.8,0.1-1.7,0.4-2.4h41.2C52.9,17.6,53,18.4,53,19.3z"/> </g> <g> <g> <linearGradient id="SVGID_4_" gradientUnits="userSpaceOnUse" x1="1.0572" y1="16.1221" x2="56.7372" y2="13.4821"> <stop  offset="0" style="stop-color:#1A6DFF"/> <stop  offset="1" style="stop-color:#C822FF"/> </linearGradient> <polygon class="reel-st4" points="42.2,16.8 36.5,16.8 34.1,14.4 31.7,12 37.4,12 41.5,16.2 				"/> <linearGradient id="SVGID_5_" gradientUnits="userSpaceOnUse" x1="1.4833" y1="25.1102" x2="57.1633" y2="22.4702"> <stop  offset="0" style="stop-color:#1A6DFF"/> <stop  offset="1" style="stop-color:#C822FF"/> </linearGradient> <polygon class="reel-st5" points="42.5,20.8 41.5,21.8 37.4,26 31.7,26 36.9,20.8 				"/> </g> <g> <linearGradient id="SVGID_6_" gradientUnits="userSpaceOnUse" x1="1.0251" y1="15.4452" x2="56.7051" y2="12.8052"> <stop  offset="0" style="stop-color:#1A6DFF"/> <stop  offset="1" style="stop-color:#C822FF"/> </linearGradient> <path class="reel-st6" d="M27.3,16.8h-5.7l-4.7-4.7c0.4-0.1,0.9-0.1,1.3-0.1h4.2l4.2,4.2L27.3,16.8z"/> <linearGradient id="SVGID_7_" gradientUnits="userSpaceOnUse" x1="1.4498" y1="24.4029" x2="57.1298" y2="21.7629"> <stop  offset="0" style="stop-color:#1A6DFF"/> <stop  offset="1" style="stop-color:#C822FF"/> </linearGradient> <polygon class="reel-st7" points="27.6,20.8 22.4,26 16.8,26 21.9,20.8 				"/> </g> </g> <g> <linearGradient id="SVGID_8_" gradientUnits="userSpaceOnUse" x1="1.6885" y1="29.4372" x2="57.3685" y2="26.7972"> <stop  offset="0" style="stop-color:#1A6DFF"/> <stop  offset="1" style="stop-color:#C822FF"/> </linearGradient> <rect x="11" y="26" class="reel-st8" width="42.1" height="4"/> </g> </g> <linearGradient id="SVGID_9_" gradientUnits="userSpaceOnUse" x1="2.3005" y1="42.3458" x2="57.9805" y2="39.7058"> <stop  offset="0" style="stop-color:#1A6DFF"/> <stop  offset="1" style="stop-color:#C822FF"/> </linearGradient> <polygon class="reel-st9" points="39,41.2 26.1,33.7 26.1,48.7 	"/> </g> </svg> <span>{{LANG reels}}</span>');
+				}
+				if (data.app_name != 'explore' && data.app_name != 'home' && data.app_name != 'reels') {
+					$('#home_nav').find('a').html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#66757f" class="feather feather-home"><path d="M9,19V13H11L13,13H15V19H18V10.91L12,4.91L6,10.91V19H9M12,2.09L21.91,12H20V21H13V15H11V21H4V12H2.09L12,2.09Z" /></svg> <span>{{LANG home}}</span>');
+					$('#explore_nav').find('a').html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#66757f" class="feather feather-compass"><path d="M7,17L10.2,10.2L17,7L13.8,13.8L7,17M12,11.1A0.9,0.9 0 0,0 11.1,12A0.9,0.9 0 0,0 12,12.9A0.9,0.9 0 0,0 12.9,12A0.9,0.9 0 0,0 12,11.1M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z" /></svg> <span>{{LANG explore}}</span>');
+					$('#reels_nav').find('a').html('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" style="enable-background:new 0 0 64 64;" xml:space="preserve" class="feather"> <style type="text/css"> .greel-st0{fill:#727372;} .greel-st1{fill:url(#SVGID_1_);} .greel-st2{fill:url(#SVGID_2_);} .greel-st3{fill:url(#SVGID_3_);} .greel-st4{fill:url(#SVGID_4_);} .greel-st5{fill:url(#SVGID_5_);} .greel-st6{fill:url(#SVGID_6_);} .greel-st7{fill:url(#SVGID_7_);} .greel-st8{fill:url(#SVGID_8_);} .greel-st9{fill:url(#SVGID_9_);} </style> <g> <g> <g> <path class="greel-st0" d="M33.4,8l0.7,0.7L34.8,8H33.4z"/> <path class="greel-st0" d="M56.8,16.8c-0.6-2.5-2-4.7-3.9-6.3c-1.1-0.9-2.3-1.5-3.7-2C48.1,8.2,47,8,45.8,8h-11l-0.7,0.7L33.4,8H18.2 c-1.6,0-3.1,0.3-4.5,0.9c-3.3,1.4-5.7,4.4-6.5,7.9C7,17.6,7,18.4,7,19.3v27.6c0,6.2,5,11.3,11.3,11.3h27.6C52,58.1,57,53,57,46.8 V19.3C57,18.4,56.9,17.6,56.8,16.8z M53,46.8c0,4-3.3,7.3-7.3,7.3H18.2c-4,0-7.3-3.3-7.3-7.3V19.3c0-0.8,0.1-1.7,0.4-2.4 c0.8-2.4,2.9-4.3,5.5-4.7c0.4-0.1,0.9-0.1,1.3-0.1h27.6c1.6,0,3,0.5,4.2,1.4c1.2,0.8,2.1,2.1,2.6,3.5c0.3,0.8,0.4,1.6,0.4,2.4 V46.8z"/> </g> <g> <path class="greel-st0" d="M53,19.3v1.6H11v-1.6c0-0.8,0.1-1.7,0.4-2.4h41.2C52.9,17.6,53,18.4,53,19.3z"/> </g> <g> <g> <polygon class="greel-st0" points="42.2,16.8 36.5,16.8 34.1,14.4 31.7,12 37.4,12 41.5,16.2 				"/> <polygon class="greel-st0" points="42.5,20.8 41.5,21.8 37.4,26 31.7,26 36.9,20.8 				"/> </g> <g> <path class="greel-st0" d="M27.3,16.8h-5.7l-4.7-4.7c0.4-0.1,0.9-0.1,1.3-0.1h4.2l4.2,4.2L27.3,16.8z"/> <polygon class="greel-st0" points="27.6,20.8 22.4,26 16.8,26 21.9,20.8 				"/> </g> </g> <g> <rect x="11" y="26" class="greel-st0" width="42.1" height="4"/> </g> </g> <polygon class="greel-st0" points="39,41.2 26.1,33.7 26.1,48.7 	"/> </g> </svg> <span>{{LANG reels}}</span>');
+					$('#home_nav').removeClass('active');
+					$('#explore_nav').removeClass('active');
+					$('#reels_nav').removeClass('active');
+				}
+
+				if (data.app_name == 'posts') {
+					$('.home_script').remove();
+					$('.profile_script').remove();
+					$('#home_nav').removeClass('active');
+					$('#explore_nav').removeClass('active');
+					if ($('.posts_script').length == 0) {
+						// $('head').append($('<script>',{
+						// 	src: "{{THEME_URL}}/main/static/js/libs/afterglow.min.js",
+						// 	class: "posts_script"
+						// }));
+					}
+				}
+				if (data.app_name == 'explore' || data.app_name == 'tags' || data.app_name == 'profile' || data.app_name == 'home') {
+					if ( $('.grid_a').length == 0 ) {
+						$('head').append($('<script>',{
+							src: "{{THEME_URL}}/main/static/js/libs/gridAlicious/jquery.grid-a-licious.js",
+							class: "grid_a"
+						}));
+					}
+				}
+				else{
+					$('.grid_a').remove();
+				}
+				$('#messages_nav').removeClass('active');
+				if (data.app_name == 'messages') {
+					$('#messages_nav').addClass('active');
+				}
+
+				$('#page_content').attr('class', 'container container-'+data.app_name+' container-'+data.app_name+'-main');
+				$('body').attr('data-app', data.app_name);
+				$('body').attr('class', 'body-'+data.app_name);
+				$('#header_').attr('class','container container-'+data.app_name+' container-'+data.app_name+'-header');
+				if (data.app_name != 'profile' || data.app_name != 'explore') {
+					$('#footer_').attr('class','container container-'+data.app_name+' container-'+data.app_name+'-main');
+				}else{
+					$('#footer_').attr('class','container container-'+data.app_name);
+				}
+				if (data.app_name == 'startup') {
+					$('footer').attr('class', 'footer_class');
+				}
+				$('.tl-follow-suggestions').slick({
+					prevArrow: '<button type="button" class="slick-prev" title="Previous"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg></button>',
+					nextArrow: '<button type="button" class="slick-next" title="Next"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" /></svg></button>',
+					infinite: false,
+					slidesToShow: 4,
+					variableWidth: false,
+					slidesToScroll: 1,
+					autoplay: false,
+					autoplaySpeed: 2000,
+					responsive: [
+						{
+							breakpoint: 1024,
+							settings: {
+								slidesToShow: 4
+							}
+						},
+						{
+							breakpoint: 800,
+							settings: {
+								slidesToShow: 3
+							}
+						},
+						{
+							breakpoint: 600,
+							settings: {
+								slidesToShow: 2
+							}
+						},
+						{
+							breakpoint: 300,
+							settings: {
+								slidesToShow: 1
+							}
+						}
+					]
+				});
+				$('.post-follow-suggestions').slick({
+					prevArrow: '<button type="button" class="slick-prev" title="Previous"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg></button>',
+					nextArrow: '<button type="button" class="slick-next" title="Next"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" /></svg></button>',
+					infinite: false,
+					slidesToShow: 5,
+					variableWidth: false,
+					slidesToScroll: 1,
+					autoplay: false,
+					autoplaySpeed: 2000,
+					responsive: [
+						{
+							breakpoint: 1024,
+							settings: {
+								slidesToShow: 4
+							}
+						},
+						{
+							breakpoint: 800,
+							settings: {
+								slidesToShow: 3
+							}
+						},
+						{
+							breakpoint: 600,
+							settings: {
+								slidesToShow: 2
+							}
+						},
+						{
+							breakpoint: 300,
+							settings: {
+								slidesToShow: 1
+							}
+						}
+					]
+				});
+				$('body').removeClass('app-loading');
+				$('#page_content').removeClass('opacity_start');
+			}
+
+		});
+
+	});
+</script>
+<body data-app="<?php echo($context['app_name']); ?>" class="body-<?php echo($context['app_name']); ?>">
+	<div class="bar_loading"></div>
+	<input type="hidden" class="hidden csrf-token" value="<?php echo($context['csrf_token']) ?>">
+	{{HEADER}}
+	<main class="container container-<?php echo($context['app_name']); ?> container-<?php echo($context['app_name']); ?>-main" id="page_content">
+		{{CONTENT}}
+	</main>
+	<?php if (!empty($context['app_name']) && $context['app_name'] != 'signup' && $context['app_name'] != 'welcome' && $context['app_name'] != 'embed') { ?>
+		{{FOOTER}}
+	<?php } ?>
+
+
+	<?php include $context['dirname_theme'].'/main/templates/js/extra-js.html'; ?>
+
+    <?php include $context['dirname_theme'].'/main/templates/includes/timeago.html'; ?>
+
+	<div class="lightbox__container"></div>
+	<script src="{{THEME_URL}}/main/static/js/libs/lightGallery/src/js/lightgallery.js"></script>
+	<script src="{{THEME_URL}}/main/static/js/libs/lightGallery/modules/lg-zoom.js"></script>
+	<script src="{{THEME_URL}}/main/static/js/libs/lightGallery/modules/lg-fullscreen.js"></script>
+	<link rel="stylesheet" href="{{THEME_URL}}/main/static/js/libs/lightGallery/src/css/lightgallery.css">
+	<link rel="stylesheet" href="{{THEME_URL}}/main/static/js/libs/lightGallery/src/css/lg-transitions.css">
+
+	<?php if ($config['google_analytics']) {
+		echo decode($config['google_analytics']);
+	} ?>
+	<script type="text/javascript">
+		if (is_logged()) {
+			setInterval(function(){
+				$.post(xhr_url()+'main/update_user_lastseen', function(data, textStatus, xhr) {
+				});
+			},60000);
+		}
+		<?php if ($context['app_name'] == 'home') { ?>
+			$('footer').hide();
+		<?php } ?>
+
+		$(window).on("popstate", function (e) {
+	        location.reload();
+	    });
+
+	</script>
+
+
+
+	<?php if( IS_LOGGED == true ){ ?>
+	<div style="display:none">
+		<audio id="notification-sound" class="sound-controls" preload="auto" style="visibility: hidden;">
+			<source src="{{THEME_URL}}/main/static/mp3/New-notification.mp3" type="audio/mpeg">
+		</audio>
+		<audio id="message-sound" class="sound-controls" preload="auto" style="visibility: hidden;">
+			<source src="{{THEME_URL}}/main/static/mp3/New-message.mp3" type="audio/mpeg">
+		</audio>
+		<audio id="calling-sound" class="sound-controls" preload="auto">
+			<source src="{{THEME_URL}}/main/static/mp3/calling.mp3" type="audio/mpeg">
+		</audio>
+		<audio id="video-calling-sound" class="sound-controls" preload="auto">
+			<source src="{{THEME_URL}}/main/static/mp3/video_call.mp3" type="audio/mpeg">
+		</audio>
+	</div>
+<?php } ?>
+
+<?php if ($config['iyzipay_payment'] == "yes" && !empty($config['iyzipay_key']) && !empty($config['iyzipay_secret_key'])) { ?>
+<script>
+function pay_usicccng_iyzipay(pkg,self,video_id,price,user_id = 0) {
+    $('.btn-iyzipay').attr('disabled','true');
+    $('.btn-iyzipay').find('span').text("{{LANG please_wait}}");
+    pay_type = '';
+    if (pkg == 'pro') {
+      path = '/go_pro/iyzipay';
+    }
+    else if (pkg == 'wallet') {
+      path = '/wallet/iyzipay';
+      price = $("#wallet_amount").val();
+    }
+    else if (pkg == 'pay') {
+      path = '/go_pro/iyzipay_pay_to_see';
+    }
+    else if (pkg == 'rent') {
+      path = '/go_pro/iyzipay_pay_to_see';
+      pay_type = 'rent';
+    }
+    else if (pkg == 'subscribe') {
+      path = '/go_pro/subscribe';
+    }
+
+    $.post('{{LINK aj}}'+path, {video_id:video_id,amount:price,user_id:user_id,pay_type:pay_type,type:'iyzipay'}, function(data) {
+      if (data.status == 200) {
+        $('#iyzipay_content').html('');
+        $('#iyzipay_content').html(data.html);
+      } else {
+        $('.btn-iyzipay').attr('disabled', false).html("Iyzipay App not set yet.");
+      }
+      $('.btn-iyzipay').removeAttr('disabled');
+      $('.btn-iyzipay').find('span').text("{{LANG iyzipay}}");
+    });
+}
+</script>
+<?php } ?>
+<?php echo $pixelphoto->PX_LoadPage('main/templates/modals/wallet'); ?>
+<?php if ($config['private_videos'] == 'on' || $config['private_photos'] == 'on') {
+	echo $pixelphoto->PX_LoadPage('main/templates/modals/subscribe');
+} ?>
+
+</body>
+</html>

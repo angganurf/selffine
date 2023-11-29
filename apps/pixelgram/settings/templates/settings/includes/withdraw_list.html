@@ -1,0 +1,14 @@
+<tr data-ad-id="<?php echo $context['user_withdrawal']->id; ?>">
+	<td><?php echo $context['user_withdrawal']->id; ?></td>
+	<td width="300"><?php echo $context['user_withdrawal']->requested; ?></td>
+	<td><?php echo Pxp_GetCurrency($context['user_withdrawal']->currency).$context['user_withdrawal']->amount; ?></td>
+	<td data-ad-status="<?php echo $context['user_withdrawal']->id; ?>" width="150">
+		<?php if ($context['user_withdrawal']->status == 1){ ?>
+			<span class="label label-status label-success">{{LANG paid}}</span>
+		<?php }elseif($context['user_withdrawal']->status == 0){ ?>
+			<span class="label label-status label-warning">{{LANG pending}}</span>
+		<?php }else{ ?>
+			<span class="label label-status label-danger">{{LANG declined}}</span>
+		<?php } ?>
+	</td>
+</tr>

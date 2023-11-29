@@ -1,0 +1,109 @@
+<div class="valign pg_store_filters" id="store_filter">
+	<div class="pg_store_fields">
+		<input type="text" name="title" id="search_title" placeholder="{{LANG title}}" value="" autocomplete="off">
+	</div>
+	<div class="pg_store_fields">
+		<select name="category" id="search_category">
+			<option value="" selected disabled>{{LANG category}}</option>
+			<?php
+				$store_categories = store_categories();
+				foreach ($store_categories as $key => $category) {
+					echo '<option value="'.$key.'">'.$category.'</option>';
+				}
+			?>
+		</select>
+	</div>
+	<div class="pg_store_fields">
+		<div class="dropdown">
+			<button id="str_fltrs" class="btn valign" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter <span class="caret"></span></button>
+			<ul class="dropdown-menu pull-right pg_store_drp_mnu" aria-labelledby="str_fltrs">
+				<div class="pg_mat_input">
+					<input type="text" name="tags" id="search_tags" placeholder="{{LANG tags}}" value="" autocomplete="off">
+					<label for="search_tags">{{LANG tags}}</label>
+				</div>
+				<div class="pg_mat_input">
+					<select name="license" id="search_license">
+						<option value="" selected disabled>{{LANG license_type}}</option>
+						<option value="rights_managed_license">{{LANG rights_managed_license}}</option>
+						<option value="editorial_use_license">{{LANG editorial_use_license}}</option>
+						<option value="royalty_free_license">{{LANG royalty_free_license}}</option>
+						<option value="royalty_free_extended_license">{{LANG royalty_free_extended_license}}</option>
+						<option value="creative_commons_license">{{LANG creative_commons_license}}</option>
+						<option value="public_domain">{{LANG public_domain}}</option>
+					</select>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="pg_mat_input">
+							<input type="number" step="1" min="0" placeholder="{{LANG price}} {{LANG min}}" id="search_min">
+							<label for="search_min">{{LANG price}} {{LANG min}}</label>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="pg_mat_input">
+							<input type="number" step="1" min="0" placeholder="{{LANG price}} {{LANG max}}" id="search_max">
+							<label for="search_max">{{LANG price}} {{LANG max}}</label>
+						</div>
+					</div>
+				</div>
+			</ul>
+		</div>
+	</div>
+	<div class="pg_store_fields">
+		<button id="store_search" class="btn btn-main btn-mat" title="{{LANG search}}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M11 2c4.968 0 9 4.032 9 9s-4.032 9-9 9-9-4.032-9-9 4.032-9 9-9zm0 16c3.867 0 7-3.133 7-7 0-3.868-3.133-7-7-7-3.868 0-7 3.132-7 7 0 3.867 3.132 7 7 7zm8.485.071l2.829 2.828-1.415 1.415-2.828-2.829 1.414-1.414z"/></svg></button>
+	</div>
+</div>
+
+<script>
+	$(document).on('click', '.pg_store_drp_mnu', function (e) {
+		e.stopPropagation();
+	});
+
+    $('#store_search').click(function(event){
+        event.preventDefault();
+        var val = $('#store_sort option:selected').val();
+
+        var _search_title = $('#search_title').val();
+        var _search_tags = $('#search_tags').val();
+        var _search_category = $('#search_category option:selected').val();
+        var _search_license = $('#search_license').val();
+        var _search_min = $('#search_min').val();
+        var _search_max = $('#search_max').val();
+		let offset = 0;
+        if ($('#is_search_filter').val() == '1') {
+	        offset = $("[data-post-id]:last").attr('data-post-id');
+	    }
+
+        $.ajax({
+            url: link('store/explore-all-store'),
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                mode: 'search',
+                offset: offset,
+                search_title: _search_title,
+                search_tags: _search_tags,
+                search_category: _search_category,
+                search_license: _search_license,
+                search_min: _search_min,
+                search_max: _search_max
+            },
+        }).done(function(data) {
+			if (data.status == 200) {
+            	if ($('#is_search_filter').val() != '1') {
+	            	$('#is_search_filter').val('1');
+	            }
+            	if ($('#is_load_filter').val() == '1') {
+	            	$('#is_load_filter').val('0');
+	            	$(".explore-posts-container").html(data.html);
+	            }
+	            else{
+	                $(".explore-posts-container").html(data.html);
+	            }
+                $(".explore-posts-container").html(data.html);
+                window.scrolled = 0;
+                // $(window).unbind('scroll');
+            }
+        });
+    });
+</script>

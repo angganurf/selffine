@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<?php if ($context['app_name'] == 'funding' && !empty($context['fund']) && !empty($context['fund']->image)) { ?>
+		<meta name="title" content="{{TITLE}}">
+		<meta name="description" content="<?php echo($context['fund']->description) ?>">
+		<meta property="og:image" content="<?php echo($context['fund']->image) ?>" />
+	<?php }else{ ?>
+        <?php if ($context['app_name'] == 'posts'){ ?>
+            <meta name="title" content="{{TITLE}}">
+            <meta name="description" content="<?php echo(strip_tags(htmlentities( $context['post_data']['description'] )) ) ?>">
+            <?php if( isset( $context['post_data']['media_set'] ) ){ ?>
+                <?php if( isset( $context['post_data']['media_set'][0] ) ){ ?>
+                    <meta property="og:image" content="<?php echo( Media( $context['post_data']['media_set'][0]['file'] ) ) ?>" />
+                <?php } ?>
+            <?php } ?>
+		<?php }else if ($context['app_name'] == 'store'){ ?>
+			<meta name="title" content="{{TITLE}} - {{CONFIG site_name}}">
+			<meta name="description" content="{{CONFIG site_desc}}">
+        <?php }else{ ?>
+		    <meta name="title" content="{{CONFIG site_name}}">
+		    <meta name="description" content="{{CONFIG site_desc}}">
+        <?php } ?>
+			<meta name="twitter:card" content="summary_large_image">
+			<meta name="twitter:title" content="{{CONFIG site_name}} - {{TITLE}}" />
+			<meta name="twitter:description" content="{{CONFIG site_desc}}" />
+			<meta name="twitter:image" content="<?php echo isset($context['post_data']['media_set'][0]['file']) ? Media( $context['post_data']['media_set'][0]['file'] ) : '';?>" />
+			<meta name="twitter:creator" content="@{{CONFIG site_name}}">
+	<?php } ?>
+	
+	<meta name="keywords" content="{{CONFIG meta_keywords}}">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<?php if($context['app_name'] == 'profile' && !$context['user_data']['search_engines']){ ?>
+	<meta name="robots" content="noindex">
+    <meta name="googlebot" content="noindex">
+    <?php } ?>
+	<title>{{TITLE}}</title>
+    
+	<?php if($context['app_name'] == 'profile' && $context['user_data']['search_engines']){ ?>
+		<link href="<?php echo $context["user_data"]["url"];?>" rel="canonical">
+		<meta name="robots" content="index, follow">
+		<meta property="og:title" content="{{TITLE}}" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="<?php echo $context['user_data']['avatar']; ?>" />
+		<meta property="og:description" content="{{CONFIG site_desc}}" />
+
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="https://demo.wowonder.com/upload/photos/d-avatar.jpg?cache=0" />
+		<meta property="og:image:secure_url" content="<?php echo $context['user_data']['avatar']; ?>" />
+		<meta property="og:description" content="{{CONFIG site_desc}}" />
+		<meta property="og:title" content="{{TITLE}}" />
+
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="{{TITLE}}" />
+		<meta name="twitter:description" content="{{CONFIG site_desc}}" />
+		<meta name="twitter:image" content="<?php echo $context['user_data']['avatar']; ?>" />
+		<meta name="twitter:creator" content="@{{CONFIG site_name}}">
+	<?php } ?>
+	<?php if ($context['app_name'] == 'blog') {?>
+		<meta property="og:title" content="{{TITLE}}" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="{{CONFIG site_url}}/media/img/icon.{{CONFIG favicon_extension}}" />
+		<meta property="og:description" content="{{CONFIG site_desc}}" />
+	<?php } ?>
+	<?php if ($context['app_name'] == 'article') {?>
+		<meta property="og:title" content="{{TITLE}}" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="{{CONFIG site_url}}/media/img/icon.{{CONFIG favicon_extension}}" />
+		<meta property="og:description" content="{{CONFIG site_desc}}" />
+	<?php } ?>
+
+	<?php if ($context['app_name'] == 'home') { ?>
+		<meta property="og:title" content="{{TITLE}}" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="{{CONFIG site_url}}/media/img/icon.{{CONFIG favicon_extension}}" />
+		<meta property="og:description" content="{{CONFIG site_desc}}" />
+	<?php } ?>
+
+	<?php if ($context['app_name'] == 'posts') {?>
+		<meta property="og:title" content="{{TITLE}}" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="<?php echo $context['post_data']['avatar'];?>" />
+		<meta property="og:description" content="{{TITLE}}" />
+	<?php } ?>
+
+	<?php if ($context['app_name'] == 'store') {?>
+		<meta property="og:title" content="<?php echo (isset($context['post_data']['title']) ? $context['post_data']['title'] : 'store' );?>" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="<?php echo (isset($context['post_data']['avatar']) ? $context['post_data']['avatar'] : '{{CONFIG site_url}}/media/img/icon.{{CONFIG favicon_extension}}' );?>" />
+		<meta property="og:description" content="<?php echo (isset($context['post_data']['tags']) ? $context['post_data']['tags'] : '{{CONFIG site_desc}}' );?>" />
+	<?php } ?>
+	
+	<link rel="shortcut icon" type="image/png" href="{{CONFIG site_url}}/media/img/icon.{{CONFIG favicon_extension}}"/>
+	<!-- <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.9.6/dist/ffmpeg.min.js"></script> -->
+	<script src="{{THEME_URL}}/main/static/js/libs/jquery-3.2.1.js"></script>
+	<script src="{{THEME_URL}}/main/static/js/libs/jquery-ui.min.js"></script>
+	<script src="{{THEME_URL}}/main/static/js/libs/tag-it.min.js"></script>
+	<link rel="stylesheet" href="{{THEME_URL}}/main/static/css/libs/jquery-ui.min.css">
+	<link rel="stylesheet" href="{{THEME_URL}}/main/static/css/libs/jquery.tagit.css">
+	<script src="{{THEME_URL}}/main/static/css/libs/bs3/js/bootstrap.js"></script>
+	<link rel="stylesheet" href="{{THEME_URL}}/main/static/css/libs/bs3/css/bootstrap.min.css">
+	<script src="{{THEME_URL}}/main/static/js/libs/highcharts/highcharts.js"></script>
+	<script src="{{THEME_URL}}/main/static/js/libs/highcharts/exporting.js"></script>
+	
+	<?php if ($context['app_name'] == 'welcome' || $context['app_name'] == 'signup' || $context['app_name'] == 'sms_validate' || $context['app_name'] == 'two_factor') { ?>
+	<link rel="stylesheet" href="{{THEME_URL}}/main/static/css/styles.welcome.css">
+    <?php } else{ ?>
+	<link rel="stylesheet" href="{{THEME_URL}}/main/static/css/styles.master.css">
+    <?php } ?>
+
+	<?php if ($_COOKIE['mode'] == 'night') { ?>
+	<link rel="stylesheet" id="night_mode_css" href="{{THEME_URL}}/main/static/css/styles.master_night.css">
+    <?php } ?>
+    <?php if ($context['app_name'] == 'welcome' && $config['recaptcha'] == 'on') { ?>
+	<script type="text/javascript" src='https://www.google.com/recaptcha/api.js'></script>
+    <?php } ?>
+    
+
+    <?php if (!empty($context['app_name']) && ($context['app_name'] == 'explore' || $context['app_name'] == 'tags' || $context['app_name'] == 'profile' || $context['app_name'] == 'home') ) { ?>
+    <?php } ?>
+    <script src="{{THEME_URL}}/main/static/js/libs/gridAlicious/jquery.grid-a-licious.js"></script>
+
+
+	<script src="{{THEME_URL}}/main/static/js/libs/jquery-form.v3.51.0.js"></script>
+	<script src="{{THEME_URL}}/main/static/js/script.master.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+	<?php if ($context['app_name'] == 'home') { ?>
+	<script src="{{THEME_URL}}/main/static/js/libs/afterglow.min.js" class="home_script"></script>
+	<script src="{{THEME_URL}}/main/static/js/libs/jquery.pause.js" class="home_script"></script>
+	<?php } ?>
+
+	<?php if ($context['app_name'] == 'profile') { ?>
+	<script src="{{THEME_URL}}/main/static/js/libs/jquery.equalheights.js" class="profile_script"></script>
+	<?php } ?>
+	
+	<?php if ($config['upload_360_videos'] == 'on') { ?>
+		<link rel="stylesheet" href="{{THEME_URL}}/main/static/css/libs/videojs-vr.css">
+		<script src="{{THEME_URL}}/main/static/js/libs/video.js" integrity="sha256-vrHnet1gn0rfMfcNSTaMvp7bW1MU+hBXCuyPjfdxXhc=" crossorigin="anonymous"></script>
+		<script src="{{THEME_URL}}/main/static/js/libs/videojs-vr.js" integrity="sha256-aVLbKVeaTsLwmKYjya1a4xZGhAaG7j3Z4Ll7SkzSa6A=" crossorigin="anonymous"></script>
+	<?php } ?>
+	
+	<script>
+		function xhr_url(){
+			return '{{CONFIG site_url}}/aj/';
+		}
+
+		function site_url(path){
+			return '{{CONFIG site_url}}/' + path;
+		}
+		function ajax_load_url(){
+			return '{{CONFIG site_url}}/load/';
+		}
+		function get_theme(){
+			return '{{THEME_URL}}';
+		}
+		window.logo = '{{CONFIG site_url}}/media/img/logo.{{CONFIG logo_extension}}';
+		window.light_logo = '{{CONFIG site_url}}/media/img/light-logo.{{CONFIG logo_extension}}';
+	</script>
+	
+	<script src="{{THEME_URL}}/main/static/js/libs/emoji/jquery-textcomplete/dist/jquery.textcomplete.min.js"></script>
+	<script src="{{THEME_URL}}/main/static/js/libs/emoji/emojionearea/dist/emojionearea.js"></script>
+	<link rel="stylesheet" type="text/css" href="{{THEME_URL}}/main/static/js/libs/emoji/emojionearea/dist/emojionearea.min.css"/>
+	<script src="{{THEME_URL}}/main/static/js/libs/lazyload.min.js"></script>
+	<script src="{{THEME_URL}}/main/static/js/bootstrap-select.min.js"></script>
+	<link rel="stylesheet" href="{{THEME_URL}}/main/static/css/bootstrap-select.min.css">
+	
+	<?php if ($config['razorpay'] == "on" && !empty($config['razorpay_key']) && !empty($config['razorpay_secret'])) { ?>
+		<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+	<?php } ?>
+	
+	<?php if ($config['checkout_payment'] == 'yes') { ?>
+        <script type="text/javascript" src="https://www.2checkout.com/checkout/api/2co.min.js"></script>
+	<?php } ?>
+
+	<?php
+	if(
+		IS_LOGGED === true &&
+		$config['twilio_video_chat'] == 'on'
+	){?>
+		<script src="{{THEME_URL}}/main/static/js/libs/twilio-video.min.js"></script>
+    <?php } ?>
+	
+	<?php if ($config['agora_live_video'] == 1 || $config['agora_chat_video'] == 'on') { ?>
+		<link rel="stylesheet" href="{{THEME_URL}}/main/static/player/mediaelementplayer.css" type="text/css"/>
+		<script src="{{THEME_URL}}/main/static/player/mediaelement-and-player.js"></script> 
+		<script src="{{THEME_URL}}/main/static/js/agora.js"></script>
+	<?php } ?>
+</head>
+<script type="text/javascript">
+	$(document).on('click', 'a[data-ajax]', function(event) {
+		$('body').addClass('app-loading');
+		event.preventDefault();
+		
+		if ($('#live_post_id').length > 0) {
+			DeleteLive();
+			window.location = $(this).attr('href');
+			return false;
+    	}
+		
+		var url = $(this).attr('data-ajax');
+		clearInterval(window.chat_interval);
+		$(".lightbox__container").empty();
+		if ($('video').length > 0) {
+			$('video')[0].pause();
+		}
+		$.post(site_url(url), {param1: 'value1'}, function(htmlData, textStatus, xhr) {
+			window.scrollTo(0,0);
+			data = JSON.parse($(htmlData).filter('#json-data').val());
+			$('#page_content').html(htmlData);
+			if (typeof(data.url)  == 'undefined') {
+				//window.location.href = site_url('');
+			}
+			else{
+				if (!data.footer) {
+					$('footer').hide();
+				}else{
+					$('footer').show();
+				}
+				if (!data.header) {
+					$('#header_nav').hide();
+				}else{
+					$('#header_nav').show();
+				}
+				window.history.pushState({state:'new'},'', site_url(data.url));
+				$('title').html(data.page_title);
+				if (data.app_name == 'explore') {
+					$('#explore_nav').addClass('active');
+					$('#explore_nav_sec').addClass('active');
+					$('#home_nav').removeClass('active');
+					$('#home_nav_sec').removeClass('active');
+					$('#go_pro_nav').removeClass('active');
+					$('#store_nav').removeClass('active');
+					$('#store_nav_sec').removeClass('active');
+					$('#reels_nav').removeClass('active');
+					$('#reels_nav_sec').removeClass('active');
+					$('#header_nav').removeClass('transparent');
+					$('.home_script').remove();
+					$('.profile_script').remove();
+					$('.posts_script').remove();
+				}
+				if (data.app_name == 'home') {
+					$('.profile_script').remove();
+					$('.posts_script').remove();
+					$('#home_nav').addClass('active');
+					$('#home_nav_sec').addClass('active');
+					$('#explore_nav').removeClass('active');
+					$('#explore_nav_sec').removeClass('active');
+					$('#go_pro_nav').removeClass('active');
+					$('#store_nav').removeClass('active');
+					$('#store_nav_sec').removeClass('active');
+					$('#reels_nav').removeClass('active');
+					$('#reels_nav_sec').removeClass('active');
+					$('#header_nav').removeClass('transparent');
+					if ($('.home_script').length == 0) {
+						// $('head').append($('<script>',{
+						// 	src: "{{THEME_URL}}/main/static/js/libs/afterglow.min.js",
+						// 	class: "home_script"
+						// }),$('<script>',{
+						// 	src: "{{THEME_URL}}/main/static/js/libs/jquery.pause.js",
+						// 	class: "home_script"
+						// }));
+					}
+				}
+				if (data.app_name == 'profile') {
+					$('.home_script').remove();
+					$('.posts_script').remove();
+					$('#home_nav').removeClass('active');
+					$('#home_nav_sec').removeClass('active');
+					$('#explore_nav').removeClass('active');
+					$('#explore_nav_sec').removeClass('active');
+					$('#go_pro_nav').removeClass('active');
+					$('#store_nav').removeClass('active');
+					$('#store_nav_sec').removeClass('active');
+					$('#reels_nav').removeClass('active');
+					$('#reels_nav_sec').removeClass('active');
+					$('#header_nav').removeClass('transparent');
+					if ($('.profile_script').length == 0) {
+						$('head').append($('<script>',{
+							src: "{{THEME_URL}}/main/static/js/libs/jquery.equalheights.js",
+							class: "profile_script"
+						}));
+					}
+				}
+				if (data.app_name == 'store') {
+					$('#home_nav').removeClass('active');
+					$('#home_nav_sec').removeClass('active');
+					$('#explore_nav').removeClass('active');
+					$('#explore_nav_sec').removeClass('active');
+					$('#go_pro_nav').removeClass('active');
+					$('#store_nav').addClass('active');
+					$('#store_nav_sec').addClass('active');
+					$('#reels_nav').removeClass('active');
+					$('#reels_nav_sec').removeClass('active');
+					$('#header_nav').addClass('transparent');
+				}
+				if (data.app_name == 'go_pro') {
+					$('#home_nav').removeClass('active');
+					$('#home_nav_sec').removeClass('active');
+					$('#explore_nav').removeClass('active');
+					$('#explore_nav_sec').removeClass('active');
+					$('#store_nav').removeClass('active');
+					$('#store_nav_sec').removeClass('active');
+					$('#reels_nav').removeClass('active');
+					$('#reels_nav_sec').removeClass('active');
+					$('#go_pro_nav').addClass('active');
+					$('#header_nav').removeClass('transparent');
+				}
+				if (data.app_name != 'explore' && data.app_name != 'home' && data.app_name != 'go_pro' && data.app_name != 'store' && data.app_name != 'reels') {
+					$('#home_nav').removeClass('active');
+					$('#home_nav_sec').removeClass('active');
+					$('#explore_nav').removeClass('active');
+					$('#explore_nav_sec').removeClass('active');
+					$('#store_nav').removeClass('active');
+					$('#store_nav_sec').removeClass('active');
+					$('#reels_nav').removeClass('active');
+					$('#reels_nav_sec').removeClass('active');
+					$('#go_pro_nav').removeClass('active');
+					$('#header_nav').removeClass('transparent');
+				}
+				
+				if (data.app_name == 'posts') {
+					$('.home_script').remove();
+					$('.profile_script').remove();
+					$('#home_nav').removeClass('active');
+					$('#home_nav_sec').removeClass('active');
+					$('#explore_nav').removeClass('active');
+					$('#explore_nav_sec').removeClass('active');
+					$('#store_nav').removeClass('active');
+					$('#store_nav_sec').removeClass('active');
+					$('#reels_nav').removeClass('active');
+					$('#reels_nav_sec').removeClass('active');
+					if ($('.posts_script').length == 0) {
+						// $('head').append($('<script>',{
+						// 	src: "{{THEME_URL}}/main/static/js/libs/afterglow.min.js",
+						// 	class: "posts_script"
+						// }));
+					}
+				}
+				$('#messages_nav').removeClass('active');
+				$('#messages_nav_sec').removeClass('active');
+				if (data.app_name == 'messages') {
+					$('#messages_nav').addClass('active');
+					$('#messages_nav_sec').addClass('active');
+				}
+				if (data.app_name == 'reels') {
+					$('#home_nav').removeClass('active');
+					$('#home_nav_sec').removeClass('active');
+					$('#explore_nav').removeClass('active');
+					$('#explore_nav_sec').removeClass('active');
+					$('#store_nav').removeClass('active');
+					$('#store_nav_sec').removeClass('active');
+					$('#reels_nav').addClass('active');
+					$('#reels_nav_sec').addClass('active');
+					$('#go_pro_nav').removeClass('active');
+					$('#header_nav').removeClass('transparent');
+				}
+				
+				$('#page_content').attr('class', 'container container-'+data.app_name+' container-'+data.app_name+'-main');
+				$('body').attr('data-app', data.app_name);
+				$('body').attr('class', 'body-'+data.app_name);
+				if (data.app_name != 'profile' || data.app_name != 'explore') {
+					$('#footer_').attr('class','container container-'+data.app_name+' container-'+data.app_name+'-main');
+				}else{
+					$('#footer_').attr('class','container container-'+data.app_name);
+				}
+				if (data.app_name == 'startup') {
+					$('footer').attr('class', 'footer_class');
+				}
+				$('.tl-follow-suggestions').flickity({
+					freeScroll: true,
+					pageDots: false,
+					contain: true,
+					resize: false,
+					cellAlign: 'left',
+				});
+				$('body').removeClass('app-loading');
+			}
+		});
+	});
+</script>
+<body data-app="<?php echo($context['app_name']); ?>" class="body-<?php echo($context['app_name']); ?>">
+	<div class="bar_loading"></div>
+	<input type="hidden" class="hidden csrf-token" value="<?php echo($context['csrf_token']) ?>">
+	{{HEADER}}
+	<main class="container container-<?php echo($context['app_name']); ?> container-<?php echo($context['app_name']); ?>-main" id="page_content">
+		{{CONTENT}}
+	</main>
+	<?php if (!empty($context['app_name']) && $context['app_name'] != 'signup' && $context['app_name'] != 'welcome' && $context['app_name'] != 'embed') { ?>
+		{{FOOTER}}
+	<?php } ?>
+	
+	
+	<?php include $context['dirname_theme'].'/main/templates/js/extra-js.html'; ?>
+
+    <?php include $context['dirname_theme'].'/main/templates/includes/timeago.html'; ?>
+	
+	<div class="lightbox__container"></div>
+	<script src="{{THEME_URL}}/main/static/js/libs/lightGallery/src/js/lightgallery.js"></script>
+	<script src="{{THEME_URL}}/main/static/js/libs/lightGallery/modules/lg-zoom.js"></script>
+	<script src="{{THEME_URL}}/main/static/js/libs/lightGallery/modules/lg-fullscreen.js"></script>
+	<link rel="stylesheet" href="{{THEME_URL}}/main/static/js/libs/lightGallery/src/css/lightgallery.css">
+	<link rel="stylesheet" href="{{THEME_URL}}/main/static/js/libs/lightGallery/src/css/lg-transitions.css">
+	
+	<?php if ($config['google_analytics']) {
+		echo decode($config['google_analytics']);
+	} ?>
+	<script type="text/javascript">
+		if (is_logged()) {
+			setInterval(function(){
+				$.post(xhr_url()+'main/update_user_lastseen', function(data, textStatus, xhr) {
+				});
+			},60000);
+		}
+		<?php if ($context['app_name'] == 'home') { ?>
+			$('footer').hide();
+		<?php } ?>
+
+		$(window).on("popstate", function (e) {
+	        location.reload();
+	    });
+		
+	</script>
+	
+	<?php if( IS_LOGGED == true ){ ?>
+		<div style="display:none">
+			<audio id="notification-sound" class="sound-controls" preload="auto" style="visibility: hidden;">
+				<source src="{{THEME_URL}}/main/static/mp3/New-notification.mp3" type="audio/mpeg">
+			</audio>
+			<audio id="message-sound" class="sound-controls" preload="auto" style="visibility: hidden;">
+				<source src="{{THEME_URL}}/main/static/mp3/New-message.mp3" type="audio/mpeg">
+			</audio>
+			<audio id="calling-sound" class="sound-controls" preload="auto">
+				<source src="{{THEME_URL}}/main/static/mp3/calling.mp3" type="audio/mpeg">
+			</audio>
+			<audio id="video-calling-sound" class="sound-controls" preload="auto">
+				<source src="{{THEME_URL}}/main/static/mp3/video_call.mp3" type="audio/mpeg">
+			</audio>
+		</div>
+	<?php } ?>
+	
+	<?php if ($config['iyzipay_payment'] == "yes" && !empty($config['iyzipay_key']) && !empty($config['iyzipay_secret_key'])) { ?>
+	<script>
+	function pay_usicccng_iyzipay(pkg,self,video_id,price,user_id = 0) {
+		$('.btn-iyzipay').attr('disabled','true');
+		$('.btn-iyzipay').find('span').text("{{LANG please_wait}}");
+		pay_type = '';
+		if (pkg == 'pro') {
+		  path = '/go_pro/iyzipay';
+		}
+		else if (pkg == 'wallet') {
+		  path = '/wallet/iyzipay';
+		  price = $("#wallet_amount").val();
+		}
+		else if (pkg == 'pay') {
+		  path = '/go_pro/iyzipay_pay_to_see';
+		}
+		else if (pkg == 'rent') {
+		  path = '/go_pro/iyzipay_pay_to_see';
+		  pay_type = 'rent';
+		}
+		else if (pkg == 'subscribe') {
+		  path = '/go_pro/subscribe';
+		}
+
+		$.post('{{LINK aj}}'+path, {video_id:video_id,amount:price,user_id:user_id,pay_type:pay_type,type:'iyzipay'}, function(data) {
+		  if (data.status == 200) {
+			$('#iyzipay_content').html('');
+			$('#iyzipay_content').html(data.html);
+		  } else {
+			$('.btn-iyzipay').attr('disabled', false).html("Iyzipay App not set yet.");
+		  }
+		  $('.btn-iyzipay').removeAttr('disabled');
+		  $('.btn-iyzipay').find('span').text("{{LANG iyzipay}}");
+		});
+	}
+	</script>
+	<?php } ?>
+	
+	<?php echo $pixelphoto->PX_LoadPage('main/templates/modals/wallet'); ?>
+	<?php if ($config['private_videos'] == 'on' || $config['private_photos'] == 'on') {
+		echo $pixelphoto->PX_LoadPage('main/templates/modals/subscribe');
+	} ?>
+</body>
+</html>

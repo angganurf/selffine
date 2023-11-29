@@ -1,0 +1,182 @@
+<?php
+$page = (!empty($_GET['page-id'])) ? $_GET['page-id'] : 1;
+$admin::$db->pageLimit = 50;
+
+$link = '';
+
+$posts = $admin::$db->where('type', 'store')->orderBy('id', 'DESC')->paginate(T_TRANSACTIONS, $page,array('*'));
+if (($page > $admin::$db->totalPages) && !empty($_GET['page-id'])) {
+    header("Location: " . pxp_acp_link('store-revenue'));
+    exit();
+}
+
+
+$total      = $admin::$db->where('type', 'store')->getValue(T_TRANSACTIONS, 'sum(amount)');
+$sales      = $admin::$db->where('type', 'store')->getValue(T_TRANSACTIONS, 'count(*)');
+$admin_earn       = $admin::$db->where('type', 'store')->getValue(T_TRANSACTIONS, 'sum(admin_com)');
+
+
+?>
+<div class="container-fluid">
+    <div>
+        <h3>Store revenue</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Manage Features</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Image Store</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Store revenue</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Sales</h6>
+                    <div class="d-flex align-items-center mb-3">
+                        <div>
+                            <div class="avatar">
+                                <span class="avatar-title bg-info-bright text-info rounded-pill">
+                                    <i class="material-icons">attach_money</i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="font-weight-bold ml-1 font-size-30 ml-3"><?php echo $sales; ?></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Total Sales</h6>
+                    <div class="d-flex align-items-center mb-3">
+                        <div>
+                            <div class="avatar">
+                                <span class="avatar-title bg-info-bright text-info rounded-pill">
+                                    <i class="material-icons">attach_money</i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="font-weight-bold ml-1 font-size-30 ml-3"><?php echo Pxp_GetCurrency($context['config']['currency']).$total; ?></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Total Commission</h6>
+                    <div class="d-flex align-items-center mb-3">
+                        <div>
+                            <div class="avatar">
+                                <span class="avatar-title bg-info-bright text-info rounded-pill">
+                                    <i class="material-icons">attach_money</i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="font-weight-bold ml-1 font-size-30 ml-3"><?php echo Pxp_GetCurrency($context['config']['currency']).$admin_earn; ?></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                   <div class="table-responsive1">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Buyer</th>
+                                    <th>Item</th>
+                                    <th>Sale Price</th>
+                                    <th>Admin commission</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                            foreach ($posts as $key => $item) {
+                                $context['item'] = o2array($item);
+                                $user = $admin::$db->where('user_id',$context['item']['user_id'])->getOne(T_USERS);
+                                $context['item']['user'] = o2array($admin->userData($user));
+
+                                $item_store_id = $admin::$db->where('id',$context['item']['item_store_id'])->getOne(T_STORE);
+                                $context['item']['product'] = o2array($item_store_id);
+                                //var_dump($item_store_id);
+                                echo $admin->loadPage('store-revenue/list');
+                            }
+                            ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="wo-admincp-feturepager">
+                      <div class="pull-left">
+                        <span>
+                          <?php echo "Showing $page out of " . $admin::$db->totalPages; ?>
+                        </span>
+                      </div>
+                      <div class="pull-right">
+                        <nav>
+                          <ul class="pagination">
+                            <li>
+                              <a href="<?php echo pxp_acp_link('store-revenue?page-id=1').$link; ?>" data-ajax="?path=store-revenue&page-id=1<?php echo($link); ?>" class="waves-effect" title='First Page'>
+                                  <i class="material-icons">first_page</i>
+                              </a>
+                            </li>
+                            <?php if ($page > 1) {  ?>
+                              <li>
+                                  <a href="<?php echo pxp_acp_link('store-revenue?page-id=' . ($page - 1)).$link; ?>" data-ajax="?path=store-revenue&page-id=<?php echo($page - 1) ?><?php echo($link); ?>" class="waves-effect" title='Previous Page'>
+                                      <i class="material-icons">chevron_left</i>
+                                  </a>
+                              </li>
+                            <?php  } ?>
+
+                            <?php 
+                              $nums       = 0;
+                              $nums_pages = ($page > 4) ? ($page - 4) : $page;
+
+                              for ($i=$nums_pages; $i <= $admin::$db->totalPages; $i++) { 
+                                if ($nums < 20) {
+                            ?>
+                              <li class="<?php echo ($page == $i) ? 'active' : ''; ?>">
+                                <a href="<?php echo pxp_acp_link('store-revenue?page-id=' . ($i)).$link; ?>" data-ajax="?path=store-revenue&page-id=<?php echo($i) ?><?php echo($link); ?>" class="waves-effect">
+                                  <?php echo $i ?>   
+                                </a>
+                              </li>
+
+                            <?php } $nums++; }?>
+
+                            <?php if ($admin::$db->totalPages > $page) { ?>
+                              <li>
+                                  <a href="<?php echo pxp_acp_link('store-revenue?page-id=' . ($page + 1)).$link; ?>" data-ajax="?path=store-revenue&page-id=<?php echo($page + 1) ?><?php echo($link); ?>" class="waves-effect" title="Next Page">
+                                      <i class="material-icons">chevron_right</i>
+                                  </a>
+                              </li>
+                            <?php } ?>
+                            <li>
+                              <a href="<?php echo pxp_acp_link('store-revenue?page-id=' . ($admin::$db->totalPages)).$link; ?>" data-ajax="?path=store-revenue&page-id=<?php echo($admin::$db->totalPages) ?><?php echo($link); ?>" class="waves-effect" title='Last Page'>
+                                  <i class="material-icons">last_page</i>
+                              </a>
+                            </li>
+                          </ul>
+                        </nav>
+                      </div>
+                      <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<!-- #END# Vertical Layout -->

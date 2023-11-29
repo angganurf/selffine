@@ -1,0 +1,274 @@
+<?php $blog_categories = blog_categories(); ?>
+<div class="container-fluid">
+    <div>
+        <h3>Manage blog categories</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Manage Features</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Blogs</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Manage blog categories</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                  <h6 class="card-title">Add Category</h6>
+                  <div class="row">
+                       <div class="col-md-12" style="margin-bottom:0;">
+                        <div class=" add_category_form_alert"></div>
+                            <form method="POST" id="add_category_form">
+                              <div class="row">
+                                <?php foreach (LangsNamesFromDB() as $key_) { ?>
+                                    <div class="col-md-2" id="normal-query-form">
+                                      <div class="form-group form-float">
+                                          <div class="form-line">
+                                            <label class="form-label"><?php echo ucfirst($key_); ?></label>
+                                              <input type="text" class="form-control" name="<?php echo($key_) ?>">
+                                          </div>
+                                      </div>
+                                    </div>
+                                <?php } ?>
+                                <div class="clearfix"></div>
+                              <div class="col-md-2">
+                                <div>&nbsp;</div>
+                                  <button type="button" class="btn btn-info" onclick="Wo_SubmitAddCategoryForm();">Add</button>
+                              </div>
+                              </div>
+                              <div class="clearfix"></div>
+                           </form>
+                       </div>
+                   </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                   <div class="table-responsive1">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="check-all" class="filled-in check-all" ><label for="check-all"></label></th>
+                                    <th>ID</th>
+                                    <th>Category Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                            $category_id = 1;
+                            foreach ($blog_categories as $category_key => $category) {
+                                $context['blog-categories'] = array('category_id' => $category_id, 'category_key' => $category_key, 'category' => $category);
+                                //$context['blog-categories'] = o2array($context['blog-categories']);
+                                echo $admin->loadPage('manage-store-categories/list');
+                                $category_id = $category_id + 1;
+                            }
+                            ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3">
+                            <span>&nbsp;</span>
+                            <button type="button" class="btn btn-info waves-effect delete-selected d-block" disabled>Delete Selected<span></span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<!-- #END# Vertical Layout -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModal1Label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal1Label">Delete category?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this category?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="SelectedDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModal1Label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal1Label">Delete category?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure that you want to remove the selected category?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="DeleteSelected()" data-dismiss="modal">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.check-all').on('click', function(event) {
+        $('input:checkbox').not(this).prop('checked', this.checked);
+    });
+    $('.delete-checkbox, .check-all').change(function(event) {
+        $('.delete-selected').attr('disabled', false);
+        $('.delete-selected').find('span').text(' (' + $('.delete-checkbox:checked').length + ')');
+    });
+
+    $('.delete-selected').on('click', function(event) {
+        event.preventDefault();
+        $('#SelectedDeleteModal').modal('show');
+    });
+    function DeleteSelected() {
+        data = new Array();
+        $('td input:checked').parents('tr').each(function () {
+            data.push($(this).attr('data_selected'));
+        });
+        $('.delete-selected').attr('disabled', true);
+        $('.delete-selected').text('Please wait..');
+        $.post(acpajax_url('remove_multi_blog_category'), {ids: data}, function () {
+            $.each( data, function( index, value ){
+                $("#list-"+value).remove();
+            });
+            $('.delete-selected').text('Delete Selected');
+        });
+    }
+    function Wo_SubmitAddCategoryForm() {
+        $('#add_category_form').submit();
+    }
+    $('.btn-lang').on('click', function(event) {
+        $('#defaultModal .modal-body form .data').html('<div class="preloader pl-size-xl "><div class="spinner-layer pl-teal"><div class="circle-clipper left"><div class="circle"></div></div><div class="circle-clipper right"><div class="circle"></div></div></div></div>');
+        var lang_id = $(this).attr('data-id');
+        $.get(acpajax_url('get_lang_key'), {id: lang_id, lang_name: lang_id}, function(data, textStatus, xhr) {
+            $('#defaultModal .modal-title').html('Edit key: ' + lang_id);
+            $('#id_of_key').val(lang_id);
+            $('#defaultModal .modal-body form .data').html(data.html);
+        });
+    });
+    function Wo_SubmitLangForm() {
+        $('.edit-key-settings').submit();
+    }
+    $(function () {
+        var form_lang_settings = $('form.edit-key-settings');
+        form_lang_settings.ajaxForm({
+            url: acpajax_url('update_lang_key'),
+            beforeSend: function() {
+                $('.btn-save').text('Please wait..');
+            },
+            success: function(data) {
+                if (data.status == 200) {
+                    $('.btn-save').text('SAVE CHANGES');
+                    var value_to_use = $('[data-editable=1]').val();
+                    var id_of_key = $('#id_of_key').val();
+                    $('#edit_' + id_of_key).text(value_to_use);
+                    $('#defaultModal').modal('hide');
+                    location.reload();
+                }
+            }
+        });
+
+        var form_gender_settings = $('form#add_category_form');
+        form_gender_settings.ajaxForm({
+            url: acpajax_url('add_new_category'),
+            beforeSend: function() {
+                form_gender_settings.find('.btn-info').text('Please wait..');
+            },
+            success: function(data) {
+
+                if (data.status == 200) {
+                    form_gender_settings.find('.btn-info').text('Add');
+                    location.reload();
+                }
+                else{
+                    form_gender_settings.find('.btn-info').text('Add');
+                    $('.add_category_form_alert').html(data.message);
+                }
+            }
+        });
+    });
+    function DeleteCategory(key,type = 'show') {
+        if (type == 'hide') {
+            $('#DeleteModal').find('.btn-primary').attr('onclick', "DeleteCategory('"+key+"')");
+            $('#DeleteModal').modal('show');
+            return false;
+        }
+        $.get(acpajax_url('delete_category'), {key:key}, function (data) {
+            if(data.status == 300){
+                location.reload();
+            }else{
+                $('#list-' + key).fadeOut(300, function () {
+                    $(this).remove();
+                });
+            }
+        });
+    }
+    $('.check-all').on('click', function(event) {
+        $('input:checkbox').not(this).prop('checked', this.checked);
+    });
+    $('.delete-checkbox, .check-all').change(function(event) {
+        $('.delete-selected').attr('disabled', false);
+        $('.delete-selected').find('span').text(' (' + $('.delete-checkbox:checked').length + ')');
+    });
+
+    $('.delete-selected').on('click', function(event) {
+        event.preventDefault();
+        $('#SelectedDeleteModal').modal('show');
+    });
+    function DeleteSelected() {
+        data = new Array();
+        $('td input:checked').parents('tr').each(function () {
+            data.push($(this).attr('data_selected'));
+        });
+        $('.delete-selected').attr('disabled', true);
+        $('.delete-selected').text('Please wait..');
+        $.post(acpajax_url('remove_multi_blog_category'), {ids: data}, function () {
+            $.each( data, function( index, value ){
+                $("#list-"+value).remove();
+            });
+            $('.delete-selected').text('Delete Selected');
+        });
+    }
+</script>
+<div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h4 class="modal-title" id="defaultModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success edit-lang-settings-alert" style="display:none;"></div>
+                <form class="edit-key-settings" method="POST">
+                    <div class="data"></div>
+                    <input type="hidden" name="id_of_key" id="id_of_key" value="">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">CLOSE</button>
+                <button type="button" class="btn btn-secondary" onclick="Wo_SubmitLangForm()" data-dismiss="modal">SAVE CHANGES</button>
+            </div>
+        </div>
+    </div>
+</div>

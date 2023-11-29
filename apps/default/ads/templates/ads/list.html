@@ -1,0 +1,35 @@
+<div class="advs_list" data-ad-id="<?php echo $context['ad']->id; ?>">
+	<div class="row">
+		<div class="col-md-1">
+			<a href="<?php echo $context['ad']->edit_url; ?>"><b>#<?php echo $context['ad']->id; ?></b></a>
+		</div>
+		<div class="col-md-4">
+			<h3>{{LANG company}}</h3><p><?php echo $context['ad']->name; ?></p>
+		</div>
+		<div class="col-md-2">
+			<h3>{{LANG bidding}}</h3><p>{{LANG <?php echo $context['ad']->bidding; ?>}}</p>
+		</div>
+		<div class="col-md-1" data-ad-status="<?php echo $context['ad']->id; ?>">
+			<h3>{{LANG status}}</h3><p><?php if ($context['ad']->status == 1): ?>
+				{{LANG active}}
+			<?php else: ?>
+				{{LANG not_active}}
+			<?php endif; ?></p>
+		</div>
+		<div class="col-xs-6 col-md-1">
+			<h3>{{LANG clicks}}</h3><p><?php echo $context['ad']->clicks; ?></p>
+		</div>
+		<div class="col-xs-6 col-md-1">
+			<h3>{{LANG views}}</h3><p><?php echo $context['ad']->views; ?></p>
+		</div>
+		
+		<div class="col-lg-2 text-right">
+			<a href="<?php echo $context['ad']->edit_url; ?>" class="btn btn-success ads_act_icos">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" /></svg>
+			</a>
+			<span class="btn btn-danger delete-ad ads_act_icos" id="<?php echo $context['ad']->id; ?>">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15,16H19V18H15V16M15,8H22V10H15V8M15,12H21V14H15V12M3,18A2,2 0 0,0 5,20H11A2,2 0 0,0 13,18V8H3V18M14,5H11L10,4H6L5,5H2V7H14V5Z" /></svg>
+			</span>
+		</div>
+	</div>
+</div>

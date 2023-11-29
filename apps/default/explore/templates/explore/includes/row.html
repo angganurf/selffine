@@ -1,0 +1,27 @@
+<div class="explore-people__itemz col-sm-3 col-md-3 col-lg-3" id="<?php echo($udata['user_id']) ?>">
+	<div class="explore-people__item">
+	<div class="avatar text-center">
+		<img src="<?php echo(media($udata['avatar'])) ?>" alt="Picture" class="img-circle img-res">
+	</div>
+	<div class="user__info">
+		<h5><a href="<?php echo(un2url($udata['username'])) ?>"  data-ajax="ajax_loading.php?app=profile&apph=profile&uname=<?php echo($udata['username']) ?>"><?php echo($udata['username']) ?></a></h5>
+		<div class="user__stat">
+			<span>
+				<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="512" height="512" x="0" y="0" viewBox="0 0 469.421 469.421" xml:space="preserve"><g> <circle xmlns="http://www.w3.org/2000/svg" cx="389.421" cy="177.21" r="44.138" fill="#005ece" data-original="#000000" class=""/> <circle xmlns="http://www.w3.org/2000/svg" cx="80" cy="177.21" r="44.138" fill="#005ece" data-original="#000000" class=""/> <path xmlns="http://www.w3.org/2000/svg" d="M389.421,251.348c-19.914,0-38.114,7.289-52.11,19.332c15.877,17.402,26.864,38.185,32.278,60.668h99.832  C469.421,287.166,433.604,251.348,389.421,251.348z" fill="#005ece" data-original="#000000" class=""/> <path xmlns="http://www.w3.org/2000/svg" d="M234.71,255.335c-60.061,0-108.75,48.689-108.75,108.75h217.5C343.46,304.024,294.771,255.335,234.71,255.335z" fill="#005ece" data-original="#000000" class=""/> <path xmlns="http://www.w3.org/2000/svg" d="M80,251.348c-44.183,0-80,35.817-80,80h99.832c5.413-22.483,16.401-43.266,32.278-60.668  C118.114,258.638,99.914,251.348,80,251.348z" fill="#005ece" data-original="#000000" class=""/> <circle xmlns="http://www.w3.org/2000/svg" cx="234.71" cy="165.335" r="60" fill="#005ece" data-original="#000000" class=""/></g></svg>
+				<b><?php echo($udata['followers']) ?></b>
+				<small>{{LANG followers}}</small>
+			</span>
+			<span>
+				<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="512" height="512" x="0" y="0" viewBox="0 0 68 68" xml:space="preserve"><g><g xmlns="http://www.w3.org/2000/svg"><path d="m61.8711 49.95-12.1 4.44v-31.36c0-4.58-3.72-8.3-8.3-8.3h-12.47v-1.48l17.1-6.27c3.26-1.2 6.89.48 8.08 3.74l2.2401 6.1 1.5 4.08 7.69 20.97c1.1999 3.26-.48 6.89-3.7401 8.08z" fill="#29c750" data-original="#000000" class=""/><path d="m41.4712 16.73h-12.47v2.54c0 3.17-2.58 5.75-5.74 5.75-3.2209 0-5.75-2.6207-5.75-5.75v-2.54h-9.21c-3.48 0-6.3 2.82-6.3 6.3v33.17c0 3.48 2.82 6.3 6.3 6.3h33.17c3.48 0 6.3-2.82 6.3-6.3v-33.17c0-3.48-2.82-6.3-6.3-6.3zm-2.3642 38.5205h-28.4448c-.5522 0-1-.4473-1-1s.4478-1 1-1h28.4448c.5522 0 1 .4473 1 1s-.4477 1-1 1zm0-8.2061h-28.4448c-.5522 0-1-.4473-1-1s.4478-1 1-1h28.4448c.5522 0 1 .4473 1 1s-.4477 1-1 1zm0-8.207h-28.4448c-.5522 0-1-.4473-1-1s.4478-1 1-1h28.4448c.5522 0 1 .4473 1 1s-.4477 1-1 1z" fill="#29c750" data-original="#000000" class=""/><path d="m26.9991 13.727v5.547c0 2.07-1.672 3.742-3.742 3.742-2.0581 0-3.743-1.6691-3.743-3.742v-10.031c0-2.071 1.681-3.743 3.743-3.743 2.07 0 3.742 1.672 3.742 3.743z" fill="#29c750" data-original="#000000" class=""/></g></g></svg>
+				<b><?php echo $udata['posts']; ?></b>
+				<small>{{LANG posts}}</small>
+			</span>
+		</div>
+		<div class="clear"></div>
+		<button class="btn btn-info" onclick="follow(<?php echo($udata['user_id']) ?>,this);">
+			<span>{{LANG follow}}</span>
+		</button>
+		<div class="clear"></div>
+	</div>
+	</div>
+</div>

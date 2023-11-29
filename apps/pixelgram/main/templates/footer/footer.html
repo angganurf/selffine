@@ -1,0 +1,110 @@
+<footer <?php if($context['app_name'] == 'startup'){ ?> class="footer_class"<?php } ?> >
+	<div class="container container-<?php echo($context['app_name']); ?> <?php if($context['app_name'] != 'profile' || $context['app_name'] != 'explore'){ ?> container-<?php echo($context['app_name']); ?>-main <?php } ?> " id="footer_">
+	<div class="footer__container">
+		<div class="footer clearfix">
+			<ul class="nav pull-right">
+				<?php if ($context['terms_of_use_page'] == 1) { ?>
+					<li><a href="<?php echo(pxp_link('terms-of-use')) ?>" data-ajax="ajax_loading.php?app=terms&apph=terms&page=terms-of-use">{{LANG terms}}</a></li>
+				<?php } ?>
+				<?php if ($context['privacy_policy_page'] == 1) { ?>
+					<li><a href="<?php echo(pxp_link('privacy-and-policy')) ?>"  data-ajax="ajax_loading.php?app=terms&apph=terms&page=privacy-and-policy">{{LANG privacy_and_policy}}</a></li>
+				<?php } ?>
+				<?php if ($context['about_page'] == 1) { ?>
+					<li><a href="<?php echo(pxp_link('about-us')) ?>"  data-ajax="ajax_loading.php?app=terms&apph=terms&page=about-us">{{LANG about}}</a></li>
+				<?php } ?>
+				<li><a href="<?php echo(pxp_link('contact_us')) ?>" data-ajax="ajax_loading.php?app=terms&apph=terms&page=contact_us">{{LANG contact_us}}</a></li>
+				<?php if ($config['blog_system'] == 'on') { ?>
+					<li><a href="{{CONFIG site_url}}/blog" data-ajax="ajax_loading.php?app=blog&apph=blog">{{LANG blog}}</a></li>
+				<?php } ?>
+				<li class="dropup">
+					<span class="dropdown-toggle" data-toggle="dropdown">
+					    <a><svg height="15" viewBox="0 0 24 24" width="15" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M5 15v2a2 2 0 0 0 1.85 1.995L7 19h3v2H7a4 4 0 0 1-4-4v-2h2zm13-5l4.4 11h-2.155l-1.201-3h-4.09l-1.199 3h-2.154L16 10h2zm-1 2.885L15.753 16h2.492L17 12.885zM8 2v2h4v7H8v3H6v-3H2V4h4V2h2zm9 1a4 4 0 0 1 4 4v2h-2V7a2 2 0 0 0-2-2h-3V3h3zM6 6H4v3h2V6zm4 0H8v3h2V6z"></path></svg> {{LANG language}}</a>
+					</span>
+					<ul class="dropdown-menu">
+						<?php foreach ($context['langs'] as $key => $val) { ?>
+							<li><a href='?lang=<?php echo($key); ?>'><?php echo($val); ?></a></li>
+						<?php } ?>
+					</ul>
+				</li>
+			</ul>
+			<ul class="nav">
+				<li>
+					<span class="fluid copyright">&copy; <?php echo date("Y") ?> {{CONFIG site_name}}</span>
+				</li>
+			</ul>
+		</div>
+	</div>
+	</div>
+</footer>
+
+<script>
+	function SharePostToTimeLine(post_id, element) {
+		if (!post_id || post_id == 0) {
+			return false;
+		}
+		var text = $('#share_comment').val();
+  		$(element).text('please wait');
+  		$(element).attr('disabled', 'true');
+		$.ajax({
+			url: link('main/share_post_on'),
+			type: 'GET',
+			dataType: 'json',
+			data: {post_id:post_id,text:text}
+		})
+		.done(function(data) {
+			$(element).text('Share');
+			$(element).removeAttr('disabled');
+			if (data.status == 200) {
+				setTimeout(function () {
+					$(".post-editing-form").fadeOut(100,function(){
+						$(this).empty();
+						$("body").removeClass('active');
+						$('#create-newpost').hide();
+					});
+				},2000);
+			}
+			else{
+				$.toast(data.message,{
+					duration: 5000, 
+					type: '',
+					align: 'bottom',
+					singleton: true
+				});
+				setTimeout(function () {
+					$(".post-editing-form").fadeOut(100,function(){
+						$(this).empty();
+						$("body").removeClass('active');
+						$('#create-newpost').hide();
+					});
+				},2000);
+			}
+		})
+		.fail(function() {})
+		.always(function() {});
+
+	}
+	function getShareModal(id, element) {
+		if (!id || id == 0) {
+			return false;
+		}
+		$("#modal-progress").removeClass('hidden');
+		$('#share_post_modal').remove();
+		$.get(link('main/get-share-modal') , {id: id}, function (data) {
+			if (data.status == 200) {
+				$('body').addClass('active');
+				$("#create-newpost").html(data.html).fadeIn(100);
+			}
+			else{
+				if (data.message) {
+					$.toast(data.message,{
+						duration: 5000, 
+						type: '',
+						align: 'top-right',
+						singleton: false
+					});
+				}
+			}
+			$("#modal-progress").addClass('hidden');
+		});
+	}
+</script>

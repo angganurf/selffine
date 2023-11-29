@@ -1,0 +1,45 @@
+<div class="content post-editing-form">
+	<div class="valign user-heading">
+		<img src="{{ME avatar}}" class="img-circle">
+		<div>
+			<span>{{ME username}}</span>
+			<span class="pp_area">{{LANG video}}</span>
+		</div>
+		<div id="pp_loader">
+			<span>0%</span>
+		</div>
+	</div>
+  	<form class="form" id="ffmpeg-upload-post-video" action="{{CONFIG site_url}}/aj/posts/ffmpeg-video-upload">
+  		<div class="form-group">
+			<div class="valign selecet-file-control" onclick="$('#post-video').trigger('click');">
+				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 491.535 491.535" xml:space="preserve"> <rect x="0" y="474.278" style="fill:#f6f6f6;" width="368.896" height="17.244"/> <polygon style="fill:#fff;" points="86.969,0.013 368.878,0.013 368.878,474.287 0,474.287 0,86.981 "/> <polygon style="fill:#d1d1d1;" points="86.969,86.981 0,86.981 86.969,0.013 "/> <rect x="180.531" y="36.539" style="fill:#64798A;" width="311.004" height="345.958"/> <g> <rect x="194.765" y="53.281" style="fill:#FFFFFF;" width="31.995" height="31.995"/> <rect x="445.276" y="53.281" style="fill:#FFFFFF;" width="31.995" height="31.995"/> <rect x="194.765" y="123.405" style="fill:#FFFFFF;" width="31.995" height="31.995"/> <rect x="445.276" y="123.405" style="fill:#FFFFFF;" width="31.995" height="31.995"/> <rect x="194.765" y="193.518" style="fill:#FFFFFF;" width="31.995" height="31.995"/> <rect x="445.276" y="193.518" style="fill:#FFFFFF;" width="31.995" height="31.995"/> <rect x="194.765" y="263.642" style="fill:#FFFFFF;" width="31.995" height="31.995"/> <rect x="445.276" y="263.642" style="fill:#FFFFFF;" width="31.995" height="31.995"/> <rect x="194.765" y="333.734" style="fill:#FFFFFF;" width="31.995" height="31.995"/> <rect x="445.276" y="333.734" style="fill:#FFFFFF;" width="31.995" height="31.995"/> </g> <g> <rect x="244.7" y="53.281" style="fill:#27A2DB;" width="182.63" height="172.232"/> <rect x="244.7" y="251.814" style="fill:#27A2DB;" width="182.63" height="113.951"/> </g></svg>
+				<h5>{{LANG select_file}}</h5>
+				<div id="post_video_prnt" class="hidden embed-responsive embed-responsive-16by9">
+					<video id="post__video" controls></video>
+				</div>
+			</div>
+  		</div>
+		<div class="form-group">
+      		<textarea class="form-control" name="caption" rows="3" placeholder="{{LANG add_post_caption}}"></textarea>
+			<?php if ($config['private_videos'] == 'on') { ?>
+				<hr>
+				<div class="set_post_price_alert">
+					<p>{{LANG set_price}}</p>
+					<div>
+						<span><sup><?php echo $context['currency_symbol']; ?></sup><input type="text" name="video_price" placeholder="0.00"></span>
+					</div>
+				</div>
+			<?php } ?>
+      	</div>
+      	<div class="form-group publish">
+			<div class="loading_cont hidden"></div>
+			<button type="reset" class="btn btn-default btn-mat" id="close-anim-modal">{{LANG close}}</button>
+      		<button type="submit" class="btn btn-main btn-mat">{{LANG publish}}</button>
+      	</div>
+      	<input class="hidden" type="file" name="video" accept="video/*" id="post-video">
+        <input type="hidden" name="hash" value="<?php echo($context['csrf_token']) ?>">
+  	</form>
+</div>
+<?php 
+include $context['dirname_theme'].'/home/templates/home/js/script.upload.video.html';
+ ?>
